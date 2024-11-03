@@ -1,7 +1,7 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.1
 * File                    : includes/translation/class-backend-translation.php
 * File Version            : 1.0.4
@@ -50,7 +50,7 @@
                 $DOPBSP->views->backend_translation->text(array('language' => $language,
                                                                 'translation' => $translation));
                 
-            	die();                
+            	die();
             }
             
             /*
@@ -111,15 +111,19 @@
                  * Check what text should be added or not to database.
                  */
                 unset($query_values);
+                $query_insert = array();
                 $query_values = array();
                 
                 for ($i=0; $i<count($DOPBSP->classes->translation->text); $i++){
                     $text[$DOPBSP->classes->translation->text[$i]['key']] = $i;
                     $DOPBSP->classes->translation->text[$i]['add'] = true;
-                    array_push($query_values, '\''.$DOPBSP->classes->translation->text[$i]['key'].'\'');
+                    array_push($query_insert, '\'%s\'');
+                    array_push($query_values, $DOPBSP->classes->translation->text[$i]['key']);
+                    // array_push($query_values, '\''.$DOPBSP->classes->translation->text[$i]['key'].'\'');
                 }
                 
-                $current_translation = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->translation.'_'.($lang_code == 'all' ? DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE:$lang_code).' WHERE key_data IN ('.implode(', ', $query_values).')');
+                $current_translation = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->translation.'_'.($lang_code == 'all' ? DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE:$lang_code).' WHERE key_data IN ('.implode(', ', $query_insert).')',
+                                                                         $query_values));
                 
                 foreach ($current_translation as $translation_item){
                     if (array_key_exists($translation_item->key_data, $text)){
@@ -162,7 +166,7 @@
                      * Delete duplicated keys.
                      */
                     $wpdb->query('DELETE t1 FROM '.$DOPBSP->tables->translation.'_'.$languages_codes[$l].' t1, '.$DOPBSP->tables->translation.'_'.$languages_codes[$l].' t2 WHERE t1.id > t2.id AND t1.key_data = t2.key_data');
-
+                    
                     /*
                      * Delete old translation.
                      */

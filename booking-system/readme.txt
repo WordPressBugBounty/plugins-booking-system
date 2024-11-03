@@ -164,6 +164,9 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 
 == Changelog ==
 
+= 2.9.9.5.2 =
+* Security bugs repaired.
+
 = 2.9.9.5.1 =
 * Security bug repaired.
 
@@ -194,6 +197,9 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 View complete changelog <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Upgrade Notice ==
+
+= 2.9.9.5.2 =
+* Security bugs repaired.
 
 = 2.9.9.5.1 =
 * Security bug repaired.
