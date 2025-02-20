@@ -63,6 +63,8 @@ if (!class_exists('DOPBSPFrontEndCalendar')){
              * Calendar HTML.
              */
             array_push($html,
+            '<style>.single_add_to_cart_button{display: none};</style>');
+            array_push($html,
                        '<link rel="stylesheet" type="text/css" href="'.$template.'" />');
 
             array_push($html,
@@ -377,7 +379,7 @@ if (!class_exists('DOPBSPFrontEndCalendar')){
              * Get template name.
              */
             $template_name = explode('/',
-                                     $settings_calendar->template);
+                                         $settings_calendar->template);
             $template_name = end($template_name);
 
             /*

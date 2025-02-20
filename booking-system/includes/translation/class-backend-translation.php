@@ -112,7 +112,7 @@
                  */
                 unset($query_values);
                 $query_insert = array();
-                $query_values = array();
+                $query_values = array($DOPBSP->tables->translation.'_'.($lang_code == 'all' ? DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE:$lang_code));
                 
                 for ($i=0; $i<count($DOPBSP->classes->translation->text); $i++){
                     $text[$DOPBSP->classes->translation->text[$i]['key']] = $i;
@@ -122,7 +122,7 @@
                     // array_push($query_values, '\''.$DOPBSP->classes->translation->text[$i]['key'].'\'');
                 }
                 
-                $current_translation = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->translation.'_'.($lang_code == 'all' ? DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE:$lang_code).' WHERE key_data IN ('.implode(', ', $query_insert).')',
+                $current_translation = $wpdb->get_results($wpdb->prepare('SELECT * FROM %s WHERE key_data IN ('.implode(', ', $query_insert).')',
                                                                          $query_values));
                 
                 foreach ($current_translation as $translation_item){

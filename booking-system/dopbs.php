@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Pinpoint Booking System
-Version: 2.9.9.5.2
+Version: 2.9.9.5.3
 Plugin URI: https://wordpress.org/plugins/booking-system/
 Description: Transform your WordPress website into a booking/reservation system. If you like this plugin, feel free to rate it five stars at <a href="https://wordpress.org/support/view/plugin-reviews/booking-system" target="_blank">Wordpress</a> in Reviews section. If you encounter any problems please contact us at <a href="mailto:support@pinpoint.world">support@pinpoint.world</a> so we can help you.
 Author: PINPOINT.WORLD
@@ -10,6 +10,13 @@ Author URI: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_me
 
 /*
 Change log:
+
+        2.9.9.5.3 (2025-02-21)
+
+                * Cc and Bcc in booking notifications emails are set correctly, bug repaired.
+		        * Polylang compatibility has been added.
+                * Security bugs repaired.
+                * Selected language displays correctly on a WooCommerce product page.
 
         2.9.9.5.2 (2024-11-04)
 
@@ -1348,7 +1355,8 @@ Installation: Upload the folder dopbsp from the zip file to "wp-content/plugins/
                 if (is_admin() 
                         && !$DOT->post('dopbsp_frontend_ajax_request')){
                     add_action('admin_menu', array(&$this, 'initBackEnd'));
-                    $this->initBackEndAJAX();
+                    add_action('init', array(&$this, 'initBackEndAJAX'));
+                    // $this->initBackEndAJAX();
                 }
                 else{
                     $this->initFrontEndAJAX();
@@ -1887,6 +1895,15 @@ Installation: Upload the folder dopbsp from the zip file to "wp-content/plugins/
              * Initialize back end AJAX requests.
              */
             function initBackEndAJAX(){
+                if (!isset($this->classes->backend_settings_users)){
+                    return false;
+                }
+
+                if (!$this->classes->backend_settings_users->permission(wp_get_current_user()->ID, 'use-booking-system')
+                        && !$this->classes->backend_settings_users->permission(wp_get_current_user()->ID, 'use-calendars')){
+                    return false;
+                }
+
                 /*
                  * Addons back end AJAX requests.
                  */

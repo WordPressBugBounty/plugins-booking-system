@@ -3,7 +3,7 @@ Contributors: DOTonPAPER, PINPOINT.WORLD
 Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
 Requires at least: 5.0
-Tested up to: 6.6
+Tested up to: 6.7
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -163,6 +163,11 @@ Click <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#
 View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Changelog ==
+= 2.9.9.5.3 =
+* Cc and Bcc in booking notifications emails are set correctly, bug repaired.
+* Polylang compatibility has been added.
+* Security bugs repaired.
+* Selected language displays correctly on a WooCommerce product page.
 
 = 2.9.9.5.2 =
 * Security bugs repaired.
@@ -197,6 +202,12 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 View complete changelog <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Upgrade Notice ==
+
+= 2.9.9.5.3 =
+* Cc and Bcc in booking notifications emails are set correctly, bug repaired.
+* Polylang compatibility has been added.
+* Security bugs repaired.
+* Selected language displays correctly on a WooCommerce product page.
 
 = 2.9.9.5.2 =
 * Security bugs repaired.
