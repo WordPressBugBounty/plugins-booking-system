@@ -163,6 +163,13 @@ Click <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#
 View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Changelog ==
+=2.9.9.5.4 =
+* A small tweak was made to resolve iCal library incompatibility with other plugins or themes.
+* Frontend bug has been repaired.
+* Grouped days in the calendar display correctly on Safari for iPhone.
+* Security bug repaired.
+* The "Extras" price now displays correctly on Chrome for Android, bug repaired.
+
 = 2.9.9.5.3 =
 * Cc and Bcc in booking notifications emails are set correctly, bug repaired.
 * Polylang compatibility has been added.
@@ -177,31 +184,16 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 
 = 2.9.9.5.0 =
 * A number of issues that can return 120 errors have been resolved.
-
-= 2.9.9.4.9 =
-* Email HTMl is displayed correctly, bug repaired.
-
-= 2.9.9.4.8 =
-* Security bug repaired.
-
-= 2.9.9.4.7 =
-* Security bug repaired.
-
-= 2.9.9.4.6 =
-* Reservations' last hour is booked correctly, bug repaired.
-
-= 2.9.9.4.5 =
-* Calendar auto-resize bug has been repaired.
-* Reservations with hours intervals book the right time period, bug repaired.
-* Tunisian Dinar currency has been added.
-
-= 2.9.9.4.4 =
-* A number of issues that can return 120 errors have been resolved.
-* Availability verification has been update.
 
 View complete changelog <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Upgrade Notice ==
+=2.9.9.5.4 =
+* A small tweak was made to resolve iCal library incompatibility with other plugins or themes.
+* Frontend bug has been repaired.
+* Grouped days in the calendar display correctly on Safari for iPhone.
+* Security bug repaired.
+* The "Extras" price now displays correctly on Chrome for Android, bug repaired.
 
 = 2.9.9.5.3 =
 * Cc and Bcc in booking notifications emails are set correctly, bug repaired.
@@ -217,22 +209,3 @@ View complete changelog <a href="https://pinpoint.world/documentation-booking/wo
 
 = 2.9.9.5.0 =
 * A number of issues that can return 120 errors have been resolved.
-
-= 2.9.9.4.9 =
-* Email HTMl is displayed correctly, bug repaired.
-
-= 2.9.9.4.8 =
-* Security bug repaired.
-
-= 2.9.9.4.7 =
-* Security bug repaired.
-
-= 2.9.9.4.6 =
-* Reservations' last hour is booked correctly, bug repaired.
-
-= 2.9.9.4.4 =
-* A number of issues that can return 120 errors have been resolved.
-* Availability verification has been update.
-
-= 2.9.9.4.3 =
-* Calendars with hours intervals are verified correctly on server when a reservation is submitted, bug repaired.

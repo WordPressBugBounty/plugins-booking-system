@@ -1950,7 +1950,7 @@
                         break;
                 }
 
-                dayHTML.push('<div class="DOPBSPCalendar-day dopbsp-season-'+season+' '+type+'" id="'+id+'">');
+                dayHTML.push('<div class="DOPBSPCalendar-day dopbsp-season-'+season+' '+type+'" id="'+id+'"'+(bind === 1 ? ' style="margin: 0 !important;"':'')+'>');
                 dayHTML.push('  <div class="dopbsp-bind-left'+((bind === 2 || bind === 3) && (status === 'available' || status === 'special') && !methods_hours.data['enabled'] ? ' dopbsp-enabled':'')+(methods_day.vars.previousBind === 3 && DOT.methods.calendar_days.settings[ID]['morningCheckOut'] && (methods_day.vars.previousStatus === 'available' || methods_day.vars.previousStatus === 'special') && !methods_hours.data['enabled'] ? ' dopbsp-extended dopbsp-'+methods_day.vars.previousStatus:'')+'">');
                 dayHTML.push('      <div class="dopbsp-head">&nbsp;</div>');
                 dayHTML.push('      <div class="dopbsp-body">&nbsp;</div>');

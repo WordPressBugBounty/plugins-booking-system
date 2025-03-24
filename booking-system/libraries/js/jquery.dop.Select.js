@@ -95,13 +95,13 @@
                             /*
                              * Single select options.
                              */
-                                HTML.push('     <li id="DOPSelect-'+ID+'-'+values[i]+'" title="'+labels[i]+'"'+(selectedOption === i ? ' class="dopselect-selected"':'')+'>'+labels[i]+'</li>');
+                                HTML.push('     <li id="DOPSelect-'+ID+'-'+values[i]+'"'+(selectedOption === i ? ' class="dopselect-selected"':'')+'>'+labels[i]+'</li>');
                             }
                             else{
                             /*
                              * Multiple select options.
                              */
-                                HTML.push('     <li title="'+labels[i]+'">');
+                                HTML.push('     <li>');
                                 HTML.push('         <input type="checkbox" name="DOPSelect-'+ID+'-'+values[i]+'" id="DOPSelect-'+ID+'-'+values[i]+'"'+(isDisabled ? ' disabled="disabled"':'')+' '+(selectedOption === i && selectedOption !== 0 ? ' checked="checked"':'')+'/>');
                                 HTML.push('         <label for="DOPSelect-'+ID+'-'+values[i]+'">'+labels[i]+'</label>');
                                 HTML.push('     </li>');

@@ -1,10 +1,10 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
+* Title                   : Pinpoint Booking System WordPress Plugin
 * Version                 : 2.1.2
 * File                    : includes/class-frontend.php
-* File Version            : 1.1.1
+* File Version            : 1.1
 * Created / Last Modified : 08 November 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
@@ -25,6 +25,9 @@ if (!class_exists('DOPBSPFrontEnd')){
                        array(&$this,
                              'addScripts'));
 
+            add_shortcode('dopbs',
+                          array(&$this,
+                                'shortcode'));
             add_shortcode('dopbsp',
                           array(&$this,
                                 'shortcode'));
@@ -71,23 +74,13 @@ if (!class_exists('DOPBSPFrontEnd')){
                                true);
 
             /*
-             * Calendar & search
+             * Calendar
              */
             wp_register_script('DOPBSP-js-frontend-calendar',
                                $DOPBSP->paths->url.'assets/js/jquery.dop.frontend.BSPCalendar.js',
                                array('jquery'),
                                false,
                                true);
-            wp_register_script('DOPBSP-js-frontend-search',
-                               $DOPBSP->paths->url.'assets/js/jquery.dop.frontend.BSPSearch.js',
-                               array('jquery'),
-                               false,
-                               true);
-            wp_register_script('DOPBSP-js-frontend-search-widget',
-                               $DOPBSP->paths->url.'assets/js/jquery.dop.frontend.BSPSearchWidget.js',
-                               array('jquery'),
-                               false,
-                               false);
 
             /*
              * Front end.
@@ -194,11 +187,9 @@ if (!class_exists('DOPBSPFrontEnd')){
             wp_enqueue_script('DOP-js-jquery-dopselect');
 
             /*
-             * Calendar & search
+             * Calendar
              */
             wp_enqueue_script('DOPBSP-js-frontend-calendar');
-            wp_enqueue_script('DOPBSP-js-frontend-search');
-            wp_enqueue_script('DOPBSP-js-frontend-search-widget');
 
             /*
              * Front end.
@@ -302,10 +293,10 @@ if (!class_exists('DOPBSPFrontEnd')){
 
             switch ($atts['item']){
                 case 'search':
-                    $content = $DOPBSP->classes->frontend_search->display($atts);
+                    // $content = $DOPBSP->classes->frontend_search->display($atts);
                     break;
                 case 'search-widget':
-                    $content = $DOPBSP->classes->frontend_search->displayWidget($atts);
+                    // $content = $DOPBSP->classes->frontend_search->displayWidget($atts);
                     break;
                 default:
                     $atts['lang'] = get_post_meta($post->ID,
