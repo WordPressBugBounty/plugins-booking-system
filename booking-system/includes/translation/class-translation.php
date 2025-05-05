@@ -204,10 +204,9 @@ if (!class_exists('DOPBSPTranslation')){
             $this->checkFolder($DOPBSP->paths->abs);
 
             for ($i = 0; $i<count($this->text); $i++){
-                if (!str_contains($this->text[$i]['key'],
-                                  'PARENT_')){
-                    if ($this->text[$i]['check']){
-                        echo '';
+                if (strpos($this->text[$i]['key'],
+                           'PARENT_') === false){
+                    if ($this->text[$i]['check'] == true){
                         // echo '<span class="dopbsp-used">'.$this->text[$i]['key'].'</span><br />';
                     }
                     else{
@@ -241,16 +240,16 @@ if (!class_exists('DOPBSPTranslation')){
                             $file_data = file_get_contents($folder.$file);
 
                             for ($i = 0; $i<count($this->text); $i++){
-                                if (str_contains($file_data,
-                                                 $this->text[$i]['key'])
-                                        || str_contains($this->text[$i]['key'],
-                                                        'AUTHORIZENET')
-                                        || str_contains($this->text[$i]['key'],
-                                                        'PAYPAL')
-                                        || str_contains($this->text[$i]['key'],
-                                                        'STRIPE')
-                                        || str_contains($this->text[$i]['key'],
-                                                        'TWOCHECKOUT')){
+                                if (strpos($file_data,
+                                           $this->text[$i]['key']) !== false
+                                        || strpos($this->text[$i]['key'],
+                                                  'AUTHORIZENET') !== false
+                                        || strpos($this->text[$i]['key'],
+                                                  'PAYPAL') !== false
+                                        || strpos($this->text[$i]['key'],
+                                                  'STRIPE') !== false
+                                        || strpos($this->text[$i]['key'],
+                                                  'TWOCHECKOUT') !== false){
                                     $this->text[$i]['check'] = true;
                                 }
                             }

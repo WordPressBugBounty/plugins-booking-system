@@ -91,16 +91,10 @@ if (!class_exists('DOPBSPBackEndTranslation')){
 
                 if ($wpdb->num_rows == 0){
                     for ($i = 0; $i<count($languages); $i++){
-                        $query_values[] = '(\''
-                                .$languages[$i]['name']
-                                .'\', \''.
-                                $languages[$i]['code']
-                                .'\', \''
-                                .(str_contains(DOPBSP_CONFIG_TRANSLATION_LANGUAGES_TO_INSTALL,
-                                               $languages[$i]['code'])
+                        $query_values[] = '(\''.$languages[$i]['name'].'\', \''.$languages[$i]['code'].'\', \''.(strpos(DOPBSP_CONFIG_TRANSLATION_LANGUAGES_TO_INSTALL,
+                                                                                                                        $languages[$i]['code']) !== false
                                         ? 'true'
-                                        : 'false')
-                                .'\')';
+                                        : 'false').'\')';
                     }
 
                     if (count($query_values)>0){

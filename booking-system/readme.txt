@@ -163,6 +163,9 @@ Click <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#
 View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Changelog ==
+= 2.9.9.5.6 =
+* PHP 7.4 compatibility checks and support functions have been implemented.
+
 = 2.9.9.5.5 =
 * Compatibility with PHP 8.2 has been improved.
 
@@ -191,6 +194,9 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 View complete changelog <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Upgrade Notice ==
+= 2.9.9.5.6 =
+* PHP 7.4 compatibility checks and support functions have been implemented.
+
 = 2.9.9.5.5 =
 * Compatibility with PHP 8.2 has been improved.
 

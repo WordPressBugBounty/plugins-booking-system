@@ -143,13 +143,22 @@ if (!class_exists('DOTModelReservationsXls')){
             /*
              * Set reservation status.
              */
-            $status = match ($reservation->status) {
-                'pending'  => 'RESERVATIONS_RESERVATION_STATUS_PENDING',
-                'approved' => 'RESERVATIONS_RESERVATION_STATUS_APPROVED',
-                'rejected' => 'RESERVATIONS_RESERVATION_STATUS_REJECTED',
-                'canceled' => 'RESERVATIONS_RESERVATION_STATUS_CANCELED',
-                default    => 'RESERVATIONS_RESERVATION_STATUS_EXPIRED',
-            };
+            switch ($reservation->status){
+                case 'pending':
+                    $status = 'RESERVATIONS_RESERVATION_STATUS_PENDING';
+                    break;
+                case 'approved':
+                    $status = 'RESERVATIONS_RESERVATION_STATUS_APPROVED';
+                    break;
+                case 'rejected':
+                    $status = 'RESERVATIONS_RESERVATION_STATUS_REJECTED';
+                    break;
+                case 'canceled':
+                    $status = 'RESERVATIONS_RESERVATION_STATUS_CANCELED';
+                    break;
+                default:
+                    $status = 'RESERVATIONS_RESERVATION_STATUS_EXPIRED';
+            }
             $data['status'] = $DOPBSP->text($status);
             $labels['status']->usage++;
 
@@ -879,8 +888,8 @@ if (!class_exists('DOTModelReservationsXls')){
             $value = (string)round($value,
                                    2);
 
-            if (str_contains($value,
-                             '.')){
+            if (strpos($value,
+                       '.') !== false){
                 $value_pieces = explode('.',
                                         $value);
                 $price = $value_pieces[0]
