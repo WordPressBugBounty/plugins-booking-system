@@ -3,7 +3,7 @@ Contributors: DOTonPAPER, PINPOINT.WORLD
 Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -163,6 +163,9 @@ Click <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#
 View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Changelog ==
+= 2.9.9.5.5 =
+* Compatibility with PHP 8.2 has been improved.
+
 =2.9.9.5.4 =
 * A small tweak was made to resolve iCal library incompatibility with other plugins or themes.
 * Frontend bug has been repaired.
@@ -188,6 +191,9 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 View complete changelog <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Upgrade Notice ==
+= 2.9.9.5.5 =
+* Compatibility with PHP 8.2 has been improved.
+
 =2.9.9.5.4 =
 * A small tweak was made to resolve iCal library incompatibility with other plugins or themes.
 * Frontend bug has been repaired.

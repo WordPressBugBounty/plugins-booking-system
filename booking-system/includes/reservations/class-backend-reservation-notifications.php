@@ -75,7 +75,8 @@ if (!class_exists('DOPBSPBackEndReservationNotifications')){
                  */
                 if (strpos($template,
                            'admin') !== false){
-                    if ($settings_notifications->{'clickatell_send_'.$template} == 'true'
+                    if (isset($settings_notifications->{'clickatell_send_'.$template})
+                            && $settings_notifications->{'clickatell_send_'.$template} == 'true'
                             && $settings_notifications->clickatell_api_id != ''
                             && $settings_notifications->phone_numbers != ''){
                         $admin_phones = $settings_notifications->phone_numbers;
@@ -107,7 +108,8 @@ if (!class_exists('DOPBSPBackEndReservationNotifications')){
                     }
                 }
                 else{
-                    if ($settings_notifications->{'clickatell_send_'.$template} == 'true'){
+                    if (isset($settings_notifications->{'clickatell_send_'.$template})
+                            && $settings_notifications->{'clickatell_send_'.$template} == 'true'){
                         if ($settings_notifications->clickatell_account_type == 'central'){
                             $DOPBSP->classes->clickatell->send_central($reservation->phone,
                                                                        $sms_message);

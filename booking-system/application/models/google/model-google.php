@@ -137,7 +137,7 @@ if (!class_exists('DOTModelGoogle')){
                                                '$text_domain'),
                                             array('a' =>
                                                           array(
-                                                                  'href' => array(),
+                                                                  'href'  => array(),
                                                                   'style' => array()))),
                                     esc_url($authUrl));
                     echo $link;
@@ -214,12 +214,12 @@ if (!class_exists('DOTModelGoogle')){
              */
             if (!$this->getToken()){
                 $DOT->db->insert($DOT->tables->settings_calendar,
-                                 array('name' => 'google_token',
+                                 array('name'  => 'google_token',
                                        'value' => json_encode($token)));
             }
             else{
                 $DOT->db->update($DOT->tables->settings_calendar,
-                                 array('name' => 'google_token',
+                                 array('name'  => 'google_token',
                                        'value' => json_encode($token)),
                                  array('calendar_id' => 0));
             }
@@ -236,21 +236,30 @@ if (!class_exists('DOTModelGoogle')){
                                                            'google_client_secret',
                                                            'google_project_id',
                                                            'google_token_uri')));
+
+            $client_id = '';
+            $client_secret = '';
+            $project_id = '';
+
             for ($i = 0; $i<4; $i++){
-                if ($cred[$i]->name == 'google_client_id'){
-                    $client_id = $cred[$i]->value;
-                }
-                if ($cred[$i]->name == 'google_client_secret'){
-                    $client_secret = $cred[$i]->value;
-                }
-                if ($cred[$i]->name == 'google_project_id'){
-                    $project_id = $cred[$i]->value;
-                }
-                if ($cred[$i]->name == 'google_token_uri'){
-                    $google_token_uri = $cred[$i]->value;
-                }
+                isset($cred[$i]->name) && $cred[$i]->name == 'google_client_id'
+                        ? $client_id = $cred[$i]->value
+                        : null;
+
+                isset($cred[$i]->name) && $cred[$i]->name == 'google_client_secret'
+                        ? $client_secret = $cred[$i]->value
+                        : null;
+                isset($cred[$i]->name) && $cred[$i]->name == 'google_project_id'
+                        ? $project_id = $cred[$i]->value
+                        : null;
+                isset($cred[$i]->name) && $cred[$i]->name == 'google_token_uri'
+                        ? $google_token_uri = $cred[$i]->value
+                        : null;
             }
-            if ($client_id == '' || $client_secret == '' || $project_id == ''){
+
+            if ($client_id == ''
+                    || $client_secret == ''
+                    || $project_id == ''){
                 return 0;
             }
 

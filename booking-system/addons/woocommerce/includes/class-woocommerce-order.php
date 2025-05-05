@@ -101,7 +101,7 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                     $wpdb->update($DOPBSPWooCommerce->tables->woocommerce,
                                   array('order_item_id' => $item_id),
                                   array('cart_item_key' => $cart_item_key,
-                                        'token' => $values['dopbsp_token']));
+                                        'token'         => $values['dopbsp_token']));
                     $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE cart_item_key="%s" AND token="%s"',
                                                                            $cart_item_key,
                                                                            $values['dopbsp_token']));
@@ -179,7 +179,7 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                 $wpdb->update($DOPBSPWooCommerce->tables->woocommerce,
                               array('order_item_id' => $item_id),
                               array('cart_item_key' => $cart_item_key,
-                                    'token' => $values['dopbsp_token']));
+                                    'token'         => $values['dopbsp_token']));
                 $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE cart_item_key="%s" AND token="%s"',
                                                                        $cart_item_key,
                                                                        $values['dopbsp_token']));
@@ -284,36 +284,36 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                                                                    json_decode($reservation_data->data,
                                                                                true),
                                                                    array(
-                                                                           array("id" => 1,
-                                                                                 "is_email" => "false",
+                                                                           array("id"                   => 1,
+                                                                                 "is_email"             => "false",
                                                                                  "add_to_day_hour_info" => "false",
                                                                                  "add_to_day_hour_body" => "false",
-                                                                                 "translation" => $DOPBSP->text('FORMS_DEFAULT_FIRST_NAME'),
-                                                                                 "value" => $billing_first_name),
-                                                                           array("id" => 2,
-                                                                                 "is_email" => "false",
+                                                                                 "translation"          => $DOPBSP->text('FORMS_DEFAULT_FIRST_NAME'),
+                                                                                 "value"                => $billing_first_name),
+                                                                           array("id"                   => 2,
+                                                                                 "is_email"             => "false",
                                                                                  "add_to_day_hour_info" => "false",
                                                                                  "add_to_day_hour_body" => "false",
-                                                                                 "translation" => $DOPBSP->text('FORMS_DEFAULT_LAST_NAME'),
-                                                                                 "value" => $billing_last_name),
-                                                                           array("id" => 3,
-                                                                                 "is_email" => "true",
+                                                                                 "translation"          => $DOPBSP->text('FORMS_DEFAULT_LAST_NAME'),
+                                                                                 "value"                => $billing_last_name),
+                                                                           array("id"                   => 3,
+                                                                                 "is_email"             => "true",
                                                                                  "add_to_day_hour_info" => "false",
                                                                                  "add_to_day_hour_body" => "false",
-                                                                                 "translation" => $DOPBSP->text('FORMS_DEFAULT_EMAIL'),
-                                                                                 "value" => $billing_email),
-                                                                           array("id" => 4,
-                                                                                 "is_email" => "false",
+                                                                                 "translation"          => $DOPBSP->text('FORMS_DEFAULT_EMAIL'),
+                                                                                 "value"                => $billing_email),
+                                                                           array("id"                   => 4,
+                                                                                 "is_email"             => "false",
                                                                                  "add_to_day_hour_info" => "false",
                                                                                  "add_to_day_hour_body" => "false",
-                                                                                 "translation" => $DOPBSP->text('FORMS_DEFAULT_PHONE'),
-                                                                                 "value" => $billing_phone),
-                                                                           array("id" => 5,
-                                                                                 "is_email" => "false",
+                                                                                 "translation"          => $DOPBSP->text('FORMS_DEFAULT_PHONE'),
+                                                                                 "value"                => $billing_phone),
+                                                                           array("id"                   => 5,
+                                                                                 "is_email"             => "false",
                                                                                  "add_to_day_hour_info" => "false",
                                                                                  "add_to_day_hour_body" => "false",
-                                                                                 "translation" => $DOPBSP->text('FORMS_DEFAULT_MESSAGE'),
-                                                                                 "value" => $order->get_customer_note())
+                                                                                 "translation"          => $DOPBSP->text('FORMS_DEFAULT_MESSAGE'),
+                                                                                 "value"                => $order->get_customer_note())
                                                                    ),
                                                                    '',
                                                                    '',
@@ -776,8 +776,12 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                          $type = ''){
             $info = array();
 
-            // $label = stripslashes(utf8_decode($label));
-            // $value = stripslashes(utf8_decode($value));
+            // $label = stripslashes(mb_convert_encoding($label,
+            //                                    'ISO-8859-1',
+            //                                    'UTF-8'));
+            // $value = stripslashes(mb_convert_encoding($reservation->value,
+            //                                    'ISO-8859-1',
+            //                                    'UTF-8'));
             $label = stripslashes($label);
             $value = stripslashes($value);
 

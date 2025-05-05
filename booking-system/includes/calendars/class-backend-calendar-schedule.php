@@ -249,19 +249,19 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                                  strtotime($end_hour_array[1]));
                             }
 
-                            $reservation = array('check_in' => $check_in,
-                                                 'check_out' => $check_out,
-                                                 'start_hour' => $start_hour,
-                                                 'end_hour' => $end_hour,
-                                                 'no_items' => 1,
-                                                 'price' => 0,
-                                                 'price_total' => 0,
-                                                 'extras_price' => 0,
+                            $reservation = array('check_in'       => $check_in,
+                                                 'check_out'      => $check_out,
+                                                 'start_hour'     => $start_hour,
+                                                 'end_hour'       => $end_hour,
+                                                 'no_items'       => 1,
+                                                 'price'          => 0,
+                                                 'price_total'    => 0,
+                                                 'extras_price'   => 0,
                                                  'discount_price' => 0,
-                                                 'coupon_price' => 0,
-                                                 'fees_price' => 0,
-                                                 'deposit_price' => 0,
-                                                 'uid' => $event->iCalUID);
+                                                 'coupon_price'   => 0,
+                                                 'fees_price'     => 0,
+                                                 'deposit_price'  => 0,
+                                                 'uid'            => $event->iCalUID);
 
                             array_push($cart,
                                        $reservation);
@@ -341,19 +341,19 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                                      strtotime($event['DTEND']));
                                     $check_out = '';
                                 }
-                                $reservation = array('check_in' => $check_in,
-                                                     'check_out' => $check_out,
-                                                     'start_hour' => $start_hour,
-                                                     'end_hour' => $end_hour,
-                                                     'no_items' => 1,
-                                                     'price' => 0,
-                                                     'price_total' => 0,
-                                                     'extras_price' => 0,
+                                $reservation = array('check_in'       => $check_in,
+                                                     'check_out'      => $check_out,
+                                                     'start_hour'     => $start_hour,
+                                                     'end_hour'       => $end_hour,
+                                                     'no_items'       => 1,
+                                                     'price'          => 0,
+                                                     'price_total'    => 0,
+                                                     'extras_price'   => 0,
                                                      'discount_price' => 0,
-                                                     'coupon_price' => 0,
-                                                     'fees_price' => 0,
-                                                     'deposit_price' => 0,
-                                                     'uid' => $event['UID']);
+                                                     'coupon_price'   => 0,
+                                                     'fees_price'     => 0,
+                                                     'deposit_price'  => 0,
+                                                     'uid'            => $event['UID']);
                                 array_push($cart,
                                            $reservation);
                             }
@@ -438,8 +438,10 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
 
             $default_availability = $DOT->post('default_availability',
                                                false);
-            $schedule = json_decode(stripslashes(utf8_encode($DOT->post('schedule',
-                                                                        false))));
+            $schedule = json_decode(stripslashes(mb_convert_encoding($DOT->post('schedule',
+                                                                                false),
+                                                                     'UTF-8',
+                                                                     'ISO-8859-1')));
             $id = $DOT->post('id',
                              'int');
             $hours_enabled = $DOT->post('hours_enabled');
@@ -513,12 +515,12 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
 
                     if ($wpdb->num_rows != 0){
                         $wpdb->update($DOPBSP->tables->days,
-                                      array('data' => json_encode($data),
+                                      array('data'          => json_encode($data),
                                             'min_available' => $min_available,
-                                            'price_min' => $price_min,
-                                            'price_max' => $price_max),
+                                            'price_min'     => $price_min,
+                                            'price_max'     => $price_max),
                                       array('calendar_id' => $id,
-                                            'day' => $day));
+                                            'day'         => $day));
                     }
                     else{
                         array_push($query_insert,
@@ -532,8 +534,8 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                    $min_available,
                                    $price_min,
                                    $price_max);
-//                        array_push($query_insert_values,
-//                                    '(\''.$id.'_'.$day.'\', \''.$id.'\', \''.$day.'\', \''.$day_items[0].'\', \''.json_encode($data).'\', \''.$min_available.'\', \''.$price_min.'\', \''.$price_max.'\')');
+                        //                        array_push($query_insert_values,
+                        //                                    '(\''.$id.'_'.$day.'\', \''.$id.'\', \''.$day.'\', \''.$day_items[0].'\', \''.json_encode($data).'\', \''.$min_available.'\', \''.$price_min.'\', \''.$price_max.'\')');
                     }
                     next($schedule);
                 }
@@ -542,8 +544,8 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     $wpdb->query($wpdb->prepare('INSERT INTO '.$DOPBSP->tables->days.' (unique_key, calendar_id, day, year, data, min_available, price_min, price_max) VALUES '.implode(', ',
                                                                                                                                                                                         $query_insert),
                                                 $query_insert_values));
-//                    $wpdb->query('INSERT INTO '.$DOPBSP->tables->days.' (unique_key, calendar_id, day, year, data, min_available, price_min, price_max) VALUES '.implode(', ',
-//                                                                                                                                                                         $query_insert_values));
+                    //                    $wpdb->query('INSERT INTO '.$DOPBSP->tables->days.' (unique_key, calendar_id, day, year, data, min_available, price_min, price_max) VALUES '.implode(', ',
+                    //                                                                                                                                                                         $query_insert_values));
                 }
 
                 $this->clean();
@@ -955,7 +957,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
-                                    'day' => $day->day));
+                                    'day'         => $day->day));
             }
             elseif ($reservation->check_out != ''){
                 /*
@@ -1000,7 +1002,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     $wpdb->update($DOPBSP->tables->days,
                                   array('data' => json_encode($data)),
                                   array('calendar_id' => $reservation->calendar_id,
-                                        'day' => $day->day));
+                                        'day'         => $day->day));
                 }
             }
             elseif ($reservation->start_hour != ''
@@ -1051,7 +1053,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
-                                    'day' => $day->day));
+                                    'day'         => $day->day));
 
                 if ($settings_calendar->days_details_from_hours == 'true'){
                     $this->setDayFromHours($reservation->calendar_id,
@@ -1125,7 +1127,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
-                                    'day' => $day->day));
+                                    'day'         => $day->day));
 
                 if ($settings_calendar->days_details_from_hours == 'true'){
                     $this->setDayFromHours($reservation->calendar_id,
@@ -1223,7 +1225,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
-                                    'day' => $day_date));
+                                    'day'         => $day_date));
             }
             elseif ($reservation->check_out != ''){
                 /*
@@ -1261,7 +1263,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     $wpdb->update($DOPBSP->tables->days,
                                   array('data' => json_encode($data)),
                                   array('calendar_id' => $reservation->calendar_id,
-                                        'day' => $day_date));
+                                        'day'         => $day_date));
                 }
             }
             elseif ($reservation->start_hour != ''
@@ -1301,7 +1303,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
-                                    'day' => $day->day));
+                                    'day'         => $day->day));
 
                 if ($settings_calendar->days_details_from_hours == 'true'){
                     $this->setDayFromHours($reservation->calendar_id,
@@ -1355,7 +1357,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     $wpdb->update($DOPBSP->tables->days,
                                   array('data' => json_encode($data)),
                                   array('calendar_id' => $reservation->calendar_id,
-                                        'day' => $day->day));
+                                        'day'         => $day->day));
 
                     if ($settings_calendar->days_details_from_hours == 'true'){
                         $this->setDayFromHours($reservation->calendar_id,
@@ -1448,7 +1450,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $wpdb->update($DOPBSP->tables->days,
                           array('data' => json_encode($data)),
                           array('calendar_id' => $calendar_id,
-                                'day' => $day));
+                                'day'         => $day));
         }
 
         /*

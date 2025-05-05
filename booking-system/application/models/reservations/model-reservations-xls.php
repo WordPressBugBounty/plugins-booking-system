@@ -143,22 +143,13 @@ if (!class_exists('DOTModelReservationsXls')){
             /*
              * Set reservation status.
              */
-            switch ($reservation->status){
-                case 'pending':
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_PENDING';
-                    break;
-                case 'approved':
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_APPROVED';
-                    break;
-                case 'rejected':
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_REJECTED';
-                    break;
-                case 'canceled':
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_CANCELED';
-                    break;
-                default:
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_EXPIRED';
-            }
+            $status = match ($reservation->status) {
+                'pending'  => 'RESERVATIONS_RESERVATION_STATUS_PENDING',
+                'approved' => 'RESERVATIONS_RESERVATION_STATUS_APPROVED',
+                'rejected' => 'RESERVATIONS_RESERVATION_STATUS_REJECTED',
+                'canceled' => 'RESERVATIONS_RESERVATION_STATUS_CANCELED',
+                default    => 'RESERVATIONS_RESERVATION_STATUS_EXPIRED',
+            };
             $data['status'] = $DOPBSP->text($status);
             $labels['status']->usage++;
 
@@ -171,7 +162,9 @@ if (!class_exists('DOTModelReservationsXls')){
             /*
              * Set reservation calendar name.
              */
-            $data['calendar_name'] = utf8_decode($calendar->name);
+            $data['calendar_name'] = mb_convert_encoding($calendar->name,
+                                                         'ISO-8859-1',
+                                                         'UTF-8');
             $labels['calendar_name']->usage++;
 
             /*
@@ -281,7 +274,9 @@ if (!class_exists('DOTModelReservationsXls')){
              * Set reservation extras.
              */
             $extras = $reservation->extras != ''
-                    ? json_decode(utf8_decode($reservation->extras))
+                    ? json_decode(mb_convert_encoding($reservation->extras,
+                                                      'ISO-8859-1',
+                                                      'UTF-8'))
                     : array();
 
             foreach ($extras as $item){
@@ -301,7 +296,9 @@ if (!class_exists('DOTModelReservationsXls')){
              * Set reservation discount.
              */
             if ($reservation->discount_price != 0){
-                $discount = json_decode(utf8_decode($reservation->discount));
+                $discount = json_decode(mb_convert_encoding($reservation->discount,
+                                                            'ISO-8859-1',
+                                                            'UTF-8'));
                 $data['discount'] = $discount->translation;
                 $labels['discount']->usage++;
 
@@ -349,7 +346,9 @@ if (!class_exists('DOTModelReservationsXls')){
              * Set reservation coupon.
              */
             if ($reservation->coupon_price != 0){
-                $coupon = json_decode(utf8_decode($reservation->coupon));
+                $coupon = json_decode(mb_convert_encoding($reservation->coupon,
+                                                          'ISO-8859-1',
+                                                          'UTF-8'));
                 $data['coupon'] = $coupon->translation;
                 $labels['coupon']->usage++;
 
@@ -364,7 +363,9 @@ if (!class_exists('DOTModelReservationsXls')){
             $labels['email']->usage++;
 
             $form = $reservation->form != ''
-                    ? json_decode(utf8_decode($reservation->form))
+                    ? json_decode(mb_convert_encoding($reservation->form,
+                                                      'ISO-8859-1',
+                                                      'UTF-8'))
                     : array();
 
             foreach ($form as $item){
@@ -391,7 +392,9 @@ if (!class_exists('DOTModelReservationsXls')){
                             'zip_code');
 
             if ($reservation->address_billing != ''){
-                $address = json_decode(utf8_decode($reservation->address_billing));
+                $address = json_decode(mb_convert_encoding($reservation->address_billing,
+                                                           'ISO-8859-1',
+                                                           'UTF-8'));
 
                 foreach ($fields as $field){
                     if ($address->{$field} != ''){
@@ -407,7 +410,9 @@ if (!class_exists('DOTModelReservationsXls')){
              */
             if ($reservation->address_shipping != ''
                     && $reservation->address_shipping != 'billing_address'){
-                $address = json_decode(utf8_decode($reservation->address_shipping));
+                $address = json_decode(mb_convert_encoding($reservation->address_shipping,
+                                                           'ISO-8859-1',
+                                                           'UTF-8'));
 
                 foreach ($fields as $field){
                     if ($address->{$field} != ''){
@@ -605,7 +610,9 @@ if (!class_exists('DOTModelReservationsXls')){
              */
             foreach ($reservations as $reservation){
                 $extras = $reservation->extras != ''
-                        ? json_decode(utf8_decode($reservation->extras))
+                        ? json_decode(mb_convert_encoding($reservation->extras,
+                                                          'ISO-8859-1',
+                                                          'UTF-8'))
                         : array();
 
                 foreach ($extras as $item){
@@ -636,7 +643,9 @@ if (!class_exists('DOTModelReservationsXls')){
              */
             foreach ($reservations as $reservation){
                 $fees = $reservation->fees != ''
-                        ? json_decode(utf8_decode($reservation->fees))
+                        ? json_decode(mb_convert_encoding($reservation->fees,
+                                                          'ISO-8859-1',
+                                                          'UTF-8'))
                         : array();
 
                 foreach ($fees as $item){
@@ -671,7 +680,9 @@ if (!class_exists('DOTModelReservationsXls')){
 
             foreach ($reservations as $reservation){
                 $form = $reservation->form != ''
-                        ? json_decode(utf8_decode($reservation->form))
+                        ? json_decode(mb_convert_encoding($reservation->form,
+                                                          'ISO-8859-1',
+                                                          'UTF-8'))
                         : array();
 
                 foreach ($form as $item){
@@ -796,9 +807,8 @@ if (!class_exists('DOTModelReservationsXls')){
              * Set data from reservations.
              */
             foreach ($reservations as $reservation){
-                array_push($data,
-                           $this->data($labels,
-                                       $reservation));
+                $data[] = $this->data($labels,
+                                      $reservation);
             }
 
             /*
@@ -869,8 +879,8 @@ if (!class_exists('DOTModelReservationsXls')){
             $value = (string)round($value,
                                    2);
 
-            if (strpos($value,
-                       '.') !== false){
+            if (str_contains($value,
+                             '.')){
                 $value_pieces = explode('.',
                                         $value);
                 $price = $value_pieces[0]

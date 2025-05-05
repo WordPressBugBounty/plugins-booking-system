@@ -266,7 +266,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                 if (isset($cart_item['dopbsp_token'])){
                     $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE token="%s"',
                                                                            $cart_item['dopbsp_token']));
-                    $cart_item['data']->price = 0;
+                    $price = 0;
 
                     foreach ($reservations_data as $reservation_data){
                         $reservation = json_decode($reservation_data->data);
@@ -274,11 +274,11 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                         if ($reservation->deposit_price != 0){
                             $reservation->price_total = $reservation->deposit_price;
                         }
-                        $cart_item['data']->price += $reservation->price_total;
+                        $price += $reservation->price_total;
 
                         if ($woocommerce->version>=3){
                             $product = $cart_item['data'];
-                            $product->set_price($cart_item['data']->price);
+                            $product->set_price($price);
                         }
                     }
                 }
