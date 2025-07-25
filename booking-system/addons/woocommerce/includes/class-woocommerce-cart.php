@@ -276,7 +276,8 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                         }
                         $price += $reservation->price_total;
 
-                        if ($woocommerce->version>=3){
+                        if ($woocommerce->version>='3'
+                            || $woocommerce->version>='10'){
                             $product = $cart_item['data'];
                             $product->set_price($price);
                         }

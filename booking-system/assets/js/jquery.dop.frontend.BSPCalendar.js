@@ -370,7 +370,7 @@
                 /*
                  * Resize & position the sidebar first.
                  */
-                if (Container.width() > 240
+                if (Container.width() > 1024
                         || (force !== undefined && force === true)){
                     methods_sidebar.rp();
                     methods_calendar.container.rp();

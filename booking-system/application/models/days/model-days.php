@@ -137,8 +137,8 @@
                      */
                     while ($start < $end){
                         $start += 86400;
-                        $start += $end-$start < 86400
-                                ? $end-$start
+                        $start += abs($end-$start) < 86400
+                                ? abs($end-$start)
                                 : 0;
 
                         array_push($days, date('Y-m-d', $start));
