@@ -43,7 +43,9 @@ if (!class_exists('DOPBSPFrontEnd')){
              * Register styles.
              */
             wp_register_style('DOPBSP-css-dopselect',
-                              $DOPBSP->paths->url.'libraries/css/jquery.dop.Select.css');
+                              $DOPBSP->paths->url.'libraries/css/jquery.dop.Select.css',
+                              [],
+                              DOT_VERSION);
 
             /*
              * Enqueue styles.
@@ -66,7 +68,8 @@ if (!class_exists('DOPBSPFrontEnd')){
              */
             wp_register_script('DOP-js-prototypes',
                                $DOPBSP->paths->url.'libraries/js/dop-prototypes.js',
-                               array('jquery'));
+                               array('jquery'),
+                               DOT_VERSION);
             wp_register_script('DOP-js-jquery-dopselect',
                                $DOPBSP->paths->url.'libraries/js/jquery.dop.Select.js',
                                array('jquery'),
@@ -79,7 +82,7 @@ if (!class_exists('DOPBSPFrontEnd')){
             wp_register_script('DOPBSP-js-frontend-calendar',
                                $DOPBSP->paths->url.'assets/js/jquery.dop.frontend.BSPCalendar.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
 
             /*
@@ -88,7 +91,7 @@ if (!class_exists('DOPBSPFrontEnd')){
             wp_register_script('DOPBSP-js-frontend',
                                $DOPBSP->paths->url.'assets/js/frontend.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
 
             /*
@@ -97,7 +100,7 @@ if (!class_exists('DOPBSPFrontEnd')){
             wp_register_script('DOPBSP-js-frontend-deposit',
                                $DOPBSP->paths->url.'assets/js/deposit/frontend-deposit.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
 
             /*
@@ -106,7 +109,7 @@ if (!class_exists('DOPBSPFrontEnd')){
             wp_register_script('DOPBSP-js-frontend-discounts',
                                $DOPBSP->paths->url.'assets/js/discounts/frontend-discounts.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
 
             /*
@@ -115,7 +118,7 @@ if (!class_exists('DOPBSPFrontEnd')){
             wp_register_script('DOPBSP-js-frontend-fees',
                                $DOPBSP->paths->url.'assets/js/fees/frontend-fees.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
 
             /*
@@ -124,7 +127,7 @@ if (!class_exists('DOPBSPFrontEnd')){
             wp_register_script('DOPBSP-js-frontend-rules',
                                $DOPBSP->paths->url.'assets/js/rules/frontend-rules.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
 
             /*
@@ -133,32 +136,32 @@ if (!class_exists('DOPBSPFrontEnd')){
             wp_register_script('dot-js',
                                $DOPBSP->paths->url.'application/assets/js/dot.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
             wp_register_script('dot-js-calendar',
                                $DOPBSP->paths->url.'application/assets/js/calendars/calendar.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
             wp_register_script('dot-js-calendar-availability',
                                $DOPBSP->paths->url.'application/assets/js/calendars/calendar-availability.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
             wp_register_script('dot-js-calendar-days',
                                $DOPBSP->paths->url.'application/assets/js/calendars/calendar-days.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
             wp_register_script('dot-js-calendar-day',
                                $DOPBSP->paths->url.'application/assets/js/calendars/calendar-day.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
             wp_register_script('dot-js-calendar-schedule',
                                $DOPBSP->paths->url.'application/assets/js/calendars/calendar-schedule.js',
                                array('jquery'),
-                               false,
+                               DOT_VERSION,
                                true);
 
             /*

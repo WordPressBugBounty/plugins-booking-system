@@ -73,22 +73,22 @@ if (!class_exists('DOPBSPBackEndSettings')){
          *                          "settings_type" (string): settings type
          *                          "value" (combined): the value with which the option will be modified
          */
-        function set($args = array('id' => '',
-                                   'is_ajax' => true,
-                                   'key' => '',
+        function set($args = array('id'            => '',
+                                   'is_ajax'       => true,
+                                   'key'           => '',
                                    'settings_type' => '',
-                                   'value' => '',
-                                   'nonce' => '')){
+                                   'value'         => '',
+                                   'nonce'         => '')){
             global $DOT;
             global $wpdb;
             global $DOPBSP;
 
             if (!isset($args['key'])){
-                $args = array('id' => '',
-                              'is_ajax' => true,
-                              'key' => '',
+                $args = array('id'            => '',
+                              'is_ajax'       => true,
+                              'key'           => '',
                               'settings_type' => '',
-                              'value' => '');
+                              'value'         => '');
             }
 
             $is_ajax = $args['is_ajax'];
@@ -120,7 +120,8 @@ if (!class_exists('DOPBSPBackEndSettings')){
                     : $DOT->sanitize($args['nonce']);
 
             if ($is_ajax
-                && !wp_verify_nonce($nonce, 'dopbsp_user_nonce')){
+                    && !wp_verify_nonce($nonce,
+                                        'dopbsp_user_nonce')){
                 return false;
             }
 
@@ -160,12 +161,12 @@ if (!class_exists('DOPBSPBackEndSettings')){
             if ($wpdb->num_rows == 0){
                 $wpdb->insert($table,
                               $id_type == 'none'
-                                      ? array('name' => $key,
+                                      ? array('name'  => $key,
                                               'value' => $value)
                                       :
                                       array($id_type => $id,
-                                            'name' => $key,
-                                            'value' => $value));
+                                            'name'   => $key,
+                                            'value'  => $value));
             }
             else{
                 $wpdb->update($table,
@@ -174,7 +175,7 @@ if (!class_exists('DOPBSPBackEndSettings')){
                                       ? array('name' => $key)
                                       :
                                       array($id_type => $id,
-                                            'name' => $key));
+                                            'name'   => $key));
             }
 
             /*

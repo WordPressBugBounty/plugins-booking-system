@@ -30,9 +30,22 @@ if (!class_exists('DOPBSPBackEndExtraGroupItem')){
          * @return new group HTML
          */
         function add(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $group_id = $DOT->post('group_id',
                                    'int');
@@ -63,9 +76,22 @@ if (!class_exists('DOPBSPBackEndExtraGroupItem')){
          * @post language (string): extra selected language
          */
         function edit(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $id = $DOT->post('id',
                              'int');
@@ -107,9 +133,22 @@ if (!class_exists('DOPBSPBackEndExtraGroupItem')){
          * @post id (integer): group item ID
          */
         function delete(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $id = $DOT->post('id',
                              'int');

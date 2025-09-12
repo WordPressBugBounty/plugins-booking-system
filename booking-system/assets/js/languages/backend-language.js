@@ -1,6 +1,5 @@
-
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.2
 * File                    : assets/js/languages/backend-language.js
 * File Version            : 1.0.2
@@ -13,7 +12,7 @@
 
 var DOPBSPBackEndLanguage = new function(){
     'use strict';
-    
+
     /*
      * Private variables
      */
@@ -24,19 +23,29 @@ var DOPBSPBackEndLanguage = new function(){
      */
     this.__construct = function(){
     };
-    
+
     /*
      * Change back end language.
      */
     this.change = function(){
-        DOPBSPBackEnd.toggleMessages('active', DOPBSPBackEnd.text('MESSAGES_SAVING'));
-        
-        $.post(ajaxurl, {action: 'dopbsp_language_change',
-                         language: $('#DOPBSP-admin-language').val()}, function(data){
-            window.location.reload();
-        }).fail(function(data){
-            DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-        });
+        DOPBSPBackEnd.toggleMessages('active',
+                                     DOPBSPBackEnd.text('MESSAGES_SAVING'));
+
+        $.post(ajaxurl,
+               {
+                   action  : 'dopbsp_language_change',
+                   language: $('#DOPBSP-admin-language')
+                   .val(),
+                   nonce   : DOPBSP_user_nonce
+
+               },
+               function(data){
+                   window.location.reload();
+               })
+         .fail(function(data){
+             DOPBSPBackEnd.toggleMessages('error',
+                                          data.status+': '+data.statusText);
+         });
     };
 
     /*
@@ -45,35 +54,60 @@ var DOPBSPBackEndLanguage = new function(){
      * @param language (String): language code
      */
     this.set = function(language){
-        if ($('#DOPBSP-translation-language-'+language).is(':checked')){
+        if ($('#DOPBSP-translation-language-'+language)
+        .is(':checked')){
             DOPBSPBackEndLanguage.enable(language);
         }
         else{
-            DOPBSPBackEnd.confirmation('LANGUAGES_REMOVE_CONFIGURATION', "DOPBSPBackEndLanguage.enable('"+language+"')", "$('#DOPBSP-translation-language-"+language+"').attr('checked', 'checked');");
+            DOPBSPBackEnd.confirmation('LANGUAGES_REMOVE_CONFIGURATION',
+                                       "DOPBSPBackEndLanguage.enable('"+language+"')",
+                                       "$('#DOPBSP-translation-language-"+language+"').attr('checked', 'checked');");
         }
     };
-    
+
     /*
      * Enable/disable a language.
      * 
      * @param language (String): language code
      */
     this.enable = function(language){
-        DOPBSPBackEnd.toggleMessages('active', $('#DOPBSP-translation-language-'+language).is(':checked') ? DOPBSPBackEnd.text('LANGUAGES_SETTING'):DOPBSPBackEnd.text('LANGUAGES_REMOVING'));
+        DOPBSPBackEnd.toggleMessages('active',
+                                     $('#DOPBSP-translation-language-'+language)
+                                     .is(':checked')
+                                             ? DOPBSPBackEnd.text('LANGUAGES_SETTING')
+                                             : DOPBSPBackEnd.text('LANGUAGES_REMOVING'));
 
-        $.post(ajaxurl, {action: 'dopbsp_language_enable',
-                         language: language,
-                         value: $('#DOPBSP-translation-language-'+language).is(':checked') ? 'true':'false'}, function(data){
-            DOPBSPBackEnd.toggleMessages('active', $('#DOPBSP-translation-language-'+language).is(':checked') ? DOPBSPBackEnd.text('LANGUAGES_SET_SUCCESS'):DOPBSPBackEnd.text('LANGUAGES_REMOVE_SUCCESS'));
-            DOPPrototypes.setCookie('DOPBSP-translation-redirect', 'languages', 1);
+        $.post(ajaxurl,
+               {
+                   action  : 'dopbsp_language_enable',
+                   language: language,
+                   value   : $('#DOPBSP-translation-language-'+language)
+                   .is(':checked')
+                           ? 'true'
+                           : 'false',
+                   nonce   : DOPBSP_user_nonce
 
-            setTimeout(function(){
-                window.location.reload();
-            }, 2000);
-        }).fail(function(data){
-            DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-        });
+               },
+               function(data){
+                   DOPBSPBackEnd.toggleMessages('active',
+                                                $('#DOPBSP-translation-language-'+language)
+                                                .is(':checked')
+                                                        ? DOPBSPBackEnd.text('LANGUAGES_SET_SUCCESS')
+                                                        : DOPBSPBackEnd.text('LANGUAGES_REMOVE_SUCCESS'));
+                   DOPPrototypes.setCookie('DOPBSP-translation-redirect',
+                                           'languages',
+                                           1);
+
+                   setTimeout(function(){
+                                  window.location.reload();
+                              },
+                              2000);
+               })
+         .fail(function(data){
+             DOPBSPBackEnd.toggleMessages('error',
+                                          data.status+': '+data.statusText);
+         });
     };
-    
+
     return this.__construct();
 };

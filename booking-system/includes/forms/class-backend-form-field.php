@@ -31,9 +31,22 @@ if (!class_exists('DOPBSPBackEndFormField')){
          * @return new field HTML
          */
         function add(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $form_id = $DOT->post('form_id',
                                   'int');
@@ -98,9 +111,22 @@ if (!class_exists('DOPBSPBackEndFormField')){
          * @post language (string): form selected language
          */
         function edit(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $id = $DOT->post('id',
                              'int');
@@ -142,9 +168,22 @@ if (!class_exists('DOPBSPBackEndFormField')){
          * @post id (integer): form field ID
          */
         function delete(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $id = $DOT->post('id',
                              'int');

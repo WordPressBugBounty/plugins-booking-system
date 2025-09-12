@@ -14,7 +14,7 @@
  */
 define('DOT_ID', 'pbs'); // Unique aplication ID.
 define('DOT_STATUS', isset($_SERVER['SERVER_NAME']) ? ($_SERVER['SERVER_NAME'] == 'dopstudios.net' ? 'beta':'live'):'beta'); // Application status (beta, live, maintenance).
-define('DOT_VERSION', '2.6.7'); // Application version.
+define('DOT_VERSION', '2.9.9.5.8'); // Application version.
 
 /*
  * AJAX configuration.

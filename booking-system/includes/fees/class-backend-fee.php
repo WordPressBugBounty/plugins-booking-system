@@ -28,6 +28,17 @@ if (!class_exists('DOPBSPBackEndFee')){
         function add(){
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
 
             $wpdb->insert($DOPBSP->tables->fees,
                           array('user_id'     => wp_get_current_user()->ID,
@@ -51,6 +62,16 @@ if (!class_exists('DOPBSPBackEndFee')){
             global $DOT;
             global $DOPBSP;
 
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+
             $id = $DOT->post('id',
                              'int');
             $language = $DOT->post('language');
@@ -73,6 +94,16 @@ if (!class_exists('DOPBSPBackEndFee')){
             global $DOT;
             global $wpdb;
             global $DOPBSP;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
 
             $id = $DOT->post('id',
                              'int');
@@ -119,6 +150,16 @@ if (!class_exists('DOPBSPBackEndFee')){
             global $DOT;
             global $wpdb;
             global $DOPBSP;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
 
             $id = $DOT->post('id',
                              'int');

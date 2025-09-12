@@ -1,6 +1,5 @@
-
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.2
 * File                    : assets/js/api/backend-api.js
 * File Version            : 1.0.1
@@ -13,18 +12,18 @@
 
 var DOPBSPBackEndApi = new function(){
     'use strict';
-    
+
     /*
      * Private variables.
      */
     var $ = jQuery.noConflict();
-        
+
     /*
      * Constructor
      */
     this.__construct = function(){
     };
-    
+
     /*
      * Display addons.
      * 
@@ -32,18 +31,28 @@ var DOPBSPBackEndApi = new function(){
      */
     this.reset = function(id){
         DOPBSPBackEnd.clearColumns(1);
-        DOPBSPBackEnd.toggleMessages('active', DOPBSPBackEnd.text('MESSAGES_SAVING'));
+        DOPBSPBackEnd.toggleMessages('active',
+                                     DOPBSPBackEnd.text('MESSAGES_SAVING'));
 
-        $.post(ajaxurl, {action: 'dopbsp_api_key_reset',
-                         user_id: id}, function(data){
-            data = $.trim(data);
-            
-            $('#DOPBSP-box-api-key').html(data);
-            DOPBSPBackEnd.toggleMessages('success', DOPBSPBackEnd.text('DASHBOARD_API_RESET_SUCCESS'));
-        }).fail(function(data){
-            DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-        });
+        $.post(ajaxurl,
+               {
+                   action : 'dopbsp_api_key_reset',
+                   user_id: id,
+                   nonce  : DOPBSP_user_nonce
+               },
+               function(data){
+                   data = $.trim(data);
+
+                   $('#DOPBSP-box-api-key')
+                   .html(data);
+                   DOPBSPBackEnd.toggleMessages('success',
+                                                DOPBSPBackEnd.text('DASHBOARD_API_RESET_SUCCESS'));
+               })
+         .fail(function(data){
+             DOPBSPBackEnd.toggleMessages('error',
+                                          data.status+': '+data.statusText);
+         });
     };
-    
+
     return this.__construct();
 };

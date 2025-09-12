@@ -395,7 +395,8 @@
                     $php_mailer->SMTPSecure = 'tls';
                 }
                 else{
-                    $php_mailer->SMTPSecure = '';
+                    $php_mailer->SMTPSecure = false;
+                    $php_mailer->SMTPAutoTLS = false;
                 }
                 $php_mailer->Username = $smtp_user;
                 $php_mailer->Password = $smtp_password;
@@ -558,8 +559,21 @@
              * @post email (string): receiver email
              */
             function test(){
-		global $DOT;
                 global $DOPBSP;
+                global $DOT;
+
+                /*
+                 * Verify nonce.
+                 */
+                $nonce = $DOT->post('nonce');
+
+                if (!wp_verify_nonce($nonce,
+                                     'dopbsp_user_nonce')){
+                    return false;
+                }
+                /*
+                 * End verify nonce.
+                 */
                 
                 $id = $DOT->post('id', 'int');
                 $method = $DOT->post('method');

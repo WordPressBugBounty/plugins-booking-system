@@ -1,4 +1,3 @@
-
 /*
  * Title                   : Pinpoint Booking System WordPress Plugin
  * File                    : assets/js/smss/backend-sms.js
@@ -10,7 +9,7 @@
 
 var DOPBSPBackEndSms = new function(){
     'use strict';
-    
+
     /*
      * Private variables.
      */
@@ -21,13 +20,13 @@ var DOPBSPBackEndSms = new function(){
      */
     this.ajaxRequestInProgress;
     this.ajaxRequestTimeout;
-    
+
     /*
      * Constructor
      */
     this.__construct = function(){
     };
-    
+
     /*
      * Display SMS.
      * 
@@ -41,43 +40,75 @@ var DOPBSPBackEndSms = new function(){
                             template,
                             clearSms){
         var HTML = new Array();
-        
-        language = language === undefined ? ($('#DOPBSP-sms-language').val() === undefined ? '':$('#DOPBSP-sms-language').val()):language;
-        template = template === undefined ? ($('#DOPBSP-sms-select-template').val() === undefined ? 'book_admin':$('#DOPBSP-sms-select-template').val()):template;
-        clearSms = clearSms === undefined ? true:false;
-        language = clearSms ? '':language;
-        
+
+        language = language === undefined
+                ? ($('#DOPBSP-sms-language')
+                .val() === undefined
+                        ? ''
+                        : $('#DOPBSP-sms-language')
+                        .val())
+                : language;
+        template = template === undefined
+                ? ($('#DOPBSP-sms-select-template')
+                .val() === undefined
+                        ? 'book_admin'
+                        : $('#DOPBSP-sms-select-template')
+                        .val())
+                : template;
+        clearSms = clearSms === undefined
+                ? true
+                : false;
+        language = clearSms
+                ? ''
+                : language;
+
         if (clearSms){
             DOPBSPBackEnd.clearColumns(2);
         }
-        DOPBSPBackEnd.toggleMessages('active', DOPBSPBackEnd.text('MESSAGES_LOADING'));
-        
-        $('#DOPBSP-column1 .dopbsp-column-content li').removeClass('dopbsp-selected');
-        $('#DOPBSP-sms-ID-'+id).addClass('dopbsp-selected');
-        $('#DOPBSP-sms-ID').val(id);
-        
-        $.post(ajaxurl, {action: 'dopbsp_sms_display', 
-                         id: id,
-                         language: language,
-                         template: template}, function(data){
-            HTML.push('<a href="javascript:DOPBSPBackEnd.confirmation(\'SMSES_DELETE_SMS_CONFIRMATION\', \'DOPBSPBackEndSms.delete('+id+')\')" class="dopbsp-button dopbsp-delete"><span class="dopbsp-info">'+DOPBSPBackEnd.text('SMSES_DELETE_SMS_SUBMIT')+'</span></a>');
-            HTML.push('<a href="'+DOPBSP_CONFIG_HELP_DOCUMENTATION_URL+'" target="_blank" class="dopbsp-button dopbsp-help">');
-            HTML.push(' <span class="dopbsp-info dopbsp-help">');
-            HTML.push(DOPBSPBackEnd.text('SMSES_SMS_HELP')+'<br /><br />');
-            HTML.push(DOPBSPBackEnd.text('HELP_VIEW_DOCUMENTATION'));
-            HTML.push(' </span>');
-            HTML.push('</a>');
-            
-            $('#DOPBSP-column2 .dopbsp-column-header').html(HTML.join(''));
-            $('#DOPBSP-column2 .dopbsp-column-content').html(data);
-            
-            $('#DOPBSP-sms-start_date').datepicker();
-            $('#DOPBSP-sms-end_date').datepicker();
-            
-            DOPBSPBackEnd.toggleMessages('success', DOPBSPBackEnd.text('SMSES_SMS_LOADED'));
-        }).fail(function(data){
-            DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-        });
+        DOPBSPBackEnd.toggleMessages('active',
+                                     DOPBSPBackEnd.text('MESSAGES_LOADING'));
+
+        $('#DOPBSP-column1 .dopbsp-column-content li')
+        .removeClass('dopbsp-selected');
+        $('#DOPBSP-sms-ID-'+id)
+        .addClass('dopbsp-selected');
+        $('#DOPBSP-sms-ID')
+        .val(id);
+
+        $.post(ajaxurl,
+               {
+                   action  : 'dopbsp_sms_display',
+                   id      : id,
+                   language: language,
+                   template: template,
+                   nonce   : DOPBSP_user_nonce
+               },
+               function(data){
+                   HTML.push('<a href="javascript:DOPBSPBackEnd.confirmation(\'SMSES_DELETE_SMS_CONFIRMATION\', \'DOPBSPBackEndSms.delete('+id+')\')" class="dopbsp-button dopbsp-delete"><span class="dopbsp-info">'+DOPBSPBackEnd.text('SMSES_DELETE_SMS_SUBMIT')+'</span></a>');
+                   HTML.push('<a href="'+DOPBSP_CONFIG_HELP_DOCUMENTATION_URL+'" target="_blank" class="dopbsp-button dopbsp-help">');
+                   HTML.push(' <span class="dopbsp-info dopbsp-help">');
+                   HTML.push(DOPBSPBackEnd.text('SMSES_SMS_HELP')+'<br /><br />');
+                   HTML.push(DOPBSPBackEnd.text('HELP_VIEW_DOCUMENTATION'));
+                   HTML.push(' </span>');
+                   HTML.push('</a>');
+
+                   $('#DOPBSP-column2 .dopbsp-column-header')
+                   .html(HTML.join(''));
+                   $('#DOPBSP-column2 .dopbsp-column-content')
+                   .html(data);
+
+                   $('#DOPBSP-sms-start_date')
+                   .datepicker();
+                   $('#DOPBSP-sms-end_date')
+                   .datepicker();
+
+                   DOPBSPBackEnd.toggleMessages('success',
+                                                DOPBSPBackEnd.text('SMSES_SMS_LOADED'));
+               })
+         .fail(function(data){
+             DOPBSPBackEnd.toggleMessages('error',
+                                          data.status+': '+data.statusText);
+         });
     };
 
     /*
@@ -85,14 +116,24 @@ var DOPBSPBackEndSms = new function(){
      */
     this.add = function(){
         DOPBSPBackEnd.clearColumns(2);
-        DOPBSPBackEnd.toggleMessages('active', DOPBSPBackEnd.text('SMSES_ADD_SMS_ADDING'));
+        DOPBSPBackEnd.toggleMessages('active',
+                                     DOPBSPBackEnd.text('SMSES_ADD_SMS_ADDING'));
 
-        $.post(ajaxurl, {action: 'dopbsp_sms_add'}, function(data){
-            $('#DOPBSP-column1 .dopbsp-column-content').html(data);
-            DOPBSPBackEnd.toggleMessages('success', DOPBSPBackEnd.text('SMSES_ADD_SMS_SUCCESS'));
-        }).fail(function(data){
-            DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-        });
+        $.post(ajaxurl,
+               {
+                   action: 'dopbsp_sms_add',
+                   nonce : DOPBSP_user_nonce
+               },
+               function(data){
+                   $('#DOPBSP-column1 .dopbsp-column-content')
+                   .html(data);
+                   DOPBSPBackEnd.toggleMessages('success',
+                                                DOPBSPBackEnd.text('SMSES_ADD_SMS_SUCCESS'));
+               })
+         .fail(function(data){
+             DOPBSPBackEnd.toggleMessages('error',
+                                          data.status+': '+data.statusText);
+         });
     };
 
     /*
@@ -105,54 +146,83 @@ var DOPBSPBackEndSms = new function(){
      * @param value (String): field value
      * @param onBlur (Boolean): true if function has been called on blur event
      */
-    this.edit = function(id, 
+    this.edit = function(id,
                          template,
-                         type, 
+                         type,
                          field,
-                         value, 
+                         value,
                          onBlur){
-        onBlur = onBlur === undefined ? false:true;
-        
-        this.ajaxRequestInProgress !== undefined && !onBlur ? this.ajaxRequestInProgress.abort():'';
-        this.ajaxRequestTimeout !== undefined ? clearTimeout(this.ajaxRequestTimeout):'';
-        
+        onBlur = onBlur === undefined
+                ? false
+                : true;
+
+        this.ajaxRequestInProgress !== undefined && !onBlur
+                ? this.ajaxRequestInProgress.abort()
+                : '';
+        this.ajaxRequestTimeout !== undefined
+                ? clearTimeout(this.ajaxRequestTimeout)
+                : '';
+
         switch (field){
             case 'name':
-                $('#DOPBSP-sms-ID-'+id+' .dopbsp-name').html(value === '' ? '&nbsp;':value);
+                $('#DOPBSP-sms-ID-'+id+' .dopbsp-name')
+                .html(value === ''
+                              ? '&nbsp;'
+                              : value);
                 break;
         }
-        
+
         if (onBlur){
-            $.post(ajaxurl, {action: 'dopbsp_sms_edit',
-                             id: id,
-                             template: template,
-                             field: field,
-                             value: value,
-                             language: $('#DOPBSP-sms-language').val()}, function(data){
-                if (!onBlur){
-                    DOPBSPBackEnd.toggleMessages('success', DOPBSPBackEnd.text('MESSAGES_SAVING_SUCCESS'));
-                }
-            }).fail(function(data){
-                DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-            });
+            $.post(ajaxurl,
+                   {
+                       action  : 'dopbsp_sms_edit',
+                       id      : id,
+                       template: template,
+                       field   : field,
+                       value   : value,
+                       language: $('#DOPBSP-sms-language')
+                       .val(),
+                       nonce   : DOPBSP_user_nonce
+                   },
+                   function(data){
+                       if (!onBlur){
+                           DOPBSPBackEnd.toggleMessages('success',
+                                                        DOPBSPBackEnd.text('MESSAGES_SAVING_SUCCESS'));
+                       }
+                   })
+             .fail(function(data){
+                 DOPBSPBackEnd.toggleMessages('error',
+                                              data.status+': '+data.statusText);
+             });
         }
         else{
-            DOPBSPBackEnd.toggleMessages('active-info', DOPBSPBackEnd.text('MESSAGES_SAVING'));
+            DOPBSPBackEnd.toggleMessages('active-info',
+                                         DOPBSPBackEnd.text('MESSAGES_SAVING'));
 
             this.ajaxRequestTimeout = setTimeout(function(){
-                clearTimeout(this.ajaxRequestTimeout);
+                                                     clearTimeout(this.ajaxRequestTimeout);
 
-                this.ajaxRequestInProgress = $.post(ajaxurl, {action: 'dopbsp_sms_edit',
-                                                              id: id,
-                                                              template: template,
-                                                              field: field,
-                                                              value: value,
-                                                              language: $('#DOPBSP-sms-language').val()}, function(data){
-                    DOPBSPBackEnd.toggleMessages('success', DOPBSPBackEnd.text('MESSAGES_SAVING_SUCCESS'));
-                }).fail(function(data){
-                    DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-                });
-            }, 600);
+                                                     this.ajaxRequestInProgress = $.post(ajaxurl,
+                                                                                         {
+                                                                                             action  : 'dopbsp_sms_edit',
+                                                                                             id      : id,
+                                                                                             template: template,
+                                                                                             field   : field,
+                                                                                             value   : value,
+                                                                                             language: $('#DOPBSP-sms-language')
+                                                                                             .val(),
+                                                                                             nonce   : DOPBSP_user_nonce
+                                                                                         },
+                                                                                         function(data){
+                                                                                             DOPBSPBackEnd.toggleMessages('success',
+                                                                                                                          DOPBSPBackEnd.text('MESSAGES_SAVING_SUCCESS'));
+                                                                                         })
+                                                                                   .fail(function(data){
+                                                                                       DOPBSPBackEnd.toggleMessages('error',
+                                                                                                                    data.status+': '+data.statusText);
+                                                                                   });
+                                                 },
+                                                 600);
         }
     };
 
@@ -163,25 +233,39 @@ var DOPBSPBackEndSms = new function(){
      * @param id (Number): SMS ID
      */
     this.delete = function(id){
-        DOPBSPBackEnd.toggleMessages('active', DOPBSPBackEnd.text('SMSES_DELETE_SMS_DELETING'));
+        DOPBSPBackEnd.toggleMessages('active',
+                                     DOPBSPBackEnd.text('SMSES_DELETE_SMS_DELETING'));
 
-        $.post(ajaxurl, {action: 'dopbsp_sms_delete', 
-                         id: id}, function(data){
-            DOPBSPBackEnd.clearColumns(2);
+        $.post(ajaxurl,
+               {
+                   action: 'dopbsp_sms_delete',
+                   id    : id,
+                   nonce : DOPBSP_user_nonce
+               },
+               function(data){
+                   DOPBSPBackEnd.clearColumns(2);
 
-            $('#DOPBSP-sms-ID-'+id).stop(true, true)
-                                      .animate({'opacity':0}, 
-                                      600, function(){
-                $(this).remove();
+                   $('#DOPBSP-sms-ID-'+id)
+                   .stop(true,
+                         true)
+                   .animate({'opacity': 0},
+                            600,
+                            function(){
+                                $(this)
+                                .remove();
 
-                if (data === '0'){
-                    $('#DOPBSP-column1 .dopbsp-column-content').html('<ul><li class="dopbsp-no-data">'+DOPBSPBackEnd.text('SMSES_NO_SMSES')+'</li></ul>');
-                }
-                DOPBSPBackEnd.toggleMessages('success', DOPBSPBackEnd.text('SMSES_DELETE_SMS_SUCCESS'));
-            });
-        }).fail(function(data){
-            DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-        });
+                                if (data === '0'){
+                                    $('#DOPBSP-column1 .dopbsp-column-content')
+                                    .html('<ul><li class="dopbsp-no-data">'+DOPBSPBackEnd.text('SMSES_NO_SMSES')+'</li></ul>');
+                                }
+                                DOPBSPBackEnd.toggleMessages('success',
+                                                             DOPBSPBackEnd.text('SMSES_DELETE_SMS_SUCCESS'));
+                            });
+               })
+         .fail(function(data){
+             DOPBSPBackEnd.toggleMessages('error',
+                                          data.status+': '+data.statusText);
+         });
     };
 
     return this.__construct();

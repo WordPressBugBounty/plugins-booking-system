@@ -33,9 +33,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
          * @return schedule JSON
          */
         function get($args = array()){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
 
             $schedule = array();
 
@@ -432,9 +432,22 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
          * @post hours_enabled (string): hours enabled
          */
         function set(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $default_availability = $DOT->post('default_availability',
                                                false);
@@ -1460,9 +1473,22 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
          * @post schedule (string): calendar data
          */
         function delete(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $id = $DOT->post('id',
                              'int');

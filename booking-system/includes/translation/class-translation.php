@@ -196,6 +196,20 @@ if (!class_exists('DOPBSPTranslation')){
          */
         function check(){
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             for ($i = 0; $i<count($this->text); $i++){
                 $this->text[$i]['check'] = false;

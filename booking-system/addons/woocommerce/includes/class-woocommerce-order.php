@@ -29,7 +29,7 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
             /*
              * Add order item meta & save order item ID.
              */
-            add_action('woocommerce_add_order_item_meta',
+            add_action('woocommerce_new_order_item',
                        array(&$this,
                              'set'),
                        10,
@@ -169,20 +169,23 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
          * @param cart_item_key (object): cart item key from which the order item is created (not received from WC)
          */
         function set($item_id,
-                     $values,
-                     $cart_item_key){
+                     $item,
+                     $order_id){
             global $wpdb;
             global $DOPBSP;
             global $DOPBSPWooCommerce;
 
-            if (isset($values['dopbsp_token'])){
+            if (isset($item->legacy_values['dopbsp_token'])){
+                $dopbsp_token = $item->legacy_values['dopbsp_token'];
+                $key = $item->legacy_values['key'];
+
                 $wpdb->update($DOPBSPWooCommerce->tables->woocommerce,
                               array('order_item_id' => $item_id),
-                              array('cart_item_key' => $cart_item_key,
-                                    'token'         => $values['dopbsp_token']));
+                              array('cart_item_key' => $key,
+                                    'token'         => $dopbsp_token));
                 $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE cart_item_key="%s" AND token="%s"',
-                                                                       $cart_item_key,
-                                                                       $values['dopbsp_token']));
+                                                                       $key,
+                                                                       $dopbsp_token));
 
                 foreach ($reservations_data as $reservation_data){
                     $reservation = json_decode($reservation_data->data);

@@ -26,6 +26,20 @@ if (!class_exists('DOPBSPBackEndEmail')){
         function add(){
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $wpdb->insert($DOPBSP->tables->emails,
                           array('user_id' => wp_get_current_user()->ID,
@@ -118,8 +132,21 @@ if (!class_exists('DOPBSPBackEndEmail')){
          * @return email HTML
          */
         function display(){
-            global $DOT;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $id = $DOT->post('id',
                              'int');
@@ -174,9 +201,22 @@ if (!class_exists('DOPBSPBackEndEmail')){
          * @post language (string): email selected language
          */
         function edit(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $id = $DOT->post('id',
                              'int');
@@ -227,9 +267,22 @@ if (!class_exists('DOPBSPBackEndEmail')){
          * @return number of emails left
          */
         function delete(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $id = $DOT->post('id',
                              'int');

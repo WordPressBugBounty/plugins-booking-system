@@ -29,9 +29,22 @@ if (!class_exists('DOPBSPBackEndTranslation')){
          * @return HTML translations list
          */
         function display(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $language = $DOT->post('language');
             $text_group = $DOT->post('text_group');
@@ -212,9 +225,22 @@ if (!class_exists('DOPBSPBackEndTranslation')){
          * @post value (string): the value with which the translation will be modified
          */
         function edit(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $value = str_replace("'",
                                  '<<single-quote>>',
@@ -238,9 +264,22 @@ if (!class_exists('DOPBSPBackEndTranslation')){
          * Reset translation database.
          */
         function reset(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $languages = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages);
 

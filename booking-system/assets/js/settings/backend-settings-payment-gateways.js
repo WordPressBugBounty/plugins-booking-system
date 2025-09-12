@@ -1,10 +1,9 @@
-
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
-* Version                 : 2.1.6
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
+* Version                 : 2.1.2
 * File                    : assets/js/settings/backend-settings-payment-gateways.js
-* File Version            : 1.0.7
-* Created / Last Modified : 16 February 2016
+* File Version            : 1.0.4
+* Created / Last Modified : 11 October 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -13,7 +12,7 @@
 
 var DOPBSPBackEndSettingsPaymentGateways = new function(){
     'use strict';
-    
+
     /*
      * Private variables
      */
@@ -24,24 +23,35 @@ var DOPBSPBackEndSettingsPaymentGateways = new function(){
      */
     this.__construct = function(){
     };
-    
+
     /*
      * Display payment gateways settings.
      * 
      * @param id (Number): calendar ID
      */
     this.display = function(id){
-        DOPBSPBackEnd.toggleMessages('active', DOPBSPBackEnd.text('MESSAGES_LOADING'));
-        DOPBSPBackEndSettings.toggle(id, 'payments');
+        DOPBSPBackEnd.toggleMessages('active',
+                                     DOPBSPBackEnd.text('MESSAGES_LOADING'));
+        DOPBSPBackEndSettings.toggle(id,
+                                     'payments');
 
-        $.post(ajaxurl, {action: 'dopbsp_settings_payment_gateways_display',
-                         id: id}, function(data){
-            DOPBSPBackEnd.toggleMessages('success', DOPBSPBackEnd.text('MESSAGES_LOADING_SUCCESS'));
-            $('#DOPBSP-column2 .dopbsp-column-content').html(data);
-        }).fail(function(data){
-            DOPBSPBackEnd.toggleMessages('error', data.status+': '+data.statusText);
-        });
+        $.post(ajaxurl,
+               {
+                   action: 'dopbsp_settings_payment_gateways_display',
+                   id    : id,
+                   nonce : DOPBSP_user_nonce
+               },
+               function(data){
+                   DOPBSPBackEnd.toggleMessages('success',
+                                                DOPBSPBackEnd.text('MESSAGES_LOADING_SUCCESS'));
+                   $('#DOPBSP-column2 .dopbsp-column-content')
+                   .html(data);
+               })
+         .fail(function(data){
+             DOPBSPBackEnd.toggleMessages('error',
+                                          data.status+': '+data.statusText);
+         });
     };
-    
+
     return this.__construct();
 };

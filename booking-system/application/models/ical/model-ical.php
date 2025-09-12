@@ -299,7 +299,7 @@ if (!class_exists('DOTModelIcal')){
             array_push($ical,
                        'END:VCALENDAR');
 
-            return implode(PHP_EOL,
+            return implode("\r\n",
                            $ical);
         }
 

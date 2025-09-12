@@ -27,9 +27,22 @@ if (!class_exists('DOPBSPBackEndReservationForm')){
          * @post reservation_id (integer): reservation ID
          */
         function edit($reservation_id = 0){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $reservation_id = $DOT->post('id',
                                          'int');

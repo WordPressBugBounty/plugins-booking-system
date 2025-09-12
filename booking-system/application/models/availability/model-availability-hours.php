@@ -14,34 +14,34 @@ if (!class_exists('DOTModelAvailabilityHours')){
         /*
          * Private variables.
          */
-        private object $default; // Calendar default schedule.
-        private int $id; // Calendar ID.
-        private array $schedule; // Calendar schedule.
-        private object $settings; // Calendar settings.
-        private array $settings_days_available; // Calendar settings.
-        private array $settings_hours; // Calendar hours definitions.
+        private $default; // Calendar default schedule.
+        private $id; // Calendar ID.
+        private $schedule; // Calendar schedule.
+        private $settings; // Calendar settings.
+        private $settings_days_available; // Calendar settings.
+        private $settings_hours; // Calendar hours definitions.
 
-        private array $intervals = array(); // General intervals list.
-        private array $intervals_no = array();  // Number intervals list.
-        private array $intervals_price = array(); // Price intervals list.
+        private $intervals = array(); // General intervals list.
+        private $intervals_no = array();  // Number intervals list.
+        private $intervals_price = array(); // Price intervals list.
 
-        private string $interval_start = ''; // General interval first day.
-        private bool $interval_started = false; // A general interval is constructed.
-        private string $interval_no_start = ''; // Number interval first day.
-        private int $interval_no = 0; // The number available for the interval that is being constructed.
-        private string $interval_price_start = ''; // Price interval first day.
-        private int $interval_price = -1; // The price for the interval that is being constructed.
+        private $interval_start = ''; // General interval first day.
+        private $interval_started = false; // A general interval is constructed.
+        private $interval_no_start = ''; // Number interval first day.
+        private $interval_no = 0; // The number available for the interval that is being constructed.
+        private $interval_price_start = ''; // Price interval first day.
+        private $interval_price = -1; // The price for the interval that is being constructed.
 
-        private string $day_curr; // Current day that is being verified.
-        private string $hour_curr; // Current hour that is being verified.
-        private int $no_curr; // Current number available.
-        private int $price_curr; // Current price.
+        private $day_curr; // Current day that is being verified.
+        private $hour_curr; // Current hour that is being verified.
+        private $no_curr; // Current number available.
+        private $price_curr; // Current price.
 
-        private int $max_year; // The top year for which the schedule is set.
-        private int $no_min = -1; // The minimum set number available.
-        private int $no_max = 0; // The maximum set number available.
-        private int $price_min = -1; // The minimum set price.
-        private int $price_max = 0; // The maximum set price.
+        private $max_year; // The top year for which the schedule is set.
+        private $no_min = -1; // The minimum set number available.
+        private $no_max = 0; // The maximum set number available.
+        private $price_min = -1; // The minimum set price.
+        private $price_max = 0; // The maximum set price.
 
         /*
          * Constructor

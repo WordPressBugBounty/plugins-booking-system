@@ -12,31 +12,49 @@
 * Description             : Back end pro PHP class.
 */
 
-    if (!class_exists('DOPBSPBackEndPRO')){
-        class DOPBSPBackEndPRO extends DOPBSPBackEnd{
+if (!class_exists('DOPBSPBackEndPRO')){
+    class DOPBSPBackEndPRO extends DOPBSPBackEnd{
+        /*
+         * Constructor
+         */
+        function __construct(){
+        }
+
+        /*
+         * Prints out the pro page.
+         *
+         * @return HTML page
+         */
+        function view(){
+            global $DOPBSP;
+
+            $DOPBSP->views->backend_pro->template();
+        }
+
+        /*
+         * Remove PRO information.
+         */
+        function remove(){
+            global $DOT;
+
             /*
-             * Constructor
+             * Verify nonce.
              */
-            function __construct(){
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
             }
-        
             /*
-             * Prints out the pro page.
-             * 
-             * @return HTML page
+             * End verify nonce.
              */
-            function view(){
-                global $DOPBSP;
-                
-                $DOPBSP->views->backend_pro->template();
-            }
-        
-            /*
-             * Remove PRO informations.
-             */
-            function remove(){
-		get_option('DOPBSP_view_pro') == '' ? add_option('DOPBSP_view_pro', 'false'):
-                                                      update_option('DOPBSP_view_pro', 'false');
-            }
+
+            get_option('DOPBSP_view_pro') == ''
+                    ? add_option('DOPBSP_view_pro',
+                                 'false')
+                    : update_option('DOPBSP_view_pro',
+                                    'false');
         }
     }
+}

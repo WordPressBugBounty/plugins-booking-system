@@ -2,7 +2,7 @@
 Contributors: DOTonPAPER, PINPOINT.WORLD
 Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
-Requires at least: 5.0
+Requires at least: 6.0
 Tested up to: 6.8
 Stable tag: trunk
 License: GPLv2 or later
@@ -163,6 +163,14 @@ Click <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#
 View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Changelog ==
+= 2.9.9.5.8 =
+* Calendars with hours correctly verify the available time periods, bug repaired.
+* JS and CSS file versions are now set correctly to ensure the latest files are loaded.
+* Security bug repaired.
+* The deprecated woocommerce_add_order_item_meta hook has been replaced with woocommerce_new_order_item for compatibility with the latest WooCommerce versions.
+* The iCal format has been updated to ensure compatibility with the latest standards.
+* The SMTP email notifications bug has been fixed.
+
 = 2.9.9.5.7 =
 * Compatibility with certain WooCommerce plugins has been improved.
 * Security bug repaired.
@@ -200,6 +208,14 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 View complete changelog <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Upgrade Notice ==
+= 2.9.9.5.8 =
+* Calendars with hours correctly verify the available time periods, bug repaired.
+* JS and CSS file versions are now set correctly to ensure the latest files are loaded.
+* Security bug repaired.
+* The deprecated woocommerce_add_order_item_meta hook has been replaced with woocommerce_new_order_item for compatibility with the latest WooCommerce versions.
+* The iCal format has been updated to ensure compatibility with the latest standards.
+* The SMTP email notifications bug has been fixed.
+
 = 2.9.9.5.7 =
 * Compatibility with certain WooCommerce plugins has been improved.
 * Security bug repaired.

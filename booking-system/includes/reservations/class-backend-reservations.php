@@ -79,14 +79,29 @@ if (!class_exists('DOPBSPBackEndReservations')){
          * @return reservations list
          */
         function get(){
-            global $DOT;
             global $wpdb;
             global $DOPBSP;
+            global $DOT;
+
+            /*
+             * Verify nonce.
+             */
+            $nonce = $DOT->post('nonce');
+
+            if (!wp_verify_nonce($nonce,
+                                 'dopbsp_user_nonce')){
+                return false;
+            }
+            /*
+             * End verify nonce.
+             */
 
             $calendars_ids = array();
             $query = array();
             $values = array();
-            $api = $DOT->get('dopbsp_api') == 'true' ? true:false;
+            $api = $DOT->get('dopbsp_api') == 'true'
+                    ? true
+                    : false;
             $export_date = gmdate("Y/m/d");
 
             if (!$api){
@@ -96,20 +111,37 @@ if (!class_exists('DOPBSPBackEndReservations')){
                 $end_date = $DOT->post('end_date');
                 $start_hour = $DOT->post('start_hour');
                 $end_hour = $DOT->post('end_hour');
-                $status_pending = $DOT->post('status_pending') == 'true' ? true:false;
-                $status_approved = $DOT->post('status_approved') == 'true' ? true:false;
-                $status_rejected = $DOT->post('status_rejected') == 'true' ? true:false;
-                $status_canceled = $DOT->post('status_canceled') == 'true' ? true:false;
-                $status_expired = $DOT->post('status_expired') == 'true' ? true:false;
-                $payment_methods = $DOT->post('payment_methods') == '' ? array():explode(',', $DOT->post('payment_methods'));
+                $status_pending = $DOT->post('status_pending') == 'true'
+                        ? true
+                        : false;
+                $status_approved = $DOT->post('status_approved') == 'true'
+                        ? true
+                        : false;
+                $status_rejected = $DOT->post('status_rejected') == 'true'
+                        ? true
+                        : false;
+                $status_canceled = $DOT->post('status_canceled') == 'true'
+                        ? true
+                        : false;
+                $status_expired = $DOT->post('status_expired') == 'true'
+                        ? true
+                        : false;
+                $payment_methods = $DOT->post('payment_methods') == ''
+                        ? array()
+                        : explode(',',
+                                  $DOT->post('payment_methods'));
                 $search = $DOT->post('search');
-                $page = $DOT->post('page', 'int');
-                $per_page = $DOT->post('per_page', 'int');
+                $page = $DOT->post('page',
+                                   'int');
+                $per_page = $DOT->post('per_page',
+                                       'int');
                 $order = $DOT->post('order');
                 $order_by = $DOT->post('order_by');
             }
             else{
-                $type = $DOT->get('type') ? $DOT->get('type'):'';
+                $type = $DOT->get('type')
+                        ? $DOT->get('type')
+                        : '';
 
                 if ($DOT->get('calendar_id') !== false
                         || $DOT->get('calendar_id') != ''){
@@ -119,44 +151,89 @@ if (!class_exists('DOPBSPBackEndReservations')){
                     $calendars_requested = '';
                 }
 
-                if($type != 'ics') {
+                if ($type != 'ics'){
                     $calendars_id = array();
-                    $key_pieces = explode('-', $DOT->post('key'));
+                    $key_pieces = explode('-',
+                                          $DOT->post('key'));
                     $calendars = $DOPBSP->classes->backend_calendars->get(array('user_id' => (int)$key_pieces[1]));
 
                     foreach ($calendars as $calendar){
                         if ($calendars_requested != ''){
-                            if (strpos($calendars_requested, ','.(string)$calendar->id.',') !== false){
-                                array_push($calendars_id, $calendar->id);
+                            if (strpos($calendars_requested,
+                                       ','.(string)$calendar->id.',') !== false){
+                                array_push($calendars_id,
+                                           $calendar->id);
                             }
                         }
                         else{
-                            array_push($calendars_id, $calendar->id);
+                            array_push($calendars_id,
+                                       $calendar->id);
                         }
                     }
 
-                    $calendar_id = implode(',', $calendars_id);
-                } else {
-                    $calendar_id = $DOT->get('calendar_id', 'int');
+                    $calendar_id = implode(',',
+                                           $calendars_id);
                 }
-                $start_date = $DOT->get('start_date') ? $DOT->get('start_date'):'';
-                $end_date = $DOT->get('end_date') ? $DOT->get('end_date'):'';
-                $start_hour = $DOT->get('start_hour') ? $DOT->get('start_hour'):'00:00';
-                $end_hour = $DOT->get('end_hour') ? $DOT->get('end_hour'):'24:00';
-                $status = $DOT->get('status') ? $DOT->get('status'):'';
-                $status_pending = strpos($status, 'pending') !== false ? true:false;
-                $status_approved = strpos($status, 'approved') !== false ? true:false;
-                $status_rejected = strpos($status, 'rejected') !== false ? true:false;
-                $status_canceled = strpos($status, 'canceled') !== false ? true:false;
-                $status_expired = strpos($status, 'expired') !== false ? true:false;
-                $payment_methods = $DOT->get('payment_methods') != '' ? explode(',', $DOT->get('payment_methods')):array();
-                $search = $DOT->get('search') ? $DOT->get('search'):'';
-                $page = $DOT->get('page') ? $DOT->get('page'):'1';
-                $per_page = $DOT->get('per_page') ? $DOT->get('per_page'):'10';
-                $order = $DOT->get('order') ? $DOT->get('order'):'ASC';
-                $order_by = $DOT->get('order_by') ? $DOT->get('order_by'):'check_in';
+                else{
+                    $calendar_id = $DOT->get('calendar_id',
+                                             'int');
+                }
+                $start_date = $DOT->get('start_date')
+                        ? $DOT->get('start_date')
+                        : '';
+                $end_date = $DOT->get('end_date')
+                        ? $DOT->get('end_date')
+                        : '';
+                $start_hour = $DOT->get('start_hour')
+                        ? $DOT->get('start_hour')
+                        : '00:00';
+                $end_hour = $DOT->get('end_hour')
+                        ? $DOT->get('end_hour')
+                        : '24:00';
+                $status = $DOT->get('status')
+                        ? $DOT->get('status')
+                        : '';
+                $status_pending = strpos($status,
+                                         'pending') !== false
+                        ? true
+                        : false;
+                $status_approved = strpos($status,
+                                          'approved') !== false
+                        ? true
+                        : false;
+                $status_rejected = strpos($status,
+                                          'rejected') !== false
+                        ? true
+                        : false;
+                $status_canceled = strpos($status,
+                                          'canceled') !== false
+                        ? true
+                        : false;
+                $status_expired = strpos($status,
+                                         'expired') !== false
+                        ? true
+                        : false;
+                $payment_methods = $DOT->get('payment_methods') != ''
+                        ? explode(',',
+                                  $DOT->get('payment_methods'))
+                        : array();
+                $search = $DOT->get('search')
+                        ? $DOT->get('search')
+                        : '';
+                $page = $DOT->get('page')
+                        ? $DOT->get('page')
+                        : '1';
+                $per_page = $DOT->get('per_page')
+                        ? $DOT->get('per_page')
+                        : '10';
+                $order = $DOT->get('order')
+                        ? $DOT->get('order')
+                        : 'ASC';
+                $order_by = $DOT->get('order_by')
+                        ? $DOT->get('order_by')
+                        : 'check_in';
 
-                if(strtolower($type) == 'ics') {
+                if (strtolower($type) == 'ics'){
                     $per_page = 1000000;
                 }
             }
@@ -164,64 +241,90 @@ if (!class_exists('DOPBSPBackEndReservations')){
             /*
              * Calendars query.
              */
-            if (strpos($calendar_id, ',') !== false){
-                $calendars_ids = explode(',', $calendar_id);
-                array_push($query, 'SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE (calendar_id=%d');
-                array_push($values, $calendars_ids[0]);
+            if (strpos($calendar_id,
+                       ',') !== false){
+                $calendars_ids = explode(',',
+                                         $calendar_id);
+                array_push($query,
+                           'SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE (calendar_id=%d');
+                array_push($values,
+                           $calendars_ids[0]);
 
-                for ($i=1; $i<count($calendars_ids); $i++){
-                    array_push($query, ' OR calendar_id=%d');
-                    array_push($values, $calendars_ids[$i]);
+                for ($i = 1; $i<count($calendars_ids); $i++){
+                    array_push($query,
+                               ' OR calendar_id=%d');
+                    array_push($values,
+                               $calendars_ids[$i]);
                 }
-                array_push($query, ')');
+                array_push($query,
+                           ')');
             }
             else{
-                array_push($query, 'SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE calendar_id=%d');
-                array_push($values, $calendar_id);
+                array_push($query,
+                           'SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE calendar_id=%d');
+                array_push($values,
+                           $calendar_id);
             }
-
 
             /*
              * Days query.
              */
             if ($start_date != ''){
                 if ($end_date != ''){
-                    array_push($query, ' AND (check_in >= %s AND check_in <= %s');
-                    array_push($values, $start_date);
-                    array_push($values, $end_date);
+                    array_push($query,
+                               ' AND (check_in >= %s AND check_in <= %s');
+                    array_push($values,
+                               $start_date);
+                    array_push($values,
+                               $end_date);
 
-                    array_push($query, ' OR check_out >= %s AND check_out <= %s AND check_out <> "")');
-                    array_push($values, $start_date);
-                    array_push($values, $end_date);
+                    array_push($query,
+                               ' OR check_out >= %s AND check_out <= %s AND check_out <> "")');
+                    array_push($values,
+                               $start_date);
+                    array_push($values,
+                               $end_date);
                 }
                 else{
-                    array_push($query, ' AND (check_in >= %s)');
-                    array_push($values, $start_date);
+                    array_push($query,
+                               ' AND (check_in >= %s)');
+                    array_push($values,
+                               $start_date);
                 }
             }
             elseif ($end_date != ''){
-                array_push($query, ' AND check_in <= %s');
-                array_push($values, $end_date);
+                array_push($query,
+                           ' AND check_in <= %s');
+                array_push($values,
+                           $end_date);
             }
 
             /*
              *  Source for sync
              */
             //                if($type == 'ics') {
-            array_push($query, ' AND reservation_from <> %s');
-            array_push($values, 'airbnb');
+            array_push($query,
+                       ' AND reservation_from <> %s');
+            array_push($values,
+                       'airbnb');
             //                }
 
             /*
              * Hours query.
              */
-            array_push($query, ' AND (start_hour >= %s AND start_hour <= %s OR start_hour = ""');
-            array_push($values, $start_hour);
-            array_push($values, $end_hour);
+            array_push($query,
+                       ' AND (start_hour >= %s AND start_hour <= %s OR start_hour = ""');
+            array_push($values,
+                       $start_hour);
+            array_push($values,
+                       $end_hour);
 
-            array_push($query, ' OR end_hour >= %s AND end_hour <= %s OR end_hour = "")');
-            array_push($values, $start_hour);
-            array_push($values, $end_hour);
+            array_push($query,
+                       ' OR end_hour >= %s AND end_hour <= %s OR end_hour = "")');
+            array_push($values,
+                       $start_hour);
+            array_push($values,
+                       $end_hour);
 
             /*
              * Status query.
@@ -233,71 +336,105 @@ if (!class_exists('DOPBSPBackEndReservations')){
                     || $status_expired){
                 $status_init = false;
                 if ($status_pending){
-                    array_push($query, $status_init ? ' OR status = %s':' AND (status = %s');
-                    array_push($values, 'pending');
+                    array_push($query,
+                               $status_init
+                                       ? ' OR status = %s'
+                                       : ' AND (status = %s');
+                    array_push($values,
+                               'pending');
                     $status_init = true;
                 }
                 if ($status_approved){
-                    array_push($query, $status_init ? ' OR status = %s':' AND (status = %s');
-                    array_push($values, 'approved');
+                    array_push($query,
+                               $status_init
+                                       ? ' OR status = %s'
+                                       : ' AND (status = %s');
+                    array_push($values,
+                               'approved');
                     $status_init = true;
                 }
                 if ($status_rejected){
-                    array_push($query, $status_init ? ' OR status = %s':' AND (status = %s');
-                    array_push($values, 'rejected');
+                    array_push($query,
+                               $status_init
+                                       ? ' OR status = %s'
+                                       : ' AND (status = %s');
+                    array_push($values,
+                               'rejected');
                     $status_init = true;
                 }
                 if ($status_canceled){
-                    array_push($query, $status_init ? ' OR status = %s':' AND (status = %s');
-                    array_push($values, 'canceled');
+                    array_push($query,
+                               $status_init
+                                       ? ' OR status = %s'
+                                       : ' AND (status = %s');
+                    array_push($values,
+                               'canceled');
                     $status_init = true;
                 }
                 if ($status_expired){
-                    array_push($query, $status_init ? ' OR status = %s':' AND (status = %s');
-                    array_push($values, 'expired');
+                    array_push($query,
+                               $status_init
+                                       ? ' OR status = %s'
+                                       : ' AND (status = %s');
+                    array_push($values,
+                               'expired');
                     $status_init = true;
                 }
-                array_push($query, ')');
+                array_push($query,
+                           ')');
             }
             else{
-                array_push($query, ' AND status <> %s');
-                array_push($values, 'expired');
+                array_push($query,
+                           ' AND status <> %s');
+                array_push($values,
+                           'expired');
             }
 
             /*
              * Payment query.
              */
-            if (count($payment_methods) > 0){
+            if (count($payment_methods)>0){
                 $payment_init = false;
 
-                for ($i=0; $i < count($payment_methods); $i++){
-                    array_push($query, $payment_init ? ' OR payment_method=%s':' AND (payment_method=%s');
-                    array_push($values, $payment_methods[$i]);
+                for ($i = 0; $i<count($payment_methods); $i++){
+                    array_push($query,
+                               $payment_init
+                                       ? ' OR payment_method=%s'
+                                       : ' AND (payment_method=%s');
+                    array_push($values,
+                               $payment_methods[$i]);
                     $payment_init = true;
                 }
-                array_push($query, ')');
+                array_push($query,
+                           ')');
             }
 
             /*
              * Search query.
              */
             if ($search != ''){
-                array_push($query, ' AND (id=%s OR transaction_id=%s OR form LIKE %s)');
-                array_push($values, $search);
-                array_push($values, $search);
-                array_push($values, '%'.$search.'%');
+                array_push($query,
+                           ' AND (id=%s OR transaction_id=%s OR form LIKE %s)');
+                array_push($values,
+                           $search);
+                array_push($values,
+                           $search);
+                array_push($values,
+                           '%'.$search.'%');
             }
 
             /*
              * Exclude reservations with incomplete payment.
              */
-            array_push($query, ' AND (token="" OR (token<>"" AND (payment_method="none" OR payment_method="default")))');
-
+            array_push($query,
+                       ' AND (token="" OR (token<>"" AND (payment_method="none" OR payment_method="default")))');
 
             /*
              * Order query.
              */
-            $order_value = $order == 'DESC' ? 'DESC':'ASC';
+            $order_value = $order == 'DESC'
+                    ? 'DESC'
+                    : 'ASC';
 
             switch ($order_by){
                 case 'check_out':
@@ -322,13 +459,18 @@ if (!class_exists('DOPBSPBackEndReservations')){
                     $order_by_value = 'check_in';
             }
 
-            array_push($query, ' ORDER BY '.$order_by_value.' '.($order_value));
+            array_push($query,
+                       ' ORDER BY '.$order_by_value.' '.($order_value));
 
             /*
              * ************************************************************* Get number of reservations.
              */
             if (!$api){
-                $reservations_total = $wpdb->get_var($wpdb->prepare(str_replace('*', 'COUNT(*)', implode('', $query)), $values));
+                $reservations_total = $wpdb->get_var($wpdb->prepare(str_replace('*',
+                                                                                'COUNT(*)',
+                                                                                implode('',
+                                                                                        $query)),
+                                                                    $values));
             }
             else{
                 $reservations_total = 0;
@@ -337,32 +479,40 @@ if (!class_exists('DOPBSPBackEndReservations')){
             /*
              * Pagination query.
              */
-            array_push($query, ' LIMIT %d, %d');
-            array_push($values, (($page-1)*$per_page));
-            array_push($values, $per_page);
+            array_push($query,
+                       ' LIMIT %d, %d');
+            array_push($values,
+                    (($page-1)*$per_page));
+            array_push($values,
+                       $per_page);
 
             /*
              * ************************************************************* Get reservations.
              */
-            $reservations = $wpdb->get_results($wpdb->prepare(implode('', $query), $values));
+            $reservations = $wpdb->get_results($wpdb->prepare(implode('',
+                                                                      $query),
+                                                              $values));
 
             $csvReservations = array();
-            $csvReservationHeader = array('ID', 'Calendar ID', 'Calendar Name', 'Check In', 'Check Out', 'Start Hour');
+            $csvReservationHeader = array('ID',
+                                          'Calendar ID',
+                                          'Calendar Name',
+                                          'Check In',
+                                          'Check Out',
+                                          'Start Hour');
             $jsonReservationsData = array();
-
 
             // ICS
             strtolower($type) == 'ics'
                     ? $DOT->models->reservations_ical->get($reservations)
                     : null;
 
-
             // XLS
             strtolower($type) == 'xls'
                     ? $DOT->models->reservations_xls->get($reservations)
                     : null;
 
-            foreach($reservations as $reservation) {
+            foreach ($reservations as $reservation){
                 $csvReservation = array();
                 $reservations_form = json_decode($reservation->form);
                 $reservation_extras = json_decode($reservation->extras);
@@ -371,256 +521,365 @@ if (!class_exists('DOPBSPBackEndReservations')){
                 $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
                                                           $reservation['calendar_id']));
 
-                array_push($csvReservation, $reservation['id']);
+                array_push($csvReservation,
+                           $reservation['id']);
 
-                if (!array_key_exists('id', $jsonReservationsData)) {
+                if (!array_key_exists('id',
+                                      $jsonReservationsData)){
                     $jsonReservationsData['id'] = array();
                 }
-                array_push($jsonReservationsData['id'], $reservation['id']);
+                array_push($jsonReservationsData['id'],
+                           $reservation['id']);
 
-                array_push($csvReservation, $reservation['calendar_id']);
+                array_push($csvReservation,
+                           $reservation['calendar_id']);
 
-                array_push($csvReservation, $calendar->name);
+                array_push($csvReservation,
+                           $calendar->name);
 
-                if (!array_key_exists('calendar_id', $jsonReservationsData)) {
+                if (!array_key_exists('calendar_id',
+                                      $jsonReservationsData)){
                     $jsonReservationsData['calendar_id'] = array();
                 }
-                array_push($jsonReservationsData['calendar_id'], $reservation['calendar_id']);
+                array_push($jsonReservationsData['calendar_id'],
+                           $reservation['calendar_id']);
 
-                array_push($csvReservation, $reservation['check_in']);
+                array_push($csvReservation,
+                           $reservation['check_in']);
 
-                if (!array_key_exists('check_in', $jsonReservationsData)) {
+                if (!array_key_exists('check_in',
+                                      $jsonReservationsData)){
                     $jsonReservationsData['check_in'] = array();
                 }
-                array_push($jsonReservationsData['check_in'], $reservation['check_in']);
+                array_push($jsonReservationsData['check_in'],
+                           $reservation['check_in']);
 
-                if($reservation['check_out'] == '') {
+                if ($reservation['check_out'] == ''){
                     $reservation['check_out'] = ' ';
                 }
 
-                if($reservation['check_out'] == '') {
+                if ($reservation['check_out'] == ''){
                     unset($csvReservationHeader[3]);
-                } else {
-                    array_push($csvReservation, $reservation['check_out']);
+                }
+                else{
+                    array_push($csvReservation,
+                               $reservation['check_out']);
 
-                    if (!array_key_exists('check_out', $jsonReservationsData)) {
+                    if (!array_key_exists('check_out',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['check_out'] = array();
                     }
-                    array_push($jsonReservationsData['check_out'], $reservation['check_out']);
+                    array_push($jsonReservationsData['check_out'],
+                               $reservation['check_out']);
                 }
 
-                if($reservation['start_hour'] == '') {
+                if ($reservation['start_hour'] == ''){
                     $reservation['start_hour'] = ' ';
                 }
 
-                if($reservation['start_hour'] == '') {
-
-                    if($reservation['check_out'] == '') {
+                if ($reservation['start_hour'] == ''){
+                    if ($reservation['check_out'] == ''){
                         unset($csvReservationHeader[3]);
-                    } else {
+                    }
+                    else{
                         unset($csvReservationHeader[4]);
                     }
-                } else {
-                    array_push($csvReservation, $reservation['start_hour']);
+                }
+                else{
+                    array_push($csvReservation,
+                               $reservation['start_hour']);
 
-                    if (!array_key_exists('start_hour', $jsonReservationsData)) {
+                    if (!array_key_exists('start_hour',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['start_hour'] = array();
                     }
-                    array_push($jsonReservationsData['start_hour'], $reservation['start_hour']);
+                    array_push($jsonReservationsData['start_hour'],
+                               $reservation['start_hour']);
                 }
 
-                if($reservation['end_hour'] == '') {
+                if ($reservation['end_hour'] == ''){
                     $reservation['end_hour'] = ' ';
                 }
 
                 //                    if($reservation['end_hour'] != '') {
-                array_push($csvReservation, $reservation['end_hour']);
+                array_push($csvReservation,
+                           $reservation['end_hour']);
 
-                if (!array_key_exists('end_hour', $jsonReservationsData)) {
+                if (!array_key_exists('end_hour',
+                                      $jsonReservationsData)){
                     $jsonReservationsData['end_hour'] = array();
-                    array_push($csvReservationHeader, 'End hour');
+                    array_push($csvReservationHeader,
+                               'End hour');
                 }
-                array_push($jsonReservationsData['end_hour'], $reservation['end_hour']);
+                array_push($jsonReservationsData['end_hour'],
+                           $reservation['end_hour']);
                 //                    }
 
-                array_push($csvReservation, $reservation['status']);
+                array_push($csvReservation,
+                           $reservation['status']);
 
-                if (!array_key_exists('status', $jsonReservationsData)) {
+                if (!array_key_exists('status',
+                                      $jsonReservationsData)){
                     $jsonReservationsData['status'] = array();
-                    array_push($csvReservationHeader, 'Status');
+                    array_push($csvReservationHeader,
+                               'Status');
                 }
-                array_push($jsonReservationsData['status'], $reservation['status']);
+                array_push($jsonReservationsData['status'],
+                           $reservation['status']);
 
-                if($reservation['price'] != 0) {
-                    array_push($csvReservation, $reservation['price']);
+                if ($reservation['price'] != 0){
+                    array_push($csvReservation,
+                               $reservation['price']);
 
-                    if (!array_key_exists('price', $jsonReservationsData)) {
+                    if (!array_key_exists('price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['price'] = array();
-                        array_push($csvReservationHeader, 'Price');
+                        array_push($csvReservationHeader,
+                                   'Price');
                     }
-                    array_push($jsonReservationsData['price'], $reservation['price']);
+                    array_push($jsonReservationsData['price'],
+                               $reservation['price']);
                 }
                 else{
-                    array_push($csvReservation, '0');
+                    array_push($csvReservation,
+                               '0');
 
-                    if (!array_key_exists('price', $jsonReservationsData)) {
+                    if (!array_key_exists('price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['price'] = array();
-                        array_push($csvReservationHeader, 'Price');
+                        array_push($csvReservationHeader,
+                                   'Price');
                     }
                 }
 
-                if($reservation['extras_price'] != 0) {
-                    array_push($csvReservation, $reservation['extras_price']);
+                if ($reservation['extras_price'] != 0){
+                    array_push($csvReservation,
+                               $reservation['extras_price']);
 
-                    if (!array_key_exists('extras_price', $jsonReservationsData)) {
+                    if (!array_key_exists('extras_price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['extras_price'] = array();
-                        array_push($csvReservationHeader, 'Extras price');
+                        array_push($csvReservationHeader,
+                                   'Extras price');
                     }
-                    array_push($jsonReservationsData['extras_price'], $reservation['extras_price']);
+                    array_push($jsonReservationsData['extras_price'],
+                               $reservation['extras_price']);
                 }
                 else{
-                    array_push($csvReservation, '0');
+                    array_push($csvReservation,
+                               '0');
 
-                    if (!array_key_exists('extras_price', $jsonReservationsData)) {
+                    if (!array_key_exists('extras_price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['extras_price'] = array();
-                        array_push($csvReservationHeader, 'Extras price');
+                        array_push($csvReservationHeader,
+                                   'Extras price');
                     }
                 }
 
-                if($reservation['fees_price'] != 0) {
-                    array_push($csvReservation, $reservation['fees_price']);
+                if ($reservation['fees_price'] != 0){
+                    array_push($csvReservation,
+                               $reservation['fees_price']);
 
-                    if (!array_key_exists('fees_price', $jsonReservationsData)) {
+                    if (!array_key_exists('fees_price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['fees_price'] = array();
-                        array_push($csvReservationHeader, 'Fees price');
+                        array_push($csvReservationHeader,
+                                   'Fees price');
                     }
-                    array_push($jsonReservationsData['fees_price'], $reservation['fees_price']);
+                    array_push($jsonReservationsData['fees_price'],
+                               $reservation['fees_price']);
                 }
                 else{
-                    array_push($csvReservation, '0');
+                    array_push($csvReservation,
+                               '0');
 
-                    if (!array_key_exists('fees_price', $jsonReservationsData)) {
+                    if (!array_key_exists('fees_price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['fees_price'] = array();
-                        array_push($csvReservationHeader, 'Fees price');
+                        array_push($csvReservationHeader,
+                                   'Fees price');
                     }
                 }
 
-                if($reservation['coupon_price'] != 0) {
-                    array_push($csvReservation, $reservation['coupon_price']);
+                if ($reservation['coupon_price'] != 0){
+                    array_push($csvReservation,
+                               $reservation['coupon_price']);
 
-                    if (!array_key_exists('coupon_price', $jsonReservationsData)) {
+                    if (!array_key_exists('coupon_price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['coupon_price'] = array();
-                        array_push($csvReservationHeader, 'Coupon price');
+                        array_push($csvReservationHeader,
+                                   'Coupon price');
                     }
-                    array_push($jsonReservationsData['coupon_price'], $reservation['coupon_price']);
+                    array_push($jsonReservationsData['coupon_price'],
+                               $reservation['coupon_price']);
                 }
                 else{
-                    array_push($csvReservation, '0');
+                    array_push($csvReservation,
+                               '0');
 
-                    if (!array_key_exists('coupon_price', $jsonReservationsData)) {
+                    if (!array_key_exists('coupon_price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['coupon_price'] = array();
-                        array_push($csvReservationHeader, 'Coupon price');
+                        array_push($csvReservationHeader,
+                                   'Coupon price');
                     }
                 }
 
-                if($reservation['deposit_price'] != 0) {
-                    array_push($csvReservation, $reservation['deposit_price']);
+                if ($reservation['deposit_price'] != 0){
+                    array_push($csvReservation,
+                               $reservation['deposit_price']);
 
-                    if (!array_key_exists('deposit_price', $jsonReservationsData)) {
+                    if (!array_key_exists('deposit_price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['deposit_price'] = array();
-                        array_push($csvReservationHeader, 'Deposit price');
+                        array_push($csvReservationHeader,
+                                   'Deposit price');
                     }
-                    array_push($jsonReservationsData['deposit_price'], $reservation['deposit_price']);
+                    array_push($jsonReservationsData['deposit_price'],
+                               $reservation['deposit_price']);
                 }
                 else{
-                    array_push($csvReservation, '0');
+                    array_push($csvReservation,
+                               '0');
 
-                    if (!array_key_exists('deposit_price', $jsonReservationsData)) {
+                    if (!array_key_exists('deposit_price',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['deposit_price'] = array();
-                        array_push($csvReservationHeader, 'Deposit price');
+                        array_push($csvReservationHeader,
+                                   'Deposit price');
                     }
                 }
 
-                array_push($csvReservation, $reservation['price_total']);
+                array_push($csvReservation,
+                           $reservation['price_total']);
 
-                if (!array_key_exists('price_total', $jsonReservationsData)) {
+                if (!array_key_exists('price_total',
+                                      $jsonReservationsData)){
                     $jsonReservationsData['price_total'] = array();
-                    array_push($csvReservationHeader, 'Total price');
+                    array_push($csvReservationHeader,
+                               'Total price');
                 }
-                array_push($jsonReservationsData['price_total'], $reservation['price_total']);
-                array_push($csvReservation, $reservation['currency_code']);
+                array_push($jsonReservationsData['price_total'],
+                           $reservation['price_total']);
+                array_push($csvReservation,
+                           $reservation['currency_code']);
 
-                if (!array_key_exists('currency_code', $jsonReservationsData)) {
+                if (!array_key_exists('currency_code',
+                                      $jsonReservationsData)){
                     $jsonReservationsData['currency_code'] = array();
-                    array_push($csvReservationHeader, 'Currency');
+                    array_push($csvReservationHeader,
+                               'Currency');
                 }
-                array_push($jsonReservationsData['currency_code'], $reservation['currency_code']);
+                array_push($jsonReservationsData['currency_code'],
+                           $reservation['currency_code']);
 
-                if($reservation['no_items'] != 0) {
-                    array_push($csvReservation, $reservation['no_items']);
+                if ($reservation['no_items'] != 0){
+                    array_push($csvReservation,
+                               $reservation['no_items']);
 
-                    if (!array_key_exists('no_items', $jsonReservationsData)) {
+                    if (!array_key_exists('no_items',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['no_items'] = array();
-                        array_push($csvReservationHeader, 'No. Items');
+                        array_push($csvReservationHeader,
+                                   'No. Items');
                     }
-                    array_push($jsonReservationsData['no_items'], $reservation['no_items']);
+                    array_push($jsonReservationsData['no_items'],
+                               $reservation['no_items']);
                 }
                 else{
-                    array_push($csvReservation,'0');
+                    array_push($csvReservation,
+                               '0');
 
-                    if (!array_key_exists('no_items', $jsonReservationsData)) {
+                    if (!array_key_exists('no_items',
+                                          $jsonReservationsData)){
                         $jsonReservationsData['no_items'] = array();
-                        array_push($csvReservationHeader, 'No. Items');
+                        array_push($csvReservationHeader,
+                                   'No. Items');
                     }
                 }
 
-                foreach($reservations_form as $key => $data) {
-
-                    if(!in_array($data->translation, $csvReservationHeader)) {
-                        array_push($csvReservationHeader, $data->translation);
+                foreach ($reservations_form as $key => $data){
+                    if (!in_array($data->translation,
+                                  $csvReservationHeader)){
+                        array_push($csvReservationHeader,
+                                   $data->translation);
                     }
-                    array_push($csvReservation, $data->value);
+                    array_push($csvReservation,
+                               $data->value);
 
-                    if (!array_key_exists(str_replace(" ","",strtolower($data->translation)), $jsonReservationsData)) {
-                        $jsonReservationsData[str_replace(" ","",strtolower($data->translation))] = array();
+                    if (!array_key_exists(str_replace(" ",
+                                                      "",
+                                                      strtolower($data->translation)),
+                                          $jsonReservationsData)){
+                        $jsonReservationsData[str_replace(" ",
+                                                          "",
+                                                          strtolower($data->translation))] = array();
                     }
-                    array_push($jsonReservationsData[str_replace(" ","",strtolower($data->translation))], $data->value);
+                    array_push($jsonReservationsData[str_replace(" ",
+                                                                 "",
+                                                                 strtolower($data->translation))],
+                               $data->value);
                 }
 
-                foreach($reservation_extras as $key => $data) {
-
-                    if(!in_array($data->group_translation, $csvReservationHeader)) {
-                        array_push($csvReservationHeader, $data->group_translation);
+                foreach ($reservation_extras as $key => $data){
+                    if (!in_array($data->group_translation,
+                                  $csvReservationHeader)){
+                        array_push($csvReservationHeader,
+                                   $data->group_translation);
                     }
-                    array_push($csvReservation, $data->translation);
+                    array_push($csvReservation,
+                               $data->translation);
 
-                    if (!array_key_exists(str_replace(" ","",strtolower($data->group_translation)), $jsonReservationsData)) {
-                        $jsonReservationsData[str_replace(" ","",strtolower($data->group_translation))] = array();
+                    if (!array_key_exists(str_replace(" ",
+                                                      "",
+                                                      strtolower($data->group_translation)),
+                                          $jsonReservationsData)){
+                        $jsonReservationsData[str_replace(" ",
+                                                          "",
+                                                          strtolower($data->group_translation))] = array();
                     }
-                    array_push($jsonReservationsData[str_replace(" ","",strtolower($data->group_translation))], $data->translation);
+                    array_push($jsonReservationsData[str_replace(" ",
+                                                                 "",
+                                                                 strtolower($data->group_translation))],
+                               $data->translation);
                 }
 
-                array_push($csvReservation, $reservation['date_created']);
+                array_push($csvReservation,
+                           $reservation['date_created']);
 
-                if (!array_key_exists('date_created', $jsonReservationsData)) {
+                if (!array_key_exists('date_created',
+                                      $jsonReservationsData)){
                     $jsonReservationsData['date_created'] = array();
-                    array_push($csvReservationHeader, 'Date created');
+                    array_push($csvReservationHeader,
+                               'Date created');
                 }
-                array_push($jsonReservationsData['date_created'], $reservation['date_created']);
+                array_push($jsonReservationsData['date_created'],
+                           $reservation['date_created']);
 
-                array_push($csvReservations, implode(',', $csvReservation));
+                array_push($csvReservations,
+                           implode(',',
+                                   $csvReservation));
             }
 
-            if (!array_key_exists('Export date:', $jsonReservationsData)) {
-                array_push($csvReservationHeader, 'Export date:');
+            if (!array_key_exists('Export date:',
+                                  $jsonReservationsData)){
+                array_push($csvReservationHeader,
+                           'Export date:');
             }
-            array_push($csvReservationHeader, $export_date);
+            array_push($csvReservationHeader,
+                       $export_date);
 
-            array_unshift($csvReservations, implode(',', $csvReservationHeader));
+            array_unshift($csvReservations,
+                          implode(',',
+                                  $csvReservationHeader));
 
-            if(strtolower($type) == 'csv') {
-                echo implode('\r\n', $csvReservations);
-            } else if(strtolower($type) == 'json') {
+            if (strtolower($type) == 'csv'){
+                echo implode('\r\n',
+                             $csvReservations);
+            }
+            elseif (strtolower($type) == 'json'){
                 echo json_encode($jsonReservationsData);
             }
 
@@ -651,7 +910,9 @@ if (!class_exists('DOPBSPBackEndReservations')){
                                                                            'payment');
             $DOPBSP->classes->translation->set();
             //                $message = str_replace('|FORM|', $this->getForm($reservation).' | ', $message);
-            $message = str_replace('|FORM|','', $message);
+            $message = str_replace('|FORM|',
+                                   '',
+                                   $message);
 
             return $message;
         }
@@ -670,7 +931,7 @@ if (!class_exists('DOPBSPBackEndReservations')){
 
             $form = json_decode($reservation->form);
 
-            for ($i=0; $i<count($form); $i++){
+            for ($i = 0; $i<count($form); $i++){
                 if (!is_array($form[$i])){
                     $form_item = get_object_vars($form[$i]);
                 }
@@ -682,10 +943,13 @@ if (!class_exists('DOPBSPBackEndReservations')){
                     $values = array();
 
                     foreach ($form_item['value'] as $value){
-                        array_push($values, $value->translation);
+                        array_push($values,
+                                   $value->translation);
                     }
-                    array_push($info, $this->getSyncInfo($form_item['translation'],
-                                                         implode('', $values)));
+                    array_push($info,
+                               $this->getSyncInfo($form_item['translation'],
+                                                  implode('',
+                                                          $values)));
                 }
                 else{
                     if ($form_item['value'] == 'true'){
@@ -697,13 +961,19 @@ if (!class_exists('DOPBSPBackEndReservations')){
                     else{
                         $value = $form_item['value'];
                     }
-                    array_push($info, $this->getSyncInfo('',
-                                                         $value != '' ? $value:$DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM_FIELD'),
-                                                         $value != '' ? '':'no-data'));
+                    array_push($info,
+                               $this->getSyncInfo('',
+                                                  $value != ''
+                                                          ? $value
+                                                          : $DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM_FIELD'),
+                                                  $value != ''
+                                                          ? ''
+                                                          : 'no-data'));
                 }
             }
 
-            return implode(', ', $info);
+            return implode(', ',
+                           $info);
         }
 
         /*
@@ -720,10 +990,11 @@ if (!class_exists('DOPBSPBackEndReservations')){
                              $type = ''){
             $info = array();
 
+            array_push($info,
+                       $label.''.$value);
 
-            array_push($info, $label.''.$value);
-
-            return implode('', $info);
+            return implode('',
+                           $info);
         }
 
         /*
@@ -733,7 +1004,7 @@ if (!class_exists('DOPBSPBackEndReservations')){
             global $wpdb;
             global $DOPBSP;
 
-            $wpdb->query('DELETE FROM '.$DOPBSP->tables->reservations. ' WHERE token <> "" AND ((check_out < "'.date('Y-m-d').'" AND check_out <> "") OR (check_in < "'.date('Y-m-d').'" AND check_out = ""))');
+            $wpdb->query('DELETE FROM '.$DOPBSP->tables->reservations.' WHERE token <> "" AND ((check_out < "'.date('Y-m-d').'" AND check_out <> "") OR (check_in < "'.date('Y-m-d').'" AND check_out = ""))');
             $wpdb->query('UPDATE '.$DOPBSP->tables->reservations.' SET status="expired" WHERE status <> "expired" AND ((check_out < "'.date('Y-m-d').'" AND check_out <> "") OR (check_in < "'.date('Y-m-d').'" AND check_out = ""))');
         }
     }
