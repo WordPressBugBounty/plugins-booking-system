@@ -129,7 +129,9 @@ if (!class_exists('DOTModelReservationsXls')){
             /*
              * Get calendar data.
              */
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $reservation->calendar_id));
             $calendar_settings = $DOPBSP->classes->backend_settings->values($reservation->calendar_id,
                                                                             'calendar');
@@ -143,22 +145,13 @@ if (!class_exists('DOTModelReservationsXls')){
             /*
              * Set reservation status.
              */
-            switch ($reservation->status){
-                case 'pending':
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_PENDING';
-                    break;
-                case 'approved':
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_APPROVED';
-                    break;
-                case 'rejected':
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_REJECTED';
-                    break;
-                case 'canceled':
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_CANCELED';
-                    break;
-                default:
-                    $status = 'RESERVATIONS_RESERVATION_STATUS_EXPIRED';
-            }
+            $status = match ($reservation->status) {
+                'pending'  => 'RESERVATIONS_RESERVATION_STATUS_PENDING',
+                'approved' => 'RESERVATIONS_RESERVATION_STATUS_APPROVED',
+                'rejected' => 'RESERVATIONS_RESERVATION_STATUS_REJECTED',
+                'canceled' => 'RESERVATIONS_RESERVATION_STATUS_CANCELED',
+                default    => 'RESERVATIONS_RESERVATION_STATUS_EXPIRED',
+            };
             $data['status'] = $DOPBSP->text($status);
             $labels['status']->usage++;
 
@@ -823,8 +816,9 @@ if (!class_exists('DOTModelReservationsXls')){
             /*
              * Get iCal.
              */
-            echo $DOT->models->xls->get($labels,
-                                        $data);
+            $dot->echo($DOT->models->xls->get($labels,
+                                              $data),
+                       'textarea');
 
             exit;
         }
@@ -888,8 +882,8 @@ if (!class_exists('DOTModelReservationsXls')){
             $value = (string)round($value,
                                    2);
 
-            if (strpos($value,
-                       '.') !== false){
+            if (str_contains($value,
+                             '.')){
                 $value_pieces = explode('.',
                                         $value);
                 $price = $value_pieces[0]

@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
-    class DOPBSPBackEndToolsRepairCalendarsSettings extends DOPBSPBackEndTools{
+    class DOPBSPBackEndToolsRepairCalendarsSettings{
         /*
          * Constructor
          */
@@ -80,17 +80,16 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
             /*
              * Repair calendars settings.
              */
-            $calendars = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->calendars.' ORDER BY id');
-            array_push($calendars_list,
-                       0);
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendars = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id',$DOPBSP->tables->calendars));
+            $calendars_list[] = 0;
 
             foreach ($calendars as $calendar){
-                array_push($calendars_list,
-                           $calendar->id);
+                $calendars_list[] = $calendar->id;
             }
 
-            echo implode(',',
-                         $calendars_list);
+            $DOT->echo(implode(',',
+                               $calendars_list));
 
             die();
         }
@@ -134,41 +133,47 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
 
             $html = array();
 
-            $columns = $wpdb->get_results('DESCRIBE '.$DOPBSP->tables->settings_calendar);
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $columns = $wpdb->get_results($wpdb->prepare('DESCRIBE %i',
+                                                         $DOPBSP->tables->settings_calendar));
 
-            array_push($html,
-                       '<tr class="dopbsp-'.($no%2 == 0
-                               ? 'odd'
-                               : 'even').'">');
+            $html[] = '<tr class="dopbsp-'.($no%2 == 0
+                            ? 'odd'
+                            : 'even').'">';
 
             if ($id != 0){
-                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                          $DOPBSP->tables->calendars,
                                                           $id));
 
-                array_push($html,
-                           ' <td>ID: '.$id.' - '.$calendar->name.'</td>');
+                $html[] = ' <td>ID: '.$id.' - '.$calendar->name.'</td>';
             }
             else{
-                array_push($html,
-                           ' <td>'.$DOPBSP->text('SETTINGS_GENERAL_TITLE').'</td>');
+                $html[] = ' <td>'.$DOPBSP->text('SETTINGS_GENERAL_TITLE').'</td>';
             }
 
             if (count($columns)>5){
                 /*
                  * Update calendar settings.
                  */
-                $settings_calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->settings_calendar.' WHERE calendar_id=%d AND name=""',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $settings_calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND name=""',
+                                                                   $DOPBSP->tables->settings_calendar,
                                                                    $id));
                 $default_calendar = $DOPBSP->classes->backend_settings->default_calendar;
 
                 foreach ($default_calendar as $key => $default){
-                    $value_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->settings_calendar.' WHERE calendar_id=%d AND name="%s"',
-                                                                $id,
-                                                                $key));
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND name=%s',
+                                                  $DOPBSP->tables->settings_calendar,
+                                                  $id,
+                                                  $key));
 
                     if ($wpdb->num_rows == 0
                             && isset($settings_calendar->$key)
                             && $settings_calendar->$key != $default){
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->insert($DOPBSP->tables->settings_calendar,
                                       array('calendar_id' => $id,
                                             'name'        => $key,
@@ -179,18 +184,23 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
                 /*
                  * Update notifications settings.
                  */
-                $settings_notifications = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->settings_notifications.' WHERE calendar_id=%d AND name=""',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $settings_notifications = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND name=""',
+                                                                        $DOPBSP->tables->settings_notifications,
                                                                         $id));
                 $default_notifications = $DOPBSP->classes->backend_settings->default_notifications;
 
                 foreach ($default_notifications as $key => $default){
-                    $value_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->settings_notifications.' WHERE calendar_id=%d AND name="%s"',
-                                                                $id,
-                                                                $key));
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND name=%s',
+                                                  $DOPBSP->tables->settings_notifications,
+                                                  $id,
+                                                  $key));
 
                     if ($wpdb->num_rows == 0
                             && isset($settings_notifications->$key)
                             && $settings_notifications->$key != $default){
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->insert($DOPBSP->tables->settings_notifications,
                                       array('calendar_id' => $id,
                                             'name'        => $key,
@@ -201,18 +211,23 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
                 /*
                  * Update payment settings.
                  */
-                $settings_payment = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->settings_payment.' WHERE calendar_id=%d AND name=""',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $settings_payment = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND name=""',
+                                                                  $DOPBSP->tables->settings_payment,
                                                                   $id));
                 $default_payment = $DOPBSP->classes->backend_settings->default_payment;
 
                 foreach ($default_payment as $key => $default){
-                    $value_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->settings_payment.' WHERE calendar_id=%d AND name="%s"',
-                                                                $id,
-                                                                $key));
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND name=%s',
+                                                  $DOPBSP->tables->settings_payment,
+                                                  $id,
+                                                  $key));
 
                     if ($wpdb->num_rows == 0
                             && isset($settings_payment->$key)
                             && $settings_payment->$key != $default){
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->insert($DOPBSP->tables->settings_payment,
                                       array('calendar_id' => $id,
                                             'name'        => $key,
@@ -220,26 +235,25 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
                     }
                 }
 
-                array_push($html,
-                           ' <td><span class="dopbsp-icon dopbsp-success"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_REPAIRED').'</td>');
-                array_push($html,
-                           ' <td><span class="dopbsp-icon dopbsp-success"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_REPAIRED').'</td>');
-                array_push($html,
-                           ' <td><span class="dopbsp-icon dopbsp-success"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_REPAIRED').'</td>');
+                $html[] = ' <td><span class="dopbsp-icon dopbsp-success"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_REPAIRED').'</td>';
+                $html[] = ' <td><span class="dopbsp-icon dopbsp-success"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_REPAIRED').'</td>';
+                $html[] = ' <td><span class="dopbsp-icon dopbsp-success"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_REPAIRED').'</td>';
             }
             else{
-                array_push($html,
-                           ' <td><span class="dopbsp-icon dopbsp-none"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_UNCHANGED').'</td>');
-                array_push($html,
-                           ' <td><span class="dopbsp-icon dopbsp-none"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_UNCHANGED').'</td>');
-                array_push($html,
-                           ' <td><span class="dopbsp-icon dopbsp-none"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_UNCHANGED').'</td>');
+                $html[] = ' <td><span class="dopbsp-icon dopbsp-none"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_UNCHANGED').'</td>';
+                $html[] = ' <td><span class="dopbsp-icon dopbsp-none"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_UNCHANGED').'</td>';
+                $html[] = ' <td><span class="dopbsp-icon dopbsp-none"></span>'.$DOPBSP->text('TOOLS_REPAIR_CALENDARS_SETTINGS_UNCHANGED').'</td>';
             }
-            array_push($html,
-                       '</tr>');
+            $html[] = '</tr>';
 
-            echo implode('',
-                         $html);
+            $DOT->echo(implode('',
+                               $html),
+                       'content',
+                       [
+                               'span' => ['class' => []],
+                               'td'   => [],
+                               'tr'   => ['class' => []]
+                       ]);
 
             die();
         }
@@ -268,9 +282,12 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
             /*
              * Delete columns.
              */
-            $columns_calendar = $wpdb->get_results('DESCRIBE '.$DOPBSP->tables->settings_calendar);
-            $columns_notifications = $wpdb->get_results('DESCRIBE '.$DOPBSP->tables->settings_notifications);
-            $columns_payment = $wpdb->get_results('DESCRIBE '.$DOPBSP->tables->settings_payment);
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $columns_calendar = $wpdb->get_results($wpdb->prepare('DESCRIBE %i',$DOPBSP->tables->settings_calendar));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $columns_notifications = $wpdb->get_results($wpdb->prepare('DESCRIBE %i',$DOPBSP->tables->settings_notifications));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $columns_payment = $wpdb->get_results($wpdb->prepare('DESCRIBE %i',$DOPBSP->tables->settings_payment));
 
             if (count($columns_calendar)>5){
                 foreach ($columns_calendar as $column){
@@ -278,7 +295,10 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
                             && $column->Field != 'calendar_id'
                             && $column->Field != 'name'
                             && $column->Field != 'value'){
-                        $wpdb->query('ALTER TABLE '.$DOPBSP->tables->settings_calendar.' DROP COLUMN '.$column->Field);
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $wpdb->query($wpdb->prepare('ALTER TABLE %i DROP COLUMN %i',
+                                                    $DOPBSP->tables->settings_calendar,
+                                                    $column->Field));
                     }
                 }
             }
@@ -289,7 +309,10 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
                             && $column->Field != 'calendar_id'
                             && $column->Field != 'name'
                             && $column->Field != 'value'){
-                        $wpdb->query('ALTER TABLE '.$DOPBSP->tables->settings_notifications.' DROP COLUMN '.$column->Field);
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $wpdb->query($wpdb->prepare('ALTER TABLE %i DROP COLUMN %i',
+                                                    $DOPBSP->tables->settings_notifications,
+                                                    $column->Field));
                     }
                 }
             }
@@ -300,7 +323,10 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
                             && $column->Field != 'calendar_id'
                             && $column->Field != 'name'
                             && $column->Field != 'value'){
-                        $wpdb->query('ALTER TABLE '.$DOPBSP->tables->settings_payment.' DROP COLUMN '.$column->Field);
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $wpdb->query($wpdb->prepare('ALTER TABLE %i DROP COLUMN %i',
+                                                    $DOPBSP->tables->settings_payment,
+                                                    $column->Field));
                     }
                 }
             }
@@ -308,10 +334,13 @@ if (!class_exists('DOPBSPBackEndToolsRepairCalendarsSettings')){
             /*
              * Delete old data.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->settings_calendar,
                           array('name' => ''));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->settings_notifications,
                           array('name' => ''));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->settings_payment,
                           array('name' => ''));
 

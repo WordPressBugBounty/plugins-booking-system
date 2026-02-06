@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndRules')){
-    class DOPBSPBackEndRules extends DOPBSPBackEnd{
+    class DOPBSPBackEndRules{
         /*
          * Constructor
          */
@@ -58,36 +58,38 @@ if (!class_exists('DOPBSPBackEndRules')){
             $user_roles = array_values(wp_get_current_user()->roles);
 
             if ($user_roles[0] == 'administrator'){
-                $rules = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->rules.' ORDER BY id DESC');
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $rules = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                                           $DOPBSP->tables->rules));
             }
             else{
-                $rules = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->rules.' WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $rules = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                                                           $DOPBSP->tables->rules,
                                                            wp_get_current_user()->ID));
             }
 
             /*
              * Create rules list HTML.
              */
-            array_push($html,
-                       '<ul>');
+            $html[] = '<ul>';
 
             if ($wpdb->num_rows != 0){
                 if ($rules){
                     foreach ($rules as $rule){
-                        array_push($html,
-                                   $this->listItem($rule));
+                        $html[] = $this->listItem($rule);
                     }
                 }
             }
             else{
-                array_push($html,
-                           '<li class="dopbsp-no-data">'.$DOPBSP->text('RULES_NO_RULES').'</li>');
+                $html[] = '<li class="dopbsp-no-data">'.$DOPBSP->text('RULES_NO_RULES').'</li>';
             }
-            array_push($html,
-                       '</ul>');
+            $html[] = '</ul>';
 
-            echo implode('',
-                         $html);
+            $DOT->echo(implode('',
+                               $html),
+                       'content',
+                       $DOT->models->allowed_html->items());
 
             die();
         }
@@ -105,41 +107,30 @@ if (!class_exists('DOPBSPBackEndRules')){
             $html = array();
             $user = get_userdata($rule->user_id); // Get data about the user who created the rules.
 
-            array_push($html,
-                       '<li class="dopbsp-item" id="DOPBSP-rule-ID-'.$rule->id.'" onclick="DOPBSPBackEndRule.display('.$rule->id.')">');
-            array_push($html,
-                       ' <div class="dopbsp-header">');
+            $html[] = '<li class="dopbsp-item" id="DOPBSP-rule-ID-'.$rule->id.'" onclick="DOPBSPBackEndRule.display('.$rule->id.')">';
+            $html[] = ' <div class="dopbsp-header">';
 
             /*
              * Display rule ID.
              */
-            array_push($html,
-                       '     <span class="dopbsp-id">ID: '.$rule->id.'</span>');
+            $html[] = '     <span class="dopbsp-id">ID: '.$rule->id.'</span>';
 
             /*
              * Display data about the user who created the rule.
              */
             if ($rule->user_id>0){
-                array_push($html,
-                           '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($rule->user_id,
-                                                                                             17));
-                array_push($html,
-                           '         <span class="dopbsp-info">'.$DOPBSP->text('RULES_CREATED_BY').': '.$user->data->display_name.'</span>');
-                array_push($html,
-                           '         <br class="dopbsp-clear" />');
-                array_push($html,
-                           '     </span>');
+                $html[] = '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($rule->user_id,
+                                                                                            17);
+                $html[] = '         <span class="dopbsp-info">'.$DOPBSP->text('RULES_CREATED_BY').': '.$user->data->display_name.'</span>';
+                $html[] = '         <br class="dopbsp-clear" />';
+                $html[] = '     </span>';
             }
-            array_push($html,
-                       '     <br class="dopbsp-clear" />');
-            array_push($html,
-                       ' </div>');
-            array_push($html,
-                       ' <div class="dopbsp-name">'.($rule->name == ''
-                               ? '&nbsp;'
-                               : $rule->name).'</div>');
-            array_push($html,
-                       '</li>');
+            $html[] = '     <br class="dopbsp-clear" />';
+            $html[] = ' </div>';
+            $html[] = ' <div class="dopbsp-name">'.($rule->name == ''
+                            ? '&nbsp;'
+                            : $rule->name).'</div>';
+            $html[] = '</li>';
 
             return implode('',
                            $html);

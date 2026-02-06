@@ -29,6 +29,12 @@ var DOPBSPBackEndLocationMap = new function(){
      * Initialize map.
      */
     this.init = function(){
+        var script = document.createElement('script');
+
+        script.type = 'text/JavaScript';
+        script.src = 'https://maps.googleapis.com/maps/api/js?key='+dopbspGoogleAPIkey+'&v=3.exp&libraries=places&callback=DOPBSPSearchLoadInfobox'; // 
+
+//        $('body').append(script);
         var $coordinates = $('#DOPBSP-location-coordinates').val(),
         coordinates = $coordinates === undefined || $coordinates === '' || $coordinates === ' ' ? [0, 0]:JSON.parse($coordinates),
         map,

@@ -228,22 +228,17 @@ if (!class_exists('DOTModelAvailability')){
             /*
              * Initialize tables.
              */
-            array_push($query,
-                       'SELECT DISTINCT availability.calendar_id');
-            array_push($query,
-                       ' FROM '.$DOT->tables->availability.' availability');
-            array_push($query,
-                       ' JOIN '.$DOT->tables->availability_no.' availability_no ON availability.calendar_id=availability_no.calendar_id');
-            array_push($query,
-                       ' JOIN '.$DOT->tables->availability_price.' availability_price ON availability.calendar_id=availability_price.calendar_id');
+            $query[] = 'SELECT DISTINCT availability.calendar_id';
+            $query[] = ' FROM '.$DOT->tables->availability.' availability';
+            $query[] = ' JOIN '.$DOT->tables->availability_no.' availability_no ON availability.calendar_id=availability_no.calendar_id';
+            $query[] = ' JOIN '.$DOT->tables->availability_price.' availability_price ON availability.calendar_id=availability_price.calendar_id';
 
             /*
              * Search for availability.
              */
             if ($day_start != ''
                     && $day_end != ''){
-                array_push($query,
-                           ' WHERE availability.date_start<=%s AND availability.date_end>=%s');
+                $query[] = ' WHERE availability.date_start<=%s AND availability.date_end>=%s';
                 array_push($values,
                            $date_start,
                            $date_end);
@@ -251,8 +246,7 @@ if (!class_exists('DOTModelAvailability')){
                 /*
                  * Join number availability table.
                  */
-                array_push($query,
-                           ' AND (availability_no.date_start>=%s AND availability_no.date_start<=%s OR availability_no.date_end>=%s AND availability_no.date_end<=%s OR availability_no.date_start>=%s AND availability_no.date_end<=%s OR availability_no.date_start<=%s AND availability_no.date_end>=%s)');
+                $query[] = ' AND (availability_no.date_start>=%s AND availability_no.date_start<=%s OR availability_no.date_end>=%s AND availability_no.date_end<=%s OR availability_no.date_start>=%s AND availability_no.date_end<=%s OR availability_no.date_start<=%s AND availability_no.date_end>=%s)';
                 array_push($values,
                            $date_start,
                            $date_end,
@@ -266,8 +260,7 @@ if (!class_exists('DOTModelAvailability')){
                 /*
                  * Join price availability table.
                  */
-                array_push($query,
-                           ' AND (availability_price.date_start>=%s AND availability_price.date_start<=%s OR availability_price.date_end>=%s AND availability_price.date_end<=%s OR availability_price.date_start>=%s AND availability_price.date_end<=%s OR availability_price.date_start<=%s AND availability_price.date_end>=%s)');
+                $query[] = ' AND (availability_price.date_start>=%s AND availability_price.date_start<=%s OR availability_price.date_end>=%s AND availability_price.date_end<=%s OR availability_price.date_start>=%s AND availability_price.date_end<=%s OR availability_price.date_start<=%s AND availability_price.date_end>=%s)';
                 array_push($values,
                            $date_start,
                            $date_end,
@@ -280,49 +273,37 @@ if (!class_exists('DOTModelAvailability')){
             }
             elseif ($day_start != ''
                     && $day_end == ''){
-                array_push($query,
-                           ' WHERE availability.date_end>=%s');
-                array_push($values,
-                           $date_start);
+                $query[] = ' WHERE availability.date_end>=%s';
+                $values[] = $date_start;
 
                 /*
                  * Join number availability table.
                  */
-                array_push($query,
-                           ' AND availability_no.date_end>=%s');
-                array_push($values,
-                           $date_start);
+                $query[] = ' AND availability_no.date_end>=%s';
+                $values[] = $date_start;
 
                 /*
                  * Join price availability table.
                  */
-                array_push($query,
-                           ' AND availability_price.date_end>=%s');
-                array_push($values,
-                           $date_start);
+                $query[] = ' AND availability_price.date_end>=%s';
+                $values[] = $date_start;
             }
             elseif ($day_start == ''
                     && $day_end != ''){
-                array_push($query,
-                           ' WHERE availability.date_start<=%s');
-                array_push($values,
-                           $date_end);
+                $query[] = ' WHERE availability.date_start<=%s';
+                $values[] = $date_end;
 
                 /*
                  * Join number availability table.
                  */
-                array_push($query,
-                           ' AND availability_no.date_start<=%s');
-                array_push($values,
-                           $date_end);
+                $query[] = ' AND availability_no.date_start<=%s';
+                $values[] = $date_end;
 
                 /*
                  * Join price availability table.
                  */
-                array_push($query,
-                           ' AND availability_price.date_start<=%s');
-                array_push($values,
-                           $date_end);
+                $query[] = ' AND availability_price.date_start<=%s';
+                $values[] = $date_end;
             }
 
             $in != ''
@@ -340,8 +321,7 @@ if (!class_exists('DOTModelAvailability')){
             if ($no>1){
                 if ($day_start != ''
                         && $day_end != ''){
-                    array_push($query,
-                               ' AND availability.calendar_id NOT IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_no.' WHERE no_available<%d AND (date_start>=%s AND date_start<=%s OR date_end>=%s AND date_end<=%s OR date_start>=%s AND date_end<=%s OR date_start<=%s AND date_end>=%s))');
+                    $query[] = ' AND availability.calendar_id NOT IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_no.' WHERE no_available<%d AND (date_start>=%s AND date_start<=%s OR date_end>=%s AND date_end<=%s OR date_start>=%s AND date_end<=%s OR date_start<=%s AND date_end>=%s))';
                     array_push($values,
                                $no,
                                $date_start,
@@ -355,16 +335,14 @@ if (!class_exists('DOTModelAvailability')){
                 }
                 elseif ($day_start != ''
                         && $day_end == ''){
-                    array_push($query,
-                               ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_no.' WHERE no_available>=%d AND date_end>=%s)');
+                    $query[] = ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_no.' WHERE no_available>=%d AND date_end>=%s)';
                     array_push($values,
                                $no,
                                $date_start);
                 }
                 elseif ($day_start == ''
                         && $day_end != ''){
-                    array_push($query,
-                               ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_no.' WHERE no_available>=%d AND date_start<=%s)');
+                    $query[] = ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_no.' WHERE no_available>=%d AND date_start<=%s)';
                     array_push($values,
                                $no,
                                $date_end);
@@ -377,8 +355,7 @@ if (!class_exists('DOTModelAvailability')){
             if ($price_min>-1){
                 if ($day_start != ''
                         && $day_end != ''){
-                    array_push($query,
-                               ' AND availability.calendar_id NOT IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price<%F AND (date_start>=%s AND date_start<=%s OR date_end>=%s AND date_end<=%s OR date_start>=%s AND date_end<=%s OR date_start<=%s AND date_end>=%s))');
+                    $query[] = ' AND availability.calendar_id NOT IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price<%F AND (date_start>=%s AND date_start<=%s OR date_end>=%s AND date_end<=%s OR date_start>=%s AND date_end<=%s OR date_start<=%s AND date_end>=%s))';
                     array_push($values,
                                $price_min,
                                $date_start,
@@ -392,16 +369,14 @@ if (!class_exists('DOTModelAvailability')){
                 }
                 elseif ($day_start != ''
                         && $day_end == ''){
-                    array_push($query,
-                               ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price>=%F AND date_end>=%s)');
+                    $query[] = ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price>=%F AND date_end>=%s)';
                     array_push($values,
                                $price_min,
                                $date_start);
                 }
                 elseif ($day_start == ''
                         && $day_end != ''){
-                    array_push($query,
-                               ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price>=%F AND date_start<=%s)');
+                    $query[] = ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price>=%F AND date_start<=%s)';
                     array_push($values,
                                $price_min,
                                $date_end);
@@ -411,8 +386,7 @@ if (!class_exists('DOTModelAvailability')){
             if ($price_max>-1){
                 if ($day_start != ''
                         && $day_end != ''){
-                    array_push($query,
-                               ' AND availability.calendar_id NOT IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price>%F AND (date_start>=%s AND date_start<=%s OR date_end>=%s AND date_end<=%s OR date_start>=%s AND date_end<=%s OR date_start<=%s AND date_end>=%s))');
+                    $query[] = ' AND availability.calendar_id NOT IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price>%F AND (date_start>=%s AND date_start<=%s OR date_end>=%s AND date_end<=%s OR date_start>=%s AND date_end<=%s OR date_start<=%s AND date_end>=%s))';
                     array_push($values,
                                $price_max,
                                $date_start,
@@ -426,16 +400,14 @@ if (!class_exists('DOTModelAvailability')){
                 }
                 elseif ($day_start != ''
                         && $day_end == ''){
-                    array_push($query,
-                               ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price<=%F AND date_end>=%s)');
+                    $query[] = ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price<=%F AND date_end>=%s)';
                     array_push($values,
                                $price_max,
                                $date_start);
                 }
                 elseif ($day_start == ''
                         && $day_end != ''){
-                    array_push($query,
-                               ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price<=%F AND date_start<=%s)');
+                    $query[] = ' AND availability.calendar_id IN (SELECT DISTINCT calendar_id FROM '.$DOT->tables->availability_price.' WHERE price<=%F AND date_start<=%s)';
                     array_push($values,
                                $price_max,
                                $date_end);
@@ -445,25 +417,16 @@ if (!class_exists('DOTModelAvailability')){
             /*
              * Sort results.
              */
-            switch ($sort_by){
-                case 'no':
-                    array_push($query,
-                               ' ORDER BY availability_price.no_available '.$sort_direction);
-                    break;
-                case 'price':
-                    array_push($query,
-                               ' ORDER BY availability_price.price '.$sort_direction);
-                    break;
-                default:
-                    array_push($query,
-                               ' ORDER BY availability.calendar_id '.$sort_direction);
-            }
+            $query[] = match ($sort_by) {
+                'no'    => ' ORDER BY availability_price.no_available '.$sort_direction,
+                'price' => ' ORDER BY availability_price.price '.$sort_direction,
+                default => ' ORDER BY availability.calendar_id '.$sort_direction,
+            };
 
             /*
              * Limit results.
              */
-            array_push($query,
-                       ' LIMIT %d, %d');
+            $query[] = ' LIMIT %d, %d';
             array_push($values,
                        ($page-1)*$page_limit,
                        $page_limit);
@@ -540,7 +503,7 @@ if (!class_exists('DOTModelAvailability')){
                                                     array($calendar_id)));
         }
 
-        /**
+        /*
          * Get prices for a calendar.
          *
          * @usage
@@ -610,15 +573,12 @@ if (!class_exists('DOTModelAvailability')){
             /*
              * Initialize tables.
              */
-            array_push($query,
-                       'SELECT DISTINCT availability_price.price');
-            array_push($query,
-                       ' FROM '.$DOT->tables->availability_price.' availability_price ');
+            $query[] = 'SELECT DISTINCT availability_price.price';
+            $query[] = ' FROM '.$DOT->tables->availability_price.' availability_price ';
 
             if ($day_start != ''
                     && $day_end != ''){
-                array_push($query,
-                           ' WHERE availability_price.calendar_id =%s AND (availability_price.date_start>=%s AND availability_price.date_start<=%s OR availability_price.date_end>=%s AND availability_price.date_end<=%s OR availability_price.date_start>=%s AND availability_price.date_end<=%s OR availability_price.date_start<=%s AND availability_price.date_end>=%s)');
+                $query[] = ' WHERE availability_price.calendar_id =%s AND (availability_price.date_start>=%s AND availability_price.date_start<=%s OR availability_price.date_end>=%s AND availability_price.date_end<=%s OR availability_price.date_start>=%s AND availability_price.date_end<=%s OR availability_price.date_start<=%s AND availability_price.date_end>=%s)';
                 array_push($values,
                            $calendar_id,
                            $date_start,
@@ -634,8 +594,7 @@ if (!class_exists('DOTModelAvailability')){
                     && $day_end == ''){
                 $day_end = $day_start;
                 $date_end = $day_end.' '.$time_end;
-                array_push($query,
-                           ' WHERE availability_price.calendar_id =%s AND (availability_price.date_start>=%s AND availability_price.date_start<=%s OR availability_price.date_end>=%s AND availability_price.date_end<=%s OR availability_price.date_start>=%s AND availability_price.date_end<=%s OR availability_price.date_start<=%s AND availability_price.date_end>=%s)');
+                $query[] = ' WHERE availability_price.calendar_id =%s AND (availability_price.date_start>=%s AND availability_price.date_start<=%s OR availability_price.date_end>=%s AND availability_price.date_end<=%s OR availability_price.date_start>=%s AND availability_price.date_end<=%s OR availability_price.date_start<=%s AND availability_price.date_end>=%s)';
                 array_push($values,
                            $calendar_id,
                            $date_start,
@@ -741,10 +700,10 @@ if (!class_exists('DOTModelAvailability')){
              * Set new calendar data.
              */
             $DOT->models->calendar->set($calendar_id,
-                                        array('max_year' => $availability_data->max_year,
+                                        array('max_year'      => $availability_data->max_year,
                                               'min_available' => $availability_data->no_min,
-                                              'price_min' => $availability_data->price_min,
-                                              'price_max' => $availability_data->price_max));
+                                              'price_min'     => $availability_data->price_min,
+                                              'price_max'     => $availability_data->price_max));
         }
     }
 }

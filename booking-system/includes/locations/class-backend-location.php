@@ -13,9 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndLocation')){
-    class DOPBSPBackEndLocation extends DOPBSPBackEndLocations{
-        private $views;
-
+    class DOPBSPBackEndLocation{
         /*
          * Constructor
          */
@@ -43,11 +41,12 @@ if (!class_exists('DOPBSPBackEndLocation')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->locations,
                           array('user_id' => wp_get_current_user()->ID,
                                 'name'    => $DOPBSP->text('LOCATIONS_ADD_LOCATION_NAME')));
 
-            echo $DOPBSP->classes->backend_locations->display();
+            $DOPBSP->classes->backend_locations->display();
 
             die();
         }
@@ -119,19 +118,23 @@ if (!class_exists('DOPBSPBackEndLocation')){
             $value = $DOT->post('value');
             $coordinates = $DOT->post('coordinates');
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->locations,
                           array($field => $value),
                           array('id' => $id));
 
             if ($field == 'address'){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->locations,
                               array('address_en' => $DOPBSP->classes->prototypes->getEnglishCharacters($value)),
                               array('id' => $id));
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->locations,
                               array('coordinates' => $coordinates),
                               array('id' => $id));
             }
             elseif ($field == 'address_alt'){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->locations,
                               array('address_alt_en' => $DOPBSP->classes->prototypes->getEnglishCharacters($value)),
                               array('id' => $id));
@@ -156,7 +159,9 @@ if (!class_exists('DOPBSPBackEndLocation')){
             global $wpdb;
             global $DOPBSP;
 
-            $location = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->locations.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $location = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->locations,
                                                       $id));
 
             if (isset($location->calendars)
@@ -165,6 +170,7 @@ if (!class_exists('DOPBSPBackEndLocation')){
                                      $location->calendars);
 
                 foreach ($calendars as $calendar){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->update($DOPBSP->tables->calendars,
                                   array('address'        => $clean
                                           ? ''
@@ -223,98 +229,15 @@ if (!class_exists('DOPBSPBackEndLocation')){
             /*
              * Delete location.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->locations,
                           array('id' => $id));
-            $locations = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->locations.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->locations));
 
-            echo $wpdb->num_rows;
-
-            die();
-        }
-
-        /*
-         * Share location.
-         *
-         * @post id (integer): location ID
-         *
-         * @return success or error message
-         */
-        function share(){
-            global $wpdb;
-            global $DOPBSP;
-            global $DOT;
-
-            /*
-             * Verify nonce.
-             */
-            $nonce = $DOT->post('nonce');
-
-            if (!wp_verify_nonce($nonce,
-                                 'dopbsp_user_nonce')){
-                return false;
-            }
-            /*
-             * End verify nonce.
-             */
-
-            $id = $DOT->post('id',
-                             'int');
-
-            $location = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->locations.' WHERE id=%d',
-                                                      $id));
-
-            if ($location->name != ''
-                    && $location->address != ''
-                    && $location->coordinates != ''
-                    && $location->link != ''
-                    && $location->image != ''
-                    && ($location->businesses != ''
-                            || $location->businesses_other != '')
-                    && $location->languages != ''
-                    && $DOPBSP->classes->prototypes->validEmail($location->email)){
-                $coordinates = json_decode($location->coordinates);
-
-                $post_variables = array('key'              => $DOPBSP->classes->prototypes->getRandomString(16),
-                                        'name'             => $location->name,
-                                        'address'          => $location->address,
-                                        'address_en'       => $location->address_en,
-                                        'address_alt'      => $location->address_alt,
-                                        'address_alt_en'   => $location->address_alt_en,
-                                        'latitude'         => $coordinates[0],
-                                        'longitude'        => $coordinates[1],
-                                        'link'             => $location->link,
-                                        'image'            => $location->image,
-                                        'businesses'       => $location->businesses,
-                                        'businesses_other' => $location->businesses_other,
-                                        'languages'        => $location->languages,
-                                        'email'            => $location->email);
-
-                $ch = curl_init();
-
-                curl_setopt($ch,
-                            CURLOPT_URL,
-                            'https://pinpoint.world/api/');
-                curl_setopt($ch,
-                            CURLOPT_POST,
-                            1);
-                curl_setopt($ch,
-                            CURLOPT_POSTFIELDS,
-                            $post_variables);
-                curl_setopt($ch,
-                            CURLOPT_RETURNTRANSFER,
-                            true);
-
-                $server_output = curl_exec($ch);
-
-                curl_close($ch);
-
-                echo $server_output == 'true'
-                        ? 'success'
-                        : $DOPBSP->text('LOCATIONS_LOCATION_SHARE_SUBMIT_ERROR_DUPLICATE');
-            }
-            else{
-                echo $DOPBSP->text('LOCATIONS_LOCATION_SHARE_SUBMIT_ERROR');
-            }
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }

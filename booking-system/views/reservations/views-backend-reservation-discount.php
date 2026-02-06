@@ -15,18 +15,13 @@
 if (!class_exists('DOPBSPViewsBackEndReservationDiscount')){
     class DOPBSPViewsBackEndReservationDiscount extends DOPBSPViewsBackEndReservation{
         /*
-         * Constructor
-         */
-        function __construct(){
-        }
-
-        /*
          * @param args (array): function arguments
          *                      * reservation (object): reservation data
          *                      * settings_calendar (object): calendar settings data
          */
         function template($args = array()){
             global $DOPBSP;
+            global $DOT;
 
             $reservation = $args['reservation'];
             $settings_calendar = $args['settings_calendar'];
@@ -37,7 +32,7 @@ if (!class_exists('DOPBSPViewsBackEndReservationDiscount')){
             ?>
             <div class="dopbsp-data-module">
                 <div class="dopbsp-data-head">
-                    <h3><?php echo $DOPBSP->text('DISCOUNTS_FRONT_END_TITLE'); ?></h3>
+                    <h3><?php $DOT->echo($DOPBSP->text('DISCOUNTS_FRONT_END_TITLE')); ?></h3>
                 </div>
                 <div class="dopbsp-data-body">
                     <?php
@@ -67,7 +62,9 @@ if (!class_exists('DOPBSPViewsBackEndReservationDiscount')){
                                                    $value));
 
                         if ($reservation->discount_price != 0){
-                            echo '<br />';
+                            ?>
+                            <br />
+                            <?php
                             $this->displayData($DOPBSP->text('RESERVATIONS_RESERVATION_PAYMENT_PRICE_CHANGE'),
                                                ($reservation->discount_price>0
                                                        ? '+'
@@ -80,7 +77,9 @@ if (!class_exists('DOPBSPViewsBackEndReservationDiscount')){
                         }
                     }
                     else{
-                        echo '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_DISCOUNT').'</em>';
+                        ?>
+                        <em><?php $DOT->echo($DOPBSP->text('RESERVATIONS_RESERVATION_NO_DISCOUNT')); ?></em>
+                        <?php
                     }
                     ?>
                 </div>

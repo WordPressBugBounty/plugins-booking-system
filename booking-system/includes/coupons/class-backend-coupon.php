@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndCoupon')){
-    class DOPBSPBackEndCoupon extends DOPBSPBackEndCoupons{
+    class DOPBSPBackEndCoupon{
         /*
          * Constructor
          */
@@ -41,12 +41,13 @@ if (!class_exists('DOPBSPBackEndCoupon')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->coupons,
                           array('user_id'     => wp_get_current_user()->ID,
                                 'name'        => $DOPBSP->text('COUPONS_ADD_COUPON_NAME'),
                                 'translation' => $DOPBSP->classes->translation->encodeJSON('COUPONS_ADD_COUPON_LABEL')));
 
-            echo $DOPBSP->classes->backend_coupons->display();
+            $DOPBSP->classes->backend_coupons->display();
 
             die();
         }
@@ -129,16 +130,19 @@ if (!class_exists('DOPBSPBackEndCoupon')){
                                              'UTF-8',
                                              'ISO-8859-1');
 
-                $coupon_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->coupons.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $coupon_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                             $DOPBSP->tables->coupons,
                                                              $id));
 
                 $translation = json_decode($coupon_data->translation);
-                $translation->$language = $value;
+                $translation->{$language} = $value;
 
-                $value = json_encode($translation);
+                $value = wp_json_encode($translation);
                 $field = 'translation';
             }
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->coupons,
                           array($field => $value),
                           array('id' => $id));
@@ -177,11 +181,15 @@ if (!class_exists('DOPBSPBackEndCoupon')){
             /*
              * Delete coupon.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->coupons,
                           array('id' => $id));
-            $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->coupons.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->coupons));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }
@@ -197,7 +205,9 @@ if (!class_exists('DOPBSPBackEndCoupon')){
             global $wpdb;
             global $DOPBSP;
 
-            $coupon = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->coupons.' WHERE id=%d ORDER BY id',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $coupon = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d ORDER BY id',
+                                                    $DOPBSP->tables->coupons,
                                                     $id));
 
             if ($coupon->no_coupons != ''){
@@ -207,6 +217,8 @@ if (!class_exists('DOPBSPBackEndCoupon')){
                 else{
                     $no_coupons = (int)$coupon->no_coupons+1;
                 }
+
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->coupons,
                               array('no_coupons' => $no_coupons),
                               array('id' => $id));
@@ -224,7 +236,9 @@ if (!class_exists('DOPBSPBackEndCoupon')){
             global $wpdb;
             global $DOPBSP;
 
-            $coupon = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->coupons.' WHERE id=%d ORDER BY id',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $coupon = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d ORDER BY id',
+                                                    $DOPBSP->tables->coupons,
                                                     $id));
 
             if (($coupon->no_coupons == ''

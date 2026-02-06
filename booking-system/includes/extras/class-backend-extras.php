@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndExtras')){
-    class DOPBSPBackEndExtras extends DOPBSPBackEnd{
+    class DOPBSPBackEndExtras{
         /*
          * Constructor
          */
@@ -58,36 +58,38 @@ if (!class_exists('DOPBSPBackEndExtras')){
             $user_roles = array_values(wp_get_current_user()->roles);
 
             if ($user_roles[0] == 'administrator'){
-                $extras = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->extras.' ORDER BY id DESC');
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $extras = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                                            $DOPBSP->tables->extras));
             }
             else{
-                $extras = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->extras.' WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $extras = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                                                            $DOPBSP->tables->extras,
                                                             wp_get_current_user()->ID));
             }
 
             /*
              * Create extras list HTML.
              */
-            array_push($html,
-                       '<ul>');
+            $html[] = '<ul>';
 
             if ($wpdb->num_rows != 0){
                 if ($extras){
                     foreach ($extras as $extra){
-                        array_push($html,
-                                   $this->listItem($extra));
+                        $html[] = $this->listItem($extra);
                     }
                 }
             }
             else{
-                array_push($html,
-                           '<li class="dopbsp-no-data">'.$DOPBSP->text('EXTRAS_NO_EXTRAS').'</li>');
+                $html[] = '<li class="dopbsp-no-data">'.$DOPBSP->text('EXTRAS_NO_EXTRAS').'</li>';
             }
-            array_push($html,
-                       '</ul>');
+            $html[] = '</ul>';
 
-            echo implode('',
-                         $html);
+            $DOT->echo(implode('',
+                               $html),
+                       'content',
+                       $DOT->models->allowed_html->items());
 
             die();
         }
@@ -105,41 +107,30 @@ if (!class_exists('DOPBSPBackEndExtras')){
             $html = array();
             $user = get_userdata($extra->user_id); // Get data about the user who created the extras.
 
-            array_push($html,
-                       '<li class="dopbsp-item" id="DOPBSP-extra-ID-'.$extra->id.'" onclick="DOPBSPBackEndExtra.display('.$extra->id.')">');
-            array_push($html,
-                       ' <div class="dopbsp-header">');
+            $html[] = '<li class="dopbsp-item" id="DOPBSP-extra-ID-'.$extra->id.'" onclick="DOPBSPBackEndExtra.display('.$extra->id.')">';
+            $html[] = ' <div class="dopbsp-header">';
 
             /*
              * Display extra ID.
              */
-            array_push($html,
-                       '     <span class="dopbsp-id">ID: '.$extra->id.'</span>');
+            $html[] = '     <span class="dopbsp-id">ID: '.$extra->id.'</span>';
 
             /*
              * Display data about the user who created the extra.
              */
             if ($extra->user_id>0){
-                array_push($html,
-                           '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($extra->user_id,
-                                                                                             17));
-                array_push($html,
-                           '         <span class="dopbsp-info">'.$DOPBSP->text('EXTRAS_CREATED_BY').': '.$user->data->display_name.'</span>');
-                array_push($html,
-                           '         <br class="dopbsp-clear" />');
-                array_push($html,
-                           '     </span>');
+                $html[] = '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($extra->user_id,
+                                                                                            17);
+                $html[] = '         <span class="dopbsp-info">'.$DOPBSP->text('EXTRAS_CREATED_BY').': '.$user->data->display_name.'</span>';
+                $html[] = '         <br class="dopbsp-clear" />';
+                $html[] = '     </span>';
             }
-            array_push($html,
-                       '     <br class="dopbsp-clear" />');
-            array_push($html,
-                       ' </div>');
-            array_push($html,
-                       ' <div class="dopbsp-name">'.($extra->name == ''
-                               ? '&nbsp;'
-                               : $extra->name).'</div>');
-            array_push($html,
-                       '</li>');
+            $html[] = '     <br class="dopbsp-clear" />';
+            $html[] = ' </div>';
+            $html[] = ' <div class="dopbsp-name">'.($extra->name == ''
+                            ? '&nbsp;'
+                            : $extra->name).'</div>';
+            $html[] = '</li>';
 
             return implode('',
                            $html);

@@ -1,11 +1,11 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.2
 * File                    : addons/woocommerce/includes/class-woocommerce-tab.php
 * File Version            : 1.0
-* Created / Last Modified : 04 December 2015
+* Created / Last Modified : 25 November 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -47,8 +47,14 @@ if (!class_exists('DOPBSPWooCommerceTab')){
          */
         function add(){
             global $DOPBSP;
+            global $DOT;
 
-            echo '<li class="dopbsp_tab"><a href="#dopbsp_tab_data">'.$DOPBSP->text('WOOCOMMERCE_TAB').'</a></li>';
+            $DOT->echo('<li class="dopbsp_tab"><a href="#dopbsp_tab_data">'.$DOPBSP->text('WOOCOMMERCE_TAB').'</a></li>',
+                       'content',
+                       [
+                               'a'  => ['href' => []],
+                               'li' => ['class' => []]
+                       ]);
         }
 
         /*
@@ -60,19 +66,19 @@ if (!class_exists('DOPBSPWooCommerceTab')){
             global $post;
             global $DOPBSP;
 
-            $dopbsp_woocommerce_options = array('calendar' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_calendar',
-                                                                            true),
-                                                'language' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_language',
-                                                                            true) == ''
+            $dopbsp_woocommerce_options = array('calendar'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_calendar',
+                                                                               true),
+                                                'language'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_language',
+                                                                               true) == ''
                                                         ? DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE
                                                         : get_post_meta($post->ID,
                                                                         'dopbsp_woocommerce_language',
                                                                         true),
-                                                'position' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_position',
-                                                                            true) == ''
+                                                'position'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_position',
+                                                                               true) == ''
                                                         ? 'summary'
                                                         : get_post_meta($post->ID,
                                                                         'dopbsp_woocommerce_position',
@@ -89,28 +95,28 @@ if (!class_exists('DOPBSPWooCommerceTab')){
                 <div class="options_group">
                     <p class="form-field">
                         <?php
-                        woocommerce_wp_select(array('id' => 'dopbsp_woocommerce_calendar',
-                                                    'options' => $this->getCalendars(),
-                                                    'label' => $DOPBSP->text('WOOCOMMERCE_TAB_CALENDAR'),
+                        woocommerce_wp_select(array('id'          => 'dopbsp_woocommerce_calendar',
+                                                    'options'     => $this->getCalendars(),
+                                                    'label'       => $DOPBSP->text('WOOCOMMERCE_TAB_CALENDAR'),
                                                     'description' => $DOPBSP->text('WOOCOMMERCE_TAB_CALENDAR_HELP')));
-                        woocommerce_wp_select(array('id' => 'dopbsp_woocommerce_language',
-                                                    'options' => $this->getLanguages(),
-                                                    'label' => $DOPBSP->text('WOOCOMMERCE_TAB_LANGUAGE'),
+                        woocommerce_wp_select(array('id'          => 'dopbsp_woocommerce_language',
+                                                    'options'     => $this->getLanguages(),
+                                                    'label'       => $DOPBSP->text('WOOCOMMERCE_TAB_LANGUAGE'),
                                                     'description' => $DOPBSP->text('WOOCOMMERCE_TAB_LANGUAGE_HELP'),
-                                                    'value' => $dopbsp_woocommerce_options['language']));
-                        woocommerce_wp_select(array('id' => 'dopbsp_woocommerce_position',
-                                                    'options' => array('summary' => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION_SUMMARY'),
-                                                                       'tabs' => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION_TABS'),
-                                                                       'summary-tabs' => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION_SUMMARY_AND_TABS')),
-                                                    'label' => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION'),
+                                                    'value'       => $dopbsp_woocommerce_options['language']));
+                        woocommerce_wp_select(array('id'          => 'dopbsp_woocommerce_position',
+                                                    'options'     => array('summary'      => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION_SUMMARY'),
+                                                                           'tabs'         => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION_TABS'),
+                                                                           'summary-tabs' => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION_SUMMARY_AND_TABS')),
+                                                    'label'       => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION'),
                                                     'description' => $DOPBSP->text('WOOCOMMERCE_TAB_POSITION_HELP'),
-                                                    'value' => $dopbsp_woocommerce_options['position']));
-                        woocommerce_wp_select(array('id' => 'dopbsp_woocommerce_add_to_cart',
-                                                    'options' => array('false' => 'WooCommerce',
-                                                                       'true' => $DOPBSP->text('TITLE')),
-                                                    'label' => $DOPBSP->text('WOOCOMMERCE_TAB_ADD_TO_CART'),
+                                                    'value'       => $dopbsp_woocommerce_options['position']));
+                        woocommerce_wp_select(array('id'          => 'dopbsp_woocommerce_add_to_cart',
+                                                    'options'     => array('false' => 'WooCommerce',
+                                                                           'true'  => $DOPBSP->text('TITLE')),
+                                                    'label'       => $DOPBSP->text('WOOCOMMERCE_TAB_ADD_TO_CART'),
                                                     'description' => $DOPBSP->text('WOOCOMMERCE_TAB_ADD_TO_CART_HELP'),
-                                                    'value' => $dopbsp_woocommerce_options['add_to_cart']));
+                                                    'value'       => $dopbsp_woocommerce_options['add_to_cart']));
                         ?>
                     </p>
                 </div>
@@ -181,7 +187,9 @@ if (!class_exists('DOPBSPWooCommerceTab')){
             $languages_list = array();
 
             $languages = $DOPBSP->classes->languages->languages;
-            $languages_enabled = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages.' WHERE enabled="true"');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $languages_enabled = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE enabled="true"',
+                                                                   $DOPBSP->tables->languages));
 
             foreach ($languages_enabled as $language_enabled){
                 for ($i = 0; $i<count($languages); $i++){

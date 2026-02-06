@@ -1,11 +1,11 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.2
 * File                    : addons/woocommerce/includes/class-woocommerce-product.php
-* File Version            : 1.0
-* Created / Last Modified : 04 December 2015
+* File Version            : 1.0.5
+* Created / Last Modified : 23 November 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -47,20 +47,21 @@ if (!class_exists('DOPBSPWooCommerceProduct')){
          */
         function summary(){
             global $post;
+            global $DOT;
 
-            $dopbsp_woocommerce_options = array('calendar' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_calendar',
-                                                                            true),
-                                                'language' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_language',
-                                                                            true) == ''
+            $dopbsp_woocommerce_options = array('calendar'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_calendar',
+                                                                               true),
+                                                'language'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_language',
+                                                                               true) == ''
                                                         ? 'en'
                                                         : get_post_meta($post->ID,
                                                                         'dopbsp_woocommerce_language',
                                                                         true),
-                                                'position' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_position',
-                                                                            true) == ''
+                                                'position'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_position',
+                                                                               true) == ''
                                                         ? 'summary'
                                                         : get_post_meta($post->ID,
                                                                         'dopbsp_woocommerce_position',
@@ -86,7 +87,12 @@ if (!class_exists('DOPBSPWooCommerceProduct')){
                  * Add only sidebar.
                  */
                 if ($dopbsp_woocommerce_options['position'] == 'summary-tabs'){
-                    echo '<div class="DOPBSPCalendar-sidebar" id="DOPBSPCalendar-outer-sidebar'.$dopbsp_woocommerce_options['calendar'].'"></div>';
+                    $DOT->echo('<div class="DOPBSPCalendar-sidebar" id="DOPBSPCalendar-outer-sidebar'.$dopbsp_woocommerce_options['calendar'].'"></div>',
+                               'content',
+                               [
+                                       'div' => ['class' => [],
+                                                 'id'    => []]
+                               ]);
                 }
             }
         }
@@ -102,19 +108,19 @@ if (!class_exists('DOPBSPWooCommerceProduct')){
 
             $tab = array();
 
-            $dopbsp_woocommerce_options = array('calendar' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_calendar',
-                                                                            true),
-                                                'language' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_language',
-                                                                            true) == ''
+            $dopbsp_woocommerce_options = array('calendar'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_calendar',
+                                                                               true),
+                                                'language'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_language',
+                                                                               true) == ''
                                                         ? 'en'
                                                         : get_post_meta($post->ID,
                                                                         'dopbsp_woocommerce_language',
                                                                         true),
-                                                'position' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_position',
-                                                                            true) == ''
+                                                'position'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_position',
+                                                                               true) == ''
                                                         ? 'summary'
                                                         : get_post_meta($post->ID,
                                                                         'dopbsp_woocommerce_position',
@@ -134,7 +140,7 @@ if (!class_exists('DOPBSPWooCommerceProduct')){
                 $DOPBSP->classes->translation->set($dopbsp_woocommerce_options['language'],
                                                    false);
 
-                $tab['booking-system'] = array('title' => $DOPBSP->text('WOOCOMMERCE_TABS'),
+                $tab['booking-system'] = array('title'    => $DOPBSP->text('WOOCOMMERCE_TABS'),
                                                'priority' => 1,
                                                'callback' => array($this,
                                                                    'tabContent'));
@@ -150,19 +156,19 @@ if (!class_exists('DOPBSPWooCommerceProduct')){
         function tabContent(){
             global $post;
 
-            $dopbsp_woocommerce_options = array('calendar' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_calendar',
-                                                                            true),
-                                                'language' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_language',
-                                                                            true) == ''
+            $dopbsp_woocommerce_options = array('calendar'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_calendar',
+                                                                               true),
+                                                'language'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_language',
+                                                                               true) == ''
                                                         ? 'en'
                                                         : get_post_meta($post->ID,
                                                                         'dopbsp_woocommerce_language',
                                                                         true),
-                                                'position' => get_post_meta($post->ID,
-                                                                            'dopbsp_woocommerce_position',
-                                                                            true) == ''
+                                                'position'    => get_post_meta($post->ID,
+                                                                               'dopbsp_woocommerce_position',
+                                                                               true) == ''
                                                         ? 'summary'
                                                         : get_post_meta($post->ID,
                                                                         'dopbsp_woocommerce_position',
@@ -197,7 +203,9 @@ if (!class_exists('DOPBSPWooCommerceProduct')){
 
             if ($dopbsp_woocommerce_options['calendar'] != ''
                     && $dopbsp_woocommerce_options['calendar'] != '0'){
-                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                          $DOPBSP->tables->calendars,
                                                           $dopbsp_woocommerce_options['calendar']));
 
                 $settings_calendar = $DOPBSP->classes->backend_settings->values($calendar->id,

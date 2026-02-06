@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPFrontEndCoupons')){
-    class DOPBSPFrontEndCoupons extends DOPBSPFrontEnd{
+    class DOPBSPFrontEndCoupons{
         /*
          * Constructor.
          */
@@ -33,7 +33,9 @@ if (!class_exists('DOPBSPFrontEndCoupons')){
             global $wpdb;
             global $DOPBSP;
 
-            $coupon = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->coupons.' WHERE id=%d ORDER BY id',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $coupon = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d ORDER BY id',
+                                                    $DOPBSP->tables->coupons,
                                                     $id));
 
             if ($id != 0){
@@ -72,39 +74,37 @@ if (!class_exists('DOPBSPFrontEndCoupons')){
             global $wpdb;
             global $DOPBSP;
 
-            $id = $DOT->post('id',
-                             'int');
             $code = $DOT->post('code');
-            $today = $DOT->post('today');
             $check_in = $DOT->post('check_in');
             $check_out = $DOT->post('check_out');
             $start_hour = $DOT->post('start_hour');
             $end_hour = $DOT->post('end_hour');
             $language = $DOT->post('language');
-            $curr_time = $DOT->post('curr_time');
             $calendar_id = $DOT->post('calendar_id',
                                       'int');
 
             $settings_calendar = $DOPBSP->classes->backend_settings->values($calendar_id,
                                                                             'calendar');
 
-            $coupon = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->coupons.' WHERE code=%s ORDER BY id',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $coupon = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE code=%s ORDER BY id',
+                                                    $DOPBSP->tables->coupons,
                                                     $code));
 
-            if (strpos($settings_calendar->coupon,
-                       ',') !== false){
+            if (str_contains($settings_calendar->coupon,
+                             ',')){
                 $coupons_active = explode(',',
                                           $settings_calendar->coupon);
 
                 if (!in_array($coupon->id,
                               $coupons_active)){
-                    echo 'error';
+                    $DOT->echo('error');
                     die();
                 }
             }
             else{
                 if ($coupon->id != $settings_calendar->coupon){
-                    echo 'error';
+                    $DOT->echo('error');
                     die();
                 }
             }
@@ -127,10 +127,11 @@ if (!class_exists('DOPBSPFrontEndCoupons')){
                     $coupon->translation = $DOPBSP->classes->translation->decodeJSON($coupon->translation,
                                                                                      $language);
                 }
-                echo json_encode($coupon);
+                $DOT->echo($coupon,
+                           'json');
             }
             else{
-                echo 'error';
+                $DOT->echo('error');
             }
 
             die();

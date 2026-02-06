@@ -1,10 +1,10 @@
-=== Pinpoint Booking System - #1 WordPress Booking Plugin ===
+=== Pinpoint Booking System - Version 2 ===
 Contributors: DOTonPAPER, PINPOINT.WORLD
 Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
-Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: trunk
+Requires at least: 6.3
+Tested up to: 6.9
+Stable tag: 2.9.9.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,7 +24,7 @@ Being an administrator of this booking calendar is just as easy. Pinpoint Bookin
 
 <blockquote>
     <p>
-	    <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Plugin website</a> | <a href="https://pinpoint.world/shop/product/pinpoint-booking-system-wordpress-plugin-pro-version-1?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">PRO version</a> | <a href="https://pinpoint.world/documentation-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Documentation</a> | <a href="https://wordpress.org/support/plugin/booking-system/">Support</a>
+	    <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Plugin website</a> | <a href="https://pinpoint.world/shop?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">PRO version</a> | <a href="https://pinpoint.world/documentation-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Documentation</a> | <a href="https://wordpress.org/support/plugin/booking-system/">Support</a>
     </p>
 </blockquote>
 
@@ -163,6 +163,28 @@ Click <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#
 View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Changelog ==
+= 2.9.9.6.4 =
+* Add-on files now load correctly, bug fixed.
+* Total price is now displayed correctly in email notifications, bug fixed.
+
+= 2.9.9.6.3 =
+* Individual calendar permissions are now saved correctly, bug fixed.
+* The Add Reservation section is displayed correctly in the admin area, bug fixed.
+* The PayPal bug has been fixed.
+
+= 2.9.9.6.2 =
+* Coupon validation is handled correctly, bug fixed.
+
+= 2.9.9.6.1 =
+* Small bugs have been repaired.
+
+= 2.9.9.6.0 =
+* Modifications have been made to ensure compliance with WordPress guidelines.
+* IMPORTANT! PHP 8 is required.
+
+= 2.9.9.5.9 =
+* iCal files for calendars are now generated correctly, bug repaired.
+
 = 2.9.9.5.8 =
 * Calendars with hours correctly verify the available time periods, bug repaired.
 * JS and CSS file versions are now set correctly to ensure the latest files are loaded.
@@ -182,32 +204,32 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 
 = 2.9.9.5.5 =
 * Compatibility with PHP 8.2 has been improved.
-
-=2.9.9.5.4 =
-* A small tweak was made to resolve iCal library incompatibility with other plugins or themes.
-* Frontend bug has been repaired.
-* Grouped days in the calendar display correctly on Safari for iPhone.
-* Security bug repaired.
-* The "Extras" price now displays correctly on Chrome for Android, bug repaired.
-
-= 2.9.9.5.3 =
-* Cc and Bcc in booking notifications emails are set correctly, bug repaired.
-* Polylang compatibility has been added.
-* Security bugs repaired.
-* Selected language displays correctly on a WooCommerce product page.
-
-= 2.9.9.5.2 =
-* Security bugs repaired.
-
-= 2.9.9.5.1 =
-* Security bug repaired.
-
-= 2.9.9.5.0 =
-* A number of issues that can return 120 errors have been resolved.
 
 View complete changelog <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Upgrade Notice ==
+= 2.9.9.6.4 =
+* Add-on files now load correctly, bug fixed.
+* Total price is now displayed correctly in email notifications, bug fixed.
+
+= 2.9.9.6.3 =
+* Individual calendar permissions are now saved correctly, bug fixed.
+* The Add Reservation section is displayed correctly in the admin area, bug fixed.
+* The PayPal bug has been fixed.
+
+= 2.9.9.6.2 =
+* Coupon validation is handled correctly, bug fixed.
+
+= 2.9.9.6.1 =
+* Small bugs have been repaired.
+
+= 2.9.9.6.0 =
+* Modifications have been made to ensure compliance with WordPress guidelines.
+* IMPORTANT! PHP 8 is required.
+
+= 2.9.9.5.9 =
+* iCal files for calendars are now generated correctly, bug repaired.
+
 = 2.9.9.5.8 =
 * Calendars with hours correctly verify the available time periods, bug repaired.
 * JS and CSS file versions are now set correctly to ensure the latest files are loaded.
@@ -227,25 +249,3 @@ View complete changelog <a href="https://pinpoint.world/documentation-booking/wo
 
 = 2.9.9.5.5 =
 * Compatibility with PHP 8.2 has been improved.
-
-=2.9.9.5.4 =
-* A small tweak was made to resolve iCal library incompatibility with other plugins or themes.
-* Frontend bug has been repaired.
-* Grouped days in the calendar display correctly on Safari for iPhone.
-* Security bug repaired.
-* The "Extras" price now displays correctly on Chrome for Android, bug repaired.
-
-= 2.9.9.5.3 =
-* Cc and Bcc in booking notifications emails are set correctly, bug repaired.
-* Polylang compatibility has been added.
-* Security bugs repaired.
-* Selected language displays correctly on a WooCommerce product page.
-
-= 2.9.9.5.2 =
-* Security bugs repaired.
-
-= 2.9.9.5.1 =
-* Security bug repaired.
-
-= 2.9.9.5.0 =
-* A number of issues that can return 120 errors have been resolved.

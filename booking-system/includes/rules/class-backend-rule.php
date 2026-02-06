@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndRule')){
-    class DOPBSPBackEndRule extends DOPBSPBackEndRules{
+    class DOPBSPBackEndRule{
         /*
          * Constructor
          */
@@ -41,11 +41,12 @@ if (!class_exists('DOPBSPBackEndRule')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->rules,
                           array('user_id' => wp_get_current_user()->ID,
                                 'name'    => $DOPBSP->text('RULES_ADD_RULE_NAME')));
 
-            echo $DOPBSP->classes->backend_rules->display();
+            $DOPBSP->classes->backend_rules->display();
 
             die();
         }
@@ -115,8 +116,8 @@ if (!class_exists('DOPBSPBackEndRule')){
                              'int');
             $field = $DOT->post('field');
             $value = $DOT->post('value');
-            //                $language = $DOT->post('language');
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->rules,
                           array($field => $value),
                           array('id' => $id));
@@ -155,11 +156,15 @@ if (!class_exists('DOPBSPBackEndRule')){
             /*
              * Delete rule.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->rules,
                           array('id' => $id));
-            $rules = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->rules.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->rules));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }

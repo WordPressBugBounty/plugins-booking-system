@@ -136,8 +136,7 @@ if (!class_exists('DOTModelIcalTimezone')){
                     .date('his',
                           $timestamp_offset);
 
-            array_push($ical,
-                       'DTSTART:'.$date);
+            $ical[] = 'DTSTART:'.$date;
         }
 
         /*
@@ -212,8 +211,7 @@ if (!class_exists('DOTModelIcalTimezone')){
             /*
              * Start timezone.
              */
-            array_push($ical,
-                       'BEGIN:VTIMEZONE');
+            $ical[] = 'BEGIN:VTIMEZONE';
 
             /*
              * Set ID.
@@ -230,8 +228,7 @@ if (!class_exists('DOTModelIcalTimezone')){
             /*
              * End timezone.
              */
-            array_push($ical,
-                       'END:VTIMEZONE');
+            $ical[] = 'END:VTIMEZONE';
 
             return $ical;
         }
@@ -293,8 +290,7 @@ if (!class_exists('DOTModelIcalTimezone')){
          */
         function id(&$ical,
                     $timezone){
-            array_push($ical,
-                       'TZID:'.$timezone->name);
+            $ical[] = 'TZID:'.$timezone->name;
         }
 
         /*
@@ -375,9 +371,8 @@ if (!class_exists('DOTModelIcalTimezone')){
                 $date = explode('-',
                                 $event->date_start);
                 $date_start = (int)$date[0];
-                $timezone_data->year_start = $timezone_data->year_start>$date_start
-                        ? $date_start
-                        : $timezone_data->year_start;
+                $timezone_data->year_start = min($timezone_data->year_start,
+                                                 $date_start);
 
                 /*
                  * Set maximum year.
@@ -385,9 +380,8 @@ if (!class_exists('DOTModelIcalTimezone')){
                 $date = explode('-',
                                 $event->date_end ?? $event->date_start);
                 $date_end = (int)$date[0];
-                $timezone_data->year_end = $timezone_data->year_end<$date_end
-                        ? $date_end
-                        : $timezone_data->year_end;
+                $timezone_data->year_end = max($timezone_data->year_end,
+                                               $date_end);
             }
 
             return $timezone_data;
@@ -462,11 +456,8 @@ if (!class_exists('DOTModelIcalTimezone')){
                     ? $offset-3600
                     : $offset+3600;
 
-            array_push($ical,
-                       'TZOFFSETFROM:'.$this->offsetFormat($offset_prev));
-
-            array_push($ical,
-                       'TZOFFSETTO:'.$this->offsetFormat($offset));
+            $ical[] = 'TZOFFSETFROM:'.$this->offsetFormat($offset_prev);
+            $ical[] = 'TZOFFSETTO:'.$this->offsetFormat($offset);
         }
 
         /*
@@ -714,14 +705,12 @@ if (!class_exists('DOTModelIcalTimezone')){
             /*
              * Start transition.
              */
-            array_push($ical,
-                       'BEGIN:'.$type);
+            $ical[] = 'BEGIN:'.$type;
 
             /*
              * Set name.
              */
-            array_push($ical,
-                       'TZNAME:'.$transition['abbr']);
+            $ical[] = 'TZNAME:'.$transition['abbr'];
 
             /*
              * Set date.
@@ -739,8 +728,7 @@ if (!class_exists('DOTModelIcalTimezone')){
             /*
              * End transition.
              */
-            array_push($ical,
-                       'END:'.$type);
+            $ical[] = 'END:'.$type;
         }
     }
 }

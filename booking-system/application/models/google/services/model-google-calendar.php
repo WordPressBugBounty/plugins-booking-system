@@ -104,16 +104,16 @@ if (!class_exists('DOTModelGoogleCalendar')){
                 if ($reservation['start_hour'] != ''){
                     $event = new Google_Service_Calendar_Event(apply_filters('dopbsp_filter_google_calendar_event_data_time',
                                                                              array(
-                                                                                     'summary' => 'Pinpoint Reservation',
+                                                                                     'summary'     => 'Pinpoint Reservation',
                                                                                      'description' => 'Reservation ID: '
                                                                                              .$reservation_id,
-                                                                                     'start' => array(
+                                                                                     'start'       => array(
                                                                                              'dateTime' => $reservation['check_in']
                                                                                                      .'T'.$reservation['start_hour']
                                                                                                      .':00',
                                                                                              'timeZone' => $timezone,
                                                                                      ),
-                                                                                     'end' => array(
+                                                                                     'end'         => array(
                                                                                              'dateTime' => $reservation['check_in']
                                                                                                      .'T'.($reservation['end_hour'] != ''
                                                                                                              ? $reservation['end_hour']
@@ -121,31 +121,31 @@ if (!class_exists('DOTModelGoogleCalendar')){
                                                                                                      .':00',
                                                                                              'timeZone' => $timezone,
                                                                                      ),
-                                                                                     'reminders' => array(
+                                                                                     'reminders'   => array(
                                                                                              'useDefault' => true,
                                                                                      ),
-                                                                                     'iCalUID' => $reservation['uid']
+                                                                                     'iCalUID'     => $reservation['uid']
                                                                              ),
                                                                              $reservation_id));
                 }
                 else{
                     $event = new Google_Service_Calendar_Event(apply_filters('dopbsp_filter_google_calendar_event_data_dates',
                                                                              array(
-                                                                                     'summary' => 'Pinpoint Reservation',
+                                                                                     'summary'     => 'Pinpoint Reservation',
                                                                                      'description' => 'Reservation ID: '
                                                                                              .$reservation_id,
-                                                                                     'start' => array(
-                                                                                             'date' => $reservation['check_in'],
+                                                                                     'start'       => array(
+                                                                                             'date'     => $reservation['check_in'],
                                                                                              'timeZone' => 'GMT',
                                                                                      ),
-                                                                                     'end' => array(
-                                                                                             'date' => $reservation['check_out'],
+                                                                                     'end'         => array(
+                                                                                             'date'     => $reservation['check_out'],
                                                                                              'timeZone' => $timezone,
                                                                                      ),
-                                                                                     'reminders' => array(
+                                                                                     'reminders'   => array(
                                                                                              'useDefault' => true,
                                                                                      ),
-                                                                                     'iCalUID' => $reservation['uid']
+                                                                                     'iCalUID'     => $reservation['uid']
                                                                              ),
                                                                              $reservation_id));
                 }
@@ -167,11 +167,11 @@ if (!class_exists('DOTModelGoogleCalendar')){
             $calendarId = $this->getGcalId($calendar_id);
 
             $optParams = array(
-                    'maxResults' => 100,
-                    'orderBy' => 'startTime',
+                    'maxResults'   => 100,
+                    'orderBy'      => 'startTime',
                     'singleEvents' => true,
-                    'showDeleted' => false,
-                    'timeMin' => date('c'),
+                    'showDeleted'  => false,
+                    'timeMin'      => date('c'),
             );
             $results = $service->events->listEvents($calendarId,
                                                     $optParams);
@@ -223,11 +223,11 @@ if (!class_exists('DOTModelGoogleCalendar')){
 
             $calendarId = $this->getGcalId($calendar_id);
             $optParams = array(
-                    'maxResults' => 100,
-                    'orderBy' => 'startTime',
+                    'maxResults'   => 100,
+                    'orderBy'      => 'startTime',
                     'singleEvents' => true,
-                    'showDeleted' => $hidden,
-                    'timeMin' => date('c'),
+                    'showDeleted'  => $hidden,
+                    'timeMin'      => date('c'),
             );
             $results = $service->events->listEvents($calendarId,
                                                     $optParams);

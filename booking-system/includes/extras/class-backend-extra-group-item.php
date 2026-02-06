@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndExtraGroupItem')){
-    class DOPBSPBackEndExtraGroupItem extends DOPBSPBackEndExtraGroupItems{
+    class DOPBSPBackEndExtraGroupItem{
         /*
          * Constructor
          */
@@ -53,12 +53,15 @@ if (!class_exists('DOPBSPBackEndExtraGroupItem')){
                                    'int');
             $language = $DOT->post('language');
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->extras_groups_items,
                           array('group_id'    => $group_id,
                                 'position'    => $position,
                                 'translation' => $DOPBSP->classes->translation->encodeJSON('EXTRAS_EXTRA_GROUP_ADD_ITEM_LABEL')));
             $id = $wpdb->insert_id;
-            $item = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->extras_groups_items.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $item = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                  $DOPBSP->tables->extras_groups_items,
                                                   $id));
 
             $DOPBSP->views->backend_extra_group_item->template(array('item'     => $item,
@@ -110,7 +113,9 @@ if (!class_exists('DOPBSPBackEndExtraGroupItem')){
                                              'UTF-8',
                                              'ISO-8859-1');
 
-                $group_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->extras_groups_items.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $group_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                            $DOPBSP->tables->extras_groups_items,
                                                             $id));
 
                 $translation = json_decode($group_data->translation);
@@ -120,6 +125,7 @@ if (!class_exists('DOPBSPBackEndExtraGroupItem')){
                 $field = 'translation';
             }
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->extras_groups_items,
                           array($field => $value),
                           array('id' => $id));
@@ -153,6 +159,7 @@ if (!class_exists('DOPBSPBackEndExtraGroupItem')){
             $id = $DOT->post('id',
                              'int');
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->extras_groups_items,
                           array('id' => $id));
 

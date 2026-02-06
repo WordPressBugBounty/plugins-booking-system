@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndFormFieldSelectOption')){
-    class DOPBSPBackEndFormFieldSelectOption extends DOPBSPBackEndFormFieldSelectOptions{
+    class DOPBSPBackEndFormFieldSelectOption{
         /*
          * Constructor
          */
@@ -53,12 +53,15 @@ if (!class_exists('DOPBSPBackEndFormFieldSelectOption')){
                                    'int');
             $language = $DOT->post('language');
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->forms_fields_options,
                           array('field_id'    => $field_id,
                                 'position'    => $position,
                                 'translation' => $DOPBSP->classes->translation->encodeJSON('FORMS_FORM_FIELD_SELECT_ADD_OPTION_LABEL')));
             $id = $wpdb->insert_id;
-            $select_option = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields_options.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $select_option = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                           $DOPBSP->tables->forms_fields_options,
                                                            $id));
 
             $DOPBSP->views->backend_form_field_select_option->template(array('select_option' => $select_option,
@@ -112,7 +115,9 @@ if (!class_exists('DOPBSPBackEndFormFieldSelectOption')){
                                              'UTF-8',
                                              'ISO-8859-1');
 
-                $field_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields_options.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $field_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                            $DOPBSP->tables->forms_fields_options,
                                                             $id));
 
                 $translation = json_decode($field_data->translation);
@@ -122,13 +127,16 @@ if (!class_exists('DOPBSPBackEndFormFieldSelectOption')){
                 $field = 'translation';
             }
 
-            $select_option = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields_options.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $select_option = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                           $DOPBSP->tables->forms_fields_options,
                                                            $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->forms_fields_options,
                           array($field => $value),
                           array('id' => $id));
 
-            echo $select_option->field_id;
+            $DOT->echo($select_option->field_id);
 
             die();
         }
@@ -161,12 +169,15 @@ if (!class_exists('DOPBSPBackEndFormFieldSelectOption')){
             $id = $DOT->post('id',
                              'int');
 
-            $select_option = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields_options.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $select_option = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                           $DOPBSP->tables->forms_fields_options,
                                                            $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->forms_fields_options,
                           array('id' => $id));
 
-            echo $select_option->field_id;
+            $DOT->echo($select_option->field_id);
 
             die();
         }

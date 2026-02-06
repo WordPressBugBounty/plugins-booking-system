@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndReservation')){
-    class DOPBSPBackEndReservation extends DOPBSPBackEndReservations{
+    class DOPBSPBackEndReservation{
         /*
          * Constructor
          */
@@ -58,9 +58,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
             $settings_payment = $DOPBSP->classes->backend_settings->values($calendar_id,
                                                                            'payment');
 
-            $days_history = isset($reservation['days_hours_history'])
-                    ? $reservation['days_hours_history']
-                    : array();
+            $days_history = $reservation['days_hours_history'] ?? array();
 
             if ($source != 'pinpoint'){
                 $settings_payment->arrival_with_approval_enabled = 'true';
@@ -84,26 +82,20 @@ if (!class_exists('DOPBSPBackEndReservation')){
                  */
                 $status = $status != ''
                         ? $status
-                        :
-                        ((($payment_method == 'none' || $payment_method == 'default') && $settings_payment->arrival_with_approval_enabled == 'false') || ($payment_method != 'none' && $payment_method != 'default' && $payment_method != 'woocommerce')
+                        : ((($payment_method == 'none' || $payment_method == 'default') && $settings_payment->arrival_with_approval_enabled == 'false') || ($payment_method != 'none' && $payment_method != 'default' && $payment_method != 'woocommerce')
                                 ? 'pending'
                                 : 'approved');
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($DOPBSP->tables->reservations,
                               array('calendar_id'        => $calendar_id,
                                     'language'           => $language,
                                     'currency'           => $currency,
                                     'currency_code'      => $currency_code,
                                     'check_in'           => $reservation['check_in'],
-                                    'check_out'          => isset($reservation['check_out'])
-                                            ? $reservation['check_out']
-                                            : '',
-                                    'start_hour'         => isset($reservation['start_hour'])
-                                            ? $reservation['start_hour']
-                                            : '',
-                                    'end_hour'           => isset($reservation['end_hour'])
-                                            ? $reservation['end_hour']
-                                            : '',
+                                    'check_out'          => $reservation['check_out'] ?? '',
+                                    'start_hour'         => $reservation['start_hour'] ?? '',
+                                    'end_hour'           => $reservation['end_hour'] ?? '',
                                     'no_items'           => $reservation['no_items'],
                                     'price'              => $reservation['price'],
                                     'price_total'        => $reservation['price_total'],
@@ -156,22 +148,19 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                             ? $transaction_id
                                             : '',
                                     'reservation_from'   => $source,
-                                    'uid'                => isset($reservation['uid'])
-                                            ? $reservation['uid']
-                                            : ''));
+                                    'uid'                => $reservation['uid'] ?? ''));
 
                 $reservation_id = $wpdb->insert_id;
-                $reservation['uid'] = isset($reservation['uid'])
-                        ? $reservation['uid']
-                        : $reservation_id.'@'.str_ireplace(array('http://',
-                                                                 'https://'),
-                                                           '',
-                                                           home_url());
+                $reservation['uid'] = $reservation['uid'] ?? $reservation_id.'@'.str_ireplace(array('http://',
+                                                                                                    'https://'),
+                                                                                              '',
+                                                                                              home_url());
 
                 $settings_calendar = $DOPBSP->classes->backend_settings->values($calendar_id,
                                                                                 'calendar');
 
                 if ($source == 'pinpoint'){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->update($DOPBSP->tables->reservations,
                                   array('uid' => $reservation['uid']),
                                   array('id' => $reservation_id));
@@ -186,26 +175,28 @@ if (!class_exists('DOPBSPBackEndReservation')){
                 $query_insert_values = array();
 
                 // Default Availability
-                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                          $DOPBSP->tables->calendars,
                                                           $calendar_id));
-                $days_data = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->days.' WHERE unique_key in ('.('"'.$calendar_id.'_'.implode('","'.$calendar_id.'_',
-                                                                                                                                              $days).'"').') ORDER BY day');
-
-                $default_availability = json_decode($calendar->default_availability);
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $days_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE unique_key in ('.('"'.$calendar_id.'_'.implode('","'.$calendar_id.'_',
+                                                                                                                                      $days).'"').') ORDER BY day',
+                                                               $DOPBSP->tables->days));
 
                 $default_availability = $calendar->default_availability != ''
                         ? $calendar->default_availability
                         : '{"available": 1,
-                                                                                                                       "bind": 0,
-                                                                                                                       "price": 0,
-                                                                                                                       "promo": 0,
-                                                                                                                       "info":  "",
-                                                                                                                       "info_body": "",
-                                                                                                                       "info_info": "",
-                                                                                                                       "notes": "",
-                                                                                                                       "hours":{},
-                                                                                                                       "hours_definitions":[{"value":"00:00"}],
-                                                                                                                       "status": "available"}';
+                            "bind": 0,
+                            "price": 0,
+                            "promo": 0,
+                            "info":  "",
+                            "info_body": "",
+                            "info_info": "",
+                            "notes": "",
+                            "hours":{},
+                            "hours_definitions":[{"value":"00:00"}],
+                            "status": "available"}';
 
                 $default_availability = json_decode($default_availability);
 
@@ -217,6 +208,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
                 if ($settings_calendar->days_morning_check_out == 'true'
                         && $settings_calendar->hours_enabled == 'false'){
                     $check_out_new = date('Y-m-d',
+                            //phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                                           strtotime($reservation['check_out']));
                     // check_out - 1 day
                     $check_out_time = new DateTime($check_out_new.' 00:00:00');
@@ -230,8 +222,10 @@ if (!class_exists('DOPBSPBackEndReservation')){
                     // Loop between timestamps, 24 hours at a time
                     for ($i = $check_in; $i<=$check_out; $i = $i+86400){
                         $day = date('Y-m-d',
+                                //phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                                     $i);
                         $year = date('Y',
+                                //phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
                                      $i);
                         $price_min = 1000000000;
                         $price_max = 0;
@@ -245,12 +239,10 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                         : (float)$hour->promo;
 
                                 if ($hour->price != '0'){
-                                    $price_min = $price<$price_min
-                                            ? $price
-                                            : $price_min;
-                                    $price_max = $price>$price_max
-                                            ? $price
-                                            : $price_max;
+                                    $price_min = min($price,
+                                                     $price_min);
+                                    $price_max = max($price,
+                                                     $price_max);
                                 }
                             endforeach;
                         }
@@ -267,39 +259,9 @@ if (!class_exists('DOPBSPBackEndReservation')){
                             $price_max = $price_min;
                         }
 
-                        //                            if ($wpdb->num_rows != 0){
-                        //                                $price_min  = 1000000000;
-                        //                                $price_max  = 0;
-                        //                                $data_new = '';
-                        //                                $day_data = json_decode($control_data->data);
-                        //
-                        //                                if ($settings_calendar->hours_enabled == 'true'){
-                        //
-                        //                                    foreach ($day_data->hours as $key_hour => $hour):
-                        //                                        $day_data->hours = (array)$day_data->hours;
-                        //                                        $price = $day_data->hours[$key_hour]->promo == '' ? ($day_data->hours[$key_hour]->price == '' ? 0:(float)$day_data->hours[$key_hour]->price):(float)$day_data->hours[$key_hour]->promo;
-                        //
-                        //                                        if ($day_data->hours[$key_hour]->price != '0'){
-                        //                                            $price_min = $price < $price_min ? $price:$price_min;
-                        //                                            $price_max = $price > $price_max ? $price:$price_max;
-                        //                                        }
-                        //                                    endforeach;
-                        //                                } else {
-                        //                                    $price_min = $day_data->promo == '' ? ($day_data->price == '' ? 0:(float)$day_data->price):(float)$day_data->promo;
-                        //                                    $price_max = $price_min;
-                        //                                }
-
-                        //                                $wpdb->update($DOPBSP->tables->days, array('data' => json_encode($day_data),
-                        //                                                                           'price_min' => $price_min,
-                        //                                                                           'price_max' => $price_max),
-                        //                                                                     array('calendar_id' => $calendar_id,
-                        //                                                                           'day' => $day));
-                        //                            } else{
-
                         if (!array_key_exists($day,
                                               $days_data)){
-                            array_push($days,
-                                       $day);
+                            $days[] = $day;
                             $price_min = 1000000000;
                             $price_max = 0;
                             $data_new = '';
@@ -315,12 +277,10 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                             : (float)$day_data->hours[$key_hour]->promo;
 
                                     if ($day_data->hours[$key_hour]->price != '0'){
-                                        $price_min = $price<$price_min
-                                                ? $price
-                                                : $price_min;
-                                        $price_max = $price>$price_max
-                                                ? $price
-                                                : $price_max;
+                                        $price_min = min($price,
+                                                         $price_min);
+                                        $price_max = max($price,
+                                                         $price_max);
                                     }
                                 endforeach;
                             }
@@ -337,12 +297,13 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                 $price_max = $price_min;
                             }
 
-                            $control_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
-                                                                          $calendar_id,
-                                                                          $day));
+                            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                            $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                          $DOPBSP->tables->days,
+                                                          $calendar_id,
+                                                          $day));
                             if ($wpdb->num_rows == 0){
-                                array_push($query_insert_values,
-                                           '(\''.$calendar_id.'_'.$day.'\', \''.$calendar_id.'\', \''.$day.'\', \''.$year.'\', \''.json_encode($day_data).'\', \''.$price_min.'\', \''.$price_max.'\')');
+                                $query_insert_values[] = '(\''.$calendar_id.'_'.$day.'\', \''.$calendar_id.'\', \''.$day.'\', \''.$year.'\', \''.json_encode($day_data).'\', \''.$price_min.'\', \''.$price_max.'\')';
                             }
                         }
                     }
@@ -356,7 +317,9 @@ if (!class_exists('DOPBSPBackEndReservation')){
                     $price_min = 1000000000;
                     $price_max = 0;
 
-                    $control_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $control_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                                  $DOPBSP->tables->days,
                                                                   $calendar_id,
                                                                   $day));
 
@@ -371,12 +334,10 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                     : (float)$hour->promo;
 
                             if ($hour->price != '0'){
-                                $price_min = $price<$price_min
-                                        ? $price
-                                        : $price_min;
-                                $price_max = $price>$price_max
-                                        ? $price
-                                        : $price_max;
+                                $price_min = min($price,
+                                                 $price_min);
+                                $price_max = max($price,
+                                                 $price_max);
                             }
                         endforeach;
                     }
@@ -405,12 +366,10 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                         : (float)$day_data->hours[$key_hour]->promo;
 
                                 if ($day_data->hours[$key_hour]->price != '0'){
-                                    $price_min = $price<$price_min
-                                            ? $price
-                                            : $price_min;
-                                    $price_max = $price>$price_max
-                                            ? $price
-                                            : $price_max;
+                                    $price_min = min($price,
+                                                     $price_min);
+                                    $price_max = max($price,
+                                                     $price_max);
                                 }
                             endforeach;
                         }
@@ -423,6 +382,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
                             $price_max = $price_min;
                         }
 
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->update($DOPBSP->tables->days,
                                       array('data'      => json_encode($day_data),
                                             'price_min' => $price_min,
@@ -433,8 +393,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
                     else{
                         if (!array_key_exists($day,
                                               $days_data)){
-                            array_push($days,
-                                       $day);
+                            $days[] = $day;
                             $price_min = 1000000000;
                             $price_max = 0;
                             $data_new = '';
@@ -450,12 +409,10 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                             : (float)$day_data->hours[$key_hour]->promo;
 
                                     if ($day_data->hours[$key_hour]->price != '0'){
-                                        $price_min = $price<$price_min
-                                                ? $price
-                                                : $price_min;
-                                        $price_max = $price>$price_max
-                                                ? $price
-                                                : $price_max;
+                                        $price_min = min($price,
+                                                         $price_min);
+                                        $price_max = max($price,
+                                                         $price_max);
                                     }
                                 endforeach;
                             }
@@ -468,18 +425,20 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                 $price_max = $price_min;
                             }
 
-                            $control_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                            $control_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                                          $DOPBSP->tables->days,
                                                                           $calendar_id,
                                                                           $day));
                             if ($wpdb->num_rows == 0){
-                                array_push($query_insert_values,
-                                           '(\''.$calendar_id.'_'.$day.'\', \''.$calendar_id.'\', \''.$day.'\', \''.$year.'\', \''.json_encode($day_data).'\', \''.$price_min.'\', \''.$price_max.'\')');
+                                $query_insert_values[] = '(\''.$calendar_id.'_'.$day.'\', \''.$calendar_id.'\', \''.$day.'\', \''.$year.'\', \''.json_encode($day_data).'\', \''.$price_min.'\', \''.$price_max.'\')';
                             }
                         }
                     }
                 }
 
                 if (count($query_insert_values)>0){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->query('INSERT INTO '.$DOPBSP->tables->days.' (unique_key, calendar_id, day, year, data, price_min, price_max) VALUES '.implode(', ',
                                                                                                                                                           $query_insert_values));
                 }
@@ -504,7 +463,9 @@ if (!class_exists('DOPBSPBackEndReservation')){
                     if (isset($reservation['coupon'])){
                         $coupon = $reservation['coupon'];
 
-                        if ($coupon['id'] != 0){
+                        if ($coupon['id'] != 0
+                                && $coupon['id'] != '0'
+                                && $coupon['id'] != ''){
                             $DOPBSP->classes->backend_coupon->update($coupon['id'],
                                                                      'use');
                         }
@@ -544,7 +505,9 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                  'int')
                     : $reservation_id;
 
-            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                         $DOPBSP->tables->reservations,
                                                          $reservation_id));
 
             /*
@@ -560,13 +523,6 @@ if (!class_exists('DOPBSPBackEndReservation')){
                 }
             }
 
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
-                                                      $reservation->calendar_id));
-
-            if ($calendar->default_availability != ''){
-                $default_availability = json_decode($calendar->default_availability);
-            }
-
             /*
              * Verify reservations availability.
              */
@@ -575,7 +531,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                                                                $reservation->check_in,
                                                                                $reservation->check_out,
                                                                                $reservation->no_items)){
-                    echo 'unavailable';
+                    $DOT->echo('unavailable');
                     die();
                 }
             }
@@ -585,7 +541,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                                                                 $reservation->start_hour,
                                                                                 $reservation->end_hour,
                                                                                 $reservation->no_items)){
-                    echo 'unavailable';
+                    $DOT->echo('unavailable');
                     die();
                 }
             }
@@ -595,9 +551,11 @@ if (!class_exists('DOPBSPBackEndReservation')){
              */
             $coupon = json_decode($reservation->coupon);
 
-            if ($coupon->id != 0){
+            if ($coupon->id != 0
+                    && $coupon->id != '0'
+                    && $coupon->id != ''){
                 if (!$DOPBSP->classes->backend_coupon->validate($coupon->id)){
-                    echo 'unavailable-coupon';
+                    $DOT->echo('unavailable-coupon');
                     die();
                 }
                 else{
@@ -612,6 +570,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
             /*
              * Update if period is available.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->reservations,
                           array('status' => 'approved'),
                           array('id' => $reservation_id));
@@ -674,7 +633,9 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                  'int')
                     : $reservation_id;
 
-            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                         $DOPBSP->tables->reservations,
                                                          $reservation_id));
 
             /*
@@ -693,6 +654,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
             /*
              * Begin reservation cancellation.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->reservations,
                           array('status' => 'canceled'),
                           array('id' => $reservation_id));
@@ -700,7 +662,9 @@ if (!class_exists('DOPBSPBackEndReservation')){
             if ($reservation->coupon != ''){
                 $coupon = json_decode($reservation->coupon);
 
-                if ($coupon->id != 0){
+                if ($coupon->id != 0
+                        && $coupon->id != '0'
+                        && $coupon->id != ''){
                     $DOPBSP->classes->backend_coupon->update($coupon->id,
                                                              'restore');
                 }
@@ -717,8 +681,8 @@ if (!class_exists('DOPBSPBackEndReservation')){
             do_action('dopbsp_action_cancel_payment',
                       $reservation);
             /*
-         * If google calendar is enabled, delete the reservation from google calendar.
-         */
+             * If google calendar is enabled, delete the reservation from google calendar.
+             */
             $settings_calendar = $DOPBSP->classes->backend_settings->values($reservation->calendar_id,
                                                                             'calendar');
             if ($settings_calendar->google_enabled == 'true'){
@@ -761,6 +725,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                  'int')
                     : $reservation_id;
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->reservations,
                           array('id' => $reservation_id));
 
@@ -797,7 +762,9 @@ if (!class_exists('DOPBSPBackEndReservation')){
                                  'int')
                     : $reservation_id;
 
-            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                         $DOPBSP->tables->reservations,
                                                          $reservation_id));
 
             /*
@@ -816,6 +783,7 @@ if (!class_exists('DOPBSPBackEndReservation')){
             /*
              * Begin reservation rejection.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->reservations,
                           array('status' => 'rejected'),
                           array('id' => $reservation_id));

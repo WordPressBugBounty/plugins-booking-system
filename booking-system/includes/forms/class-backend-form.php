@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndForm')){
-    class DOPBSPBackEndForm extends DOPBSPBackEndForms{
+    class DOPBSPBackEndForm{
         /*
          * Constructor
          */
@@ -41,10 +41,12 @@ if (!class_exists('DOPBSPBackEndForm')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->forms,
                           array('user_id' => wp_get_current_user()->ID,
                                 'name'    => $DOPBSP->text('FORMS_ADD_FORM_NAME')));
-            echo $DOPBSP->classes->backend_forms->display();
+
+            $DOPBSP->classes->backend_forms->display();
 
             die();
         }
@@ -111,6 +113,7 @@ if (!class_exists('DOPBSPBackEndForm')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->forms,
                           array($DOT->post('field') => $DOT->post('value')),
                           array('id' => $DOT->post('id',
@@ -150,14 +153,18 @@ if (!class_exists('DOPBSPBackEndForm')){
             /*
              * Delete form.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->forms,
                           array('id' => $id));
 
             /*
              * Delete form fields.
              */
-            $fields = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields.' WHERE form_id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $fields = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE form_id=%d',
+                                                        $DOPBSP->tables->forms_fields,
                                                         $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->forms_fields,
                           array('form_id' => $id));
 
@@ -165,13 +172,17 @@ if (!class_exists('DOPBSPBackEndForm')){
              * Delete form fields select options.
              */
             foreach ($fields as $field){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->delete($DOPBSP->tables->forms_fields_options,
                               array('field_id' => $field->id));
             }
 
-            $forms = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->forms.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->forms));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }

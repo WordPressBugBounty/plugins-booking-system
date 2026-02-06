@@ -15,12 +15,6 @@
 if (!class_exists('DOPBSPViewsBackEndDashboardAPI')){
     class DOPBSPViewsBackEndDashboardAPI extends DOPBSPViewsBackEndDashboard{
         /*
-         * Constructor
-         */
-        function __construct(){
-        }
-
-        /*
          * Returns dashboard system template.
          *
          * @param args (array): function arguments
@@ -31,23 +25,25 @@ if (!class_exists('DOPBSPViewsBackEndDashboardAPI')){
          */
         function template($args = array()){
             global $DOPBSP;
+            global $DOT;
 
             $api_key = $args['api_key'];
             ?>
             <section class="dopbsp-content-wrapper dopbsp-responsive-hidden">
                 <div class="dopbsp-box-header dopbsp-hide">
-                    <h3><?php echo $DOPBSP->text('DASHBOARD_API_TITLE'); ?></h3>
+                    <h3><?php $DOT->echo($DOPBSP->text('DASHBOARD_API_TITLE')); ?></h3>
                     <a href="javascript:DOPBSPBackEnd.toggleBox('api')" id="DOPBSP-box-button-api" class="dopbsp-button"></a>
                 </div>
                 <div id="DOPBSP-box-api" class="dopbsp-box-wrapper">
-                    <p id="DOPBSP-box-api-key"><?php echo $api_key; ?></p>
-                    <a href="<?php echo DOPBSP_CONFIG_HELP_DOCUMENTATION_URL; ?>" target="_blank" class="dopbsp-button dopbsp-help dopbsp-right">
-                        <span class="dopbsp-info dopbsp-help"><?php echo $DOPBSP->text('DASHBOARD_API_HELP'); ?>
-                            <br /><br /><?php echo $DOPBSP->text('HELP_VIEW_DOCUMENTATION'); ?>
+                    <p id="DOPBSP-box-api-key"><?php $DOT->echo($api_key); ?></p>
+                    <a href="<?php $DOT->echo(DOPBSP_CONFIG_HELP_DOCUMENTATION_URL,
+                                              'url'); ?>" target="_blank" class="dopbsp-button dopbsp-help dopbsp-right">
+                        <span class="dopbsp-info dopbsp-help"><?php $DOT->echo($DOPBSP->text('DASHBOARD_API_HELP')); ?>
+                            <br /><br /><?php $DOT->echo($DOPBSP->text('HELP_VIEW_DOCUMENTATION')); ?>
                         </span>
                     </a>
-                    <a href="javascript:DOPBSPBackEndApi.reset(<?php echo wp_get_current_user()->ID; ?>)" class="dopbsp-button dopbsp-reset-api-key dopbsp-right">
-                        <span class="dopbsp-info"><?php echo $DOPBSP->text('DASHBOARD_API_RESET'); ?></span>
+                    <a href="javascript:DOPBSPBackEndApi.reset(<?php $DOT->echo(wp_get_current_user()->ID); ?>)" class="dopbsp-button dopbsp-reset-api-key dopbsp-right">
+                        <span class="dopbsp-info"><?php $DOT->echo($DOPBSP->text('DASHBOARD_API_RESET')); ?></span>
                     </a>
                 </div>
             </section>

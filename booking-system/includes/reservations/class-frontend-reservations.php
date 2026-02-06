@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPFrontEndReservations')){
-    class DOPBSPFrontEndReservations extends DOPBSPFrontEnd{
+    class DOPBSPFrontEndReservations{
         /*
          * Constructor.
          */
@@ -28,36 +28,36 @@ if (!class_exists('DOPBSPFrontEndReservations')){
 
             return array('data' => array(),
                          'text' => array('addressShippingCopy' => $DOPBSP->text('RESERVATIONS_RESERVATION_ADDRESS_SHIPPING_COPY'),
-                                         'buttonApprove' => $DOPBSP->text('RESERVATIONS_RESERVATION_APPROVE'),
-                                         'buttonCancel' => $DOPBSP->text('RESERVATIONS_RESERVATION_CANCEL'),
-                                         'buttonClose' => $DOPBSP->text('RESERVATIONS_RESERVATION_CLOSE'),
-                                         'buttonDelete' => $DOPBSP->text('RESERVATIONS_RESERVATION_DELETE'),
-                                         'buttonReject' => $DOPBSP->text('RESERVATIONS_RESERVATION_REJECT'),
-                                         'dateCreated' => $DOPBSP->text('RESERVATIONS_RESERVATION_DATE_CREATED'),
-                                         'id' => $DOPBSP->text('RESERVATIONS_RESERVATION_ID'),
-                                         'instructions' => $DOPBSP->text('RESERVATIONS_RESERVATION_INSTRUCTIONS'),
-                                         'language' => $DOPBSP->text('RESERVATIONS_RESERVATION_LANGUAGE'),
-                                         'noAddressBilling' => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_ADDRESS_BILLING'),
-                                         'noAddressShipping' => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_ADDRESS_SHIPPING'),
-                                         'noExtras' => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_EXTRAS'),
-                                         'noDiscount' => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_DISCOUNT'),
-                                         'noCoupon' => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_COUPON'),
-                                         'noFees' => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_FEES'),
-                                         'noForm' => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM'),
-                                         'noFormField' => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM_FIELD'),
-                                         'price' => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_PRICE'),
-                                         'priceChange' => $DOPBSP->text('RESERVATIONS_RESERVATION_PAYMENT_PRICE_CHANGE'),
-                                         'priceTotal' => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_TOTAL_PRICE'),
-                                         'selectDays' => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_SELECT_DAYS'),
-                                         'selectHours' => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_SELECT_HOURS'),
-                                         'status' => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS'),
-                                         'statusApproved' => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_APPROVED'),
-                                         'statusCanceled' => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_CANCELED'),
-                                         'statusExpired' => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_EXPIRED'),
-                                         'statusPending' => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_PENDING'),
-                                         'statusRejected' => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_REJECTED'),
-                                         'title' => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_TITLE'),
-                                         'titleDetails' => $DOPBSP->text('RESERVATIONS_RESERVATION_DETAILS_TITLE')));
+                                         'buttonApprove'       => $DOPBSP->text('RESERVATIONS_RESERVATION_APPROVE'),
+                                         'buttonCancel'        => $DOPBSP->text('RESERVATIONS_RESERVATION_CANCEL'),
+                                         'buttonClose'         => $DOPBSP->text('RESERVATIONS_RESERVATION_CLOSE'),
+                                         'buttonDelete'        => $DOPBSP->text('RESERVATIONS_RESERVATION_DELETE'),
+                                         'buttonReject'        => $DOPBSP->text('RESERVATIONS_RESERVATION_REJECT'),
+                                         'dateCreated'         => $DOPBSP->text('RESERVATIONS_RESERVATION_DATE_CREATED'),
+                                         'id'                  => $DOPBSP->text('RESERVATIONS_RESERVATION_ID'),
+                                         'instructions'        => $DOPBSP->text('RESERVATIONS_RESERVATION_INSTRUCTIONS'),
+                                         'language'            => $DOPBSP->text('RESERVATIONS_RESERVATION_LANGUAGE'),
+                                         'noAddressBilling'    => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_ADDRESS_BILLING'),
+                                         'noAddressShipping'   => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_ADDRESS_SHIPPING'),
+                                         'noExtras'            => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_EXTRAS'),
+                                         'noDiscount'          => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_DISCOUNT'),
+                                         'noCoupon'            => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_COUPON'),
+                                         'noFees'              => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_FEES'),
+                                         'noForm'              => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM'),
+                                         'noFormField'         => $DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM_FIELD'),
+                                         'price'               => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_PRICE'),
+                                         'priceChange'         => $DOPBSP->text('RESERVATIONS_RESERVATION_PAYMENT_PRICE_CHANGE'),
+                                         'priceTotal'          => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_TOTAL_PRICE'),
+                                         'selectDays'          => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_SELECT_DAYS'),
+                                         'selectHours'         => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_SELECT_HOURS'),
+                                         'status'              => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS'),
+                                         'statusApproved'      => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_APPROVED'),
+                                         'statusCanceled'      => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_CANCELED'),
+                                         'statusExpired'       => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_EXPIRED'),
+                                         'statusPending'       => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_PENDING'),
+                                         'statusRejected'      => $DOPBSP->text('RESERVATIONS_RESERVATION_STATUS_REJECTED'),
+                                         'title'               => $DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_TITLE'),
+                                         'titleDetails'        => $DOPBSP->text('RESERVATIONS_RESERVATION_DETAILS_TITLE')));
         }
 
         /*
@@ -122,7 +122,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                                                        $reservation['check_in'],
                                                                                        $reservation['check_out'],
                                                                                        $reservation['no_items'])){
-                            echo 'unavailable';
+                            $DOT->echo('unavailable');
                             die();
                         }
                     }
@@ -132,7 +132,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                                                         $reservation['start_hour'],
                                                                                         $reservation['end_hour'],
                                                                                         $reservation['no_items'])){
-                            echo 'unavailable';
+                            $DOT->echo('unavailable');
                             die();
                         }
                     }
@@ -145,7 +145,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
 
                     if ($coupon['id'] != 0){
                         if (!$DOPBSP->classes->backend_coupon->validate($coupon['id'])){
-                            echo 'unavailable-coupon';
+                            $DOT->echo('unavailable-coupon');
                             die();
                         }
                     }
@@ -156,7 +156,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                  */
                 if (!$this->validate($calendar_id,
                                      $reservation)){
-                    echo 'security';
+                    $DOT->echo('security');
                     die();
                 }
             }
@@ -252,12 +252,6 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             $ip = $_SERVER['REMOTE_ADDR'];
 
             /*
-             * Verify reservations.
-             */
-            $settings_payment = $DOPBSP->classes->backend_settings->values($calendar_id,
-                                                                           'payment');
-
-            /*
              * Set token.
              */
             if ($payment_method != 'default'
@@ -280,17 +274,21 @@ if (!class_exists('DOPBSPFrontEndReservations')){
 
                 // check reservation
                 if ($source != 'airbnb'){
-                    $control_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE uid="%s" AND calendar_id=%d AND (status="approved" OR status="expired")',
-                                                                  $reservation['uid'],
-                                                                  $calendar_id));
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE uid=%s AND calendar_id=%d AND (status="approved" OR status="expired")',
+                                                  $DOPBSP->tables->reservations,
+                                                  $reservation['uid'],
+                                                  $calendar_id));
                 }
                 else{
-                    $control_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE check_in="%s" AND check_out="%s" AND start_hour="%s" AND end_hour="%s" AND calendar_id=%d AND (status="approved" OR status="expired")',
-                                                                  $reservation['check_in'],
-                                                                  $reservation['check_out'],
-                                                                  $reservation['start_hour'],
-                                                                  $reservation['end_hour'],
-                                                                  $calendar_id));
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE check_in=%s AND check_out=%s AND start_hour=%s AND end_hour=%s AND calendar_id=%d AND (status="approved" OR status="expired")',
+                                                  $DOPBSP->tables->reservations,
+                                                  $reservation['check_in'],
+                                                  $reservation['check_out'],
+                                                  $reservation['start_hour'],
+                                                  $reservation['end_hour'],
+                                                  $calendar_id));
                 }
 
                 if ($wpdb->num_rows<1){
@@ -423,7 +421,9 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                      $check_out);
 
             // Default Availability
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $calendar_id));
 
             $calendar->default_availability != ''
@@ -433,7 +433,9 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             for ($i = 0; $i<count($selected_days)-($settings_calendar->days_morning_check_out == 'true'
                     ? 1
                     : 0); $i++){
-                $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                     $DOPBSP->tables->days,
                                                      $calendar_id,
                                                      $selected_days[$i]));
 
@@ -482,12 +484,16 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                                             'calendar');
 
             // Default Availability
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $calendar_id));
 
             $default_availability = json_decode($calendar->default_availability);
             //Custom Availability
-            $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                 $DOPBSP->tables->days,
                                                  $calendar_id,
                                                  $day));
 
@@ -574,18 +580,17 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             /*
              * Get extras data.
              */
-            $extras_ids = array();
+            $extras_ids = array($DOPBSP->tables->extras_groups_items);
             $extras_ids_type = array();
 
             foreach ($extras as $extra){
-                array_push($extras_ids,
-                           $extra['id']);
-                array_push($extras_ids_type,
-                           '%d');
+                $extras_ids[] = $extra['id'];
+                $extras_ids_type[] = '%d';
             }
 
-            $extras_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->extras_groups_items.' WHERE id in ('.implode(',',
-                                                                                                                                            $extras_ids_type).') ORDER BY position',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $extras_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE id in ('.implode(',',
+                                                                                                      $extras_ids_type).') ORDER BY position',
                                                              $extras_ids));
 
             /*
@@ -807,13 +812,6 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                 $time_lapse = $DOT->prototypes->hours($start_hour,
                                                       $end_hour);
             }
-
-            //            if ($settings_calendar->hours_enabled == 'true'
-            //                    && $settings_calendar->hours_interval_enabled == 'true'){
-            //                $time_lapse = $time_lapse%2 === 0
-            //                        ? intval($time_lapse/2)
-            //                        : intval($time_lapse/2)+1;
-            //            }
 
             for ($i = 0; $i<count($discounts); $i++){
                 if (($discounts[$i]->start_time_lapse == ''

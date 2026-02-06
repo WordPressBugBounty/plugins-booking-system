@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndDiscountItems')){
-    class DOPBSPBackEndDiscountItems extends DOPBSPBackEndDiscount{
+    class DOPBSPBackEndDiscountItems{
         /*
          * Constructor
          */
@@ -49,6 +49,7 @@ if (!class_exists('DOPBSPBackEndDiscountItems')){
 
             foreach ($ids as $id){
                 $i++;
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->discounts_items,
                               array('position' => $i),
                               array('id' => $id));

@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndFormField')){
-    class DOPBSPBackEndFormField extends DOPBSPBackEndFormFields{
+    class DOPBSPBackEndFormField{
         /*
          * Constructor
          */
@@ -70,6 +70,7 @@ if (!class_exists('DOPBSPBackEndFormField')){
                     $key = 'FORMS_FORM_ADD_FIELD_TEXTAREA_LABEL';
                     break;
             }
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->forms_fields,
                           array('form_id'            => $form_id,
                                 'type'               => $type,
@@ -77,7 +78,9 @@ if (!class_exists('DOPBSPBackEndFormField')){
                                 'allowed_characters' => '',
                                 'translation'        => $DOPBSP->classes->translation->encodeJSON($key)));
             $id = $wpdb->insert_id;
-            $field = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $field = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                   $DOPBSP->tables->forms_fields,
                                                    $id));
 
             switch ($type){
@@ -145,7 +148,9 @@ if (!class_exists('DOPBSPBackEndFormField')){
                                              'UTF-8',
                                              'ISO-8859-1');
 
-                $field_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $field_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                            $DOPBSP->tables->forms_fields,
                                                             $id));
 
                 $translation = json_decode($field_data->translation);
@@ -155,6 +160,7 @@ if (!class_exists('DOPBSPBackEndFormField')){
                 $field = 'translation';
             }
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->forms_fields,
                           array($field => $value),
                           array('id' => $id));
@@ -188,8 +194,10 @@ if (!class_exists('DOPBSPBackEndFormField')){
             $id = $DOT->post('id',
                              'int');
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->forms_fields,
                           array('id' => $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->forms_fields_options,
                           array('field_id' => $id));
 

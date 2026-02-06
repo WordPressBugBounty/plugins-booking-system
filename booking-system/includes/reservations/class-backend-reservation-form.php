@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndReservationForm')){
-    class DOPBSPBackEndReservationForm extends DOPBSPBackEndReservations{
+    class DOPBSPBackEndReservationForm{
         /*
          * Constructor
          */
@@ -44,8 +44,10 @@ if (!class_exists('DOPBSPBackEndReservationForm')){
              * End verify nonce.
              */
 
-            $reservation_id = $DOT->post('id',
-                                         'int');
+            $reservation_id = $reservation_id != 0
+                    ? $reservation_id
+                    : $DOT->post('id',
+                                 'int');
             $form = $DOT->post('value',
                                false);
             $form = mb_convert_encoding($form,
@@ -61,12 +63,13 @@ if (!class_exists('DOPBSPBackEndReservationForm')){
                 }
             }
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->reservations,
                           array('form'  => $form,
                                 'email' => $edited_email),
                           array('id' => $reservation_id));
 
-            echo 'success';
+            $DOT->echo('success');
 
             die();
         }

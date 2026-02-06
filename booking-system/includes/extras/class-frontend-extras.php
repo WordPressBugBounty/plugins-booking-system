@@ -1,11 +1,11 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.1
 * File                    : includes/extras/class-frontend-extras.php
 * File Version            : 1.0.2
-* Created / Last Modified : 26 August 2015
+* Created / Last Modified : 25 August 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -13,7 +13,7 @@
 */
 
     if (!class_exists('DOPBSPFrontEndExtras')){
-        class DOPBSPFrontEndExtras extends DOPBSPFrontEnd{
+        class DOPBSPFrontEndExtras{
             /*
              * Constructor.
              */
@@ -36,14 +36,18 @@
                 /*
                  * Get extra groups.
                  */
-                $groups = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->extras_groups.' WHERE extra_id=%d ORDER BY position',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $groups = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE extra_id=%d ORDER BY position',
+                                                            $DOPBSP->tables->extras_groups,
                                                             $id));
                 
                 foreach ($groups as $group){
                     $group->translation = $DOPBSP->classes->translation->decodeJSON($group->translation,
                                                                                     $language);
-                    
-                    $items = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->extras_groups_items.' WHERE group_id=%d ORDER BY position',
+
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $items = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE group_id=%d ORDER BY position',
+                                                               $DOPBSP->tables->extras_groups_items,
                                                                $group->id));
 
                     foreach ($items as $item){

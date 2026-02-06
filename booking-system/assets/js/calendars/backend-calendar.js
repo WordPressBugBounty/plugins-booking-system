@@ -1,9 +1,9 @@
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.6
 * File                    : assets/js/calendars/backend-calendar.js
-* File Version            : 1.1.1
-* Created / Last Modified : 20 February 2016
+* File Version            : 1.0.8
+* Created / Last Modified : 16 February 2016
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -64,24 +64,22 @@ var DOPBSPBackEndCalendar = new function(){
         helpHTML.push(DOPBSPBackEnd.text('CALENDARS_EDIT_CALENDAR_EMAILS_HELP')+'<br /><br />');
         helpHTML.push(DOPBSPBackEnd.text('CALENDARS_EDIT_CALENDAR_PAYMENT_GATEWAYS_HELP')+'<br /><br />');
 
-        if (DOPBSP_user_role === 'administrator'
-                && DOPBSP_view_pro){
+        if (DOPBSP_user_role === 'administrator'){
             var post_type   = DOPPrototypes.$_GET('post_type'),
                 post_action = DOPPrototypes.$_GET('action');
 
             if (post_action !== 'edit'){
-                headerHTML.push('<a href="?page=dopbsp-pro" class="dopbsp-button dopbsp-users"><span class="dopbsp-info dopbsp-pro">'+DOPBSPBackEnd.text('CALENDARS_EDIT_CALENDAR_USERS_PERMISSIONS')+' - '+DOPBSPBackEnd.text('MESSAGES_PRO_TEXT')+'</span></a>');
+                headerHTML.push('<a href="javascript:DOPBSPBackEndSettingsUsers.display('+id+')" class="dopbsp-button dopbsp-users"><span class="dopbsp-info">'+DOPBSPBackEnd.text('CALENDARS_EDIT_CALENDAR_USERS_PERMISSIONS')+'</span></a>');
                 helpHTML.push(DOPBSPBackEnd.text('CALENDARS_EDIT_CALENDAR_USERS_HELP')+'<br /><br />');
             }
         }
         //        headerHTML.push('<a href="javascript:void(0)" class="dopbsp-button dopbsp-notifications"><span class="dopbsp-info"><span id="DOPBSP-calendar-new-reservations">0</span> '+DOPBSPBackEnd.text('CALENDARS_EDIT_CALENDAR_NEW_RESERVATIONS')+'</span></a>');
 
         if (DOPPrototypes.$_GET('action') !== 'edit'
-                && userId === DOPBSP_user_ID
-                && DOPBSP_view_pro){
-            headerHTML.push('<a href="?page=dopbsp-pro" class="dopbsp-button dopbsp-delete"><span class="dopbsp-info dopbsp-pro">'+DOPBSPBackEnd.text('CALENDARS_EDIT_CALENDAR_DELETE')+' - '+DOPBSPBackEnd.text('MESSAGES_PRO_TEXT')+'</span></a>');
+                && userId === DOPBSP_user_ID){
+            // headerHTML.push('<a href="javascript:DOPBSPBackEnd.confirmation(\'CALENDARS_DELETE_CALENDAR_CONFIRMATION\', \'DOPBSPBackEndCalendar.delete('+id+')\')" class="dopbsp-button dopbsp-delete"><span class="dopbsp-info">'+DOPBSPBackEnd.text('CALENDARS_EDIT_CALENDAR_DELETE')+'</span></a>');
         }
-        //        helpHTML.push(DOPBSPBackEnd.text('CALENDARS_CALENDAR_NOTIFICATIONS_HELP')+'<br /><br />');
+        helpHTML.push(DOPBSPBackEnd.text('CALENDARS_CALENDAR_NOTIFICATIONS_HELP')+'<br /><br />');
         helpHTML.push(DOPBSPBackEnd.text('HELP_VIEW_DOCUMENTATION'));
         headerHTML.push('<a href="'+DOPBSP_CONFIG_HELP_DOCUMENTATION_URL+'" target="_blank" class="dopbsp-button dopbsp-help"><span class="dopbsp-info dopbsp-help">'+helpHTML.join('')+'</span></a>');
 
@@ -174,7 +172,6 @@ var DOPBSPBackEndCalendar = new function(){
                        field : field,
                        value : value,
                        nonce : DOPBSP_user_nonce
-
                    },
                    function(data){
                    })
@@ -196,8 +193,7 @@ var DOPBSPBackEndCalendar = new function(){
                                                                                              id    : id,
                                                                                              field : field,
                                                                                              value : value,
-                                                                                             nonce : DOPBSP_user_nonce
-
+                                                                                             nonce: DOPBSP_user_nonce
                                                                                          },
                                                                                          function(data){
                                                                                              DOPBSPBackEnd.toggleMessages('success',
@@ -210,6 +206,46 @@ var DOPBSPBackEndCalendar = new function(){
                                                  },
                                                  600);
         }
+    };
+
+    /*
+     * Delete calendar.
+     * 
+     * @param id (Number): calendar ID
+     */
+    this.delete = function(id){
+        DOPBSPBackEnd.toggleMessages('show',
+                                     DOPBSPBackEnd.text('CALENDARS_DELETE_CALENDAR_DELETING'));
+
+        $.post(ajaxurl,
+               {
+                   action: 'dopbsp_calendar_delete',
+                   id    : id,
+                   nonce: DOPBSP_user_nonce
+               },
+               function(data){
+                   DOPBSPBackEnd.clearColumns(2);
+                   $('#DOPBSP-admin-reservations')
+                   .css('display',
+                        'none');
+
+                   $('#DOPBSP-calendar-ID-'+id)
+                   .stop(true,
+                         true)
+                   .animate({'opacity': 0},
+                            600,
+                            function(){
+                                $(this)
+                                .remove();
+
+                                if (data === '0'){
+                                    $('#DOPBSP-column1 .dopbsp-column-content')
+                                    .html('<ul><li class="dopbsp-no-data">'+DOPBSPBackEnd.text('CALENDARS_NO_CALENDARS')+'</li></ul>');
+                                }
+                                DOPBSPBackEnd.toggleMessages('success',
+                                                             DOPBSPBackEnd.text('CALENDARS_DELETE_CALENDAR_SUCCESS'));
+                            });
+               });
     };
 
     return this.__construct();

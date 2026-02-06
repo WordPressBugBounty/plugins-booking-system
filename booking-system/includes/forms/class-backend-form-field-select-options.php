@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndFormFieldSelectOptions')){
-    class DOPBSPBackEndFormFieldSelectOptions extends DOPBSPBackEndFormField{
+    class DOPBSPBackEndFormFieldSelectOptions{
         /*
          * Constructor
          */
@@ -49,6 +49,8 @@ if (!class_exists('DOPBSPBackEndFormFieldSelectOptions')){
 
             foreach ($ids as $id){
                 $i++;
+
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->forms_fields_options,
                               array('position' => $i),
                               array('id' => $id));

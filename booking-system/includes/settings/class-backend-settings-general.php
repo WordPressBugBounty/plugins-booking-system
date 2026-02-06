@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndSettingsGeneral')){
-    class DOPBSPBackEndSettingsGeneral extends DOPBSPBackEndSettings{
+    class DOPBSPBackEndSettingsGeneral{
         /*
          * Constructor
          */
@@ -60,16 +60,14 @@ if (!class_exists('DOPBSPBackEndSettingsGeneral')){
          *
          * @return default general settings array
          */
-        function defaults($default_general){
-            $default_general = array('dopbsp_licence_email'    => '',
-                                     'dopbsp_licence_instance' => '',
-                                     'dopbsp_licence_key'      => '',
-                                     'dopbsp_licence_status'   => 'deactivated',
-                                     'google_map_api_key'      => '',
-                                     'referral_id'             => '',
-                                     'referral_display'        => 'false');
-
-            return $default_general;
+        function defaults(){
+            return array('dopbsp_licence_email'    => '',
+                         'dopbsp_licence_instance' => '',
+                         'dopbsp_licence_key'      => '',
+                         'dopbsp_licence_status'   => 'deactivated',
+                         'google_map_api_key'      => '',
+                         'referral_id'             => '',
+                         'referral_display'        => 'false');
         }
     }
 }

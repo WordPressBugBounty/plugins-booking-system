@@ -17,7 +17,7 @@
             /*
              * Currencies list.
              */
-            public $currencies = array();
+            public array $currencies = array();
             
             /*
              * Constructor
@@ -64,375 +64,375 @@
              * @return currencies array
              */
             function set($currencies){
-                array_push($currencies, array('code' => 'AFN',
+                $currencies[] = array('code' => 'AFN',
                                               'name' => 'Afghanistan Afghani',
-                                              'sign' => '&#1547;'));
-                array_push($currencies, array('code' => 'ALL',
+                                              'sign' => '&#1547;');
+                $currencies[] = array('code' => 'ALL',
                                               'name' => 'Albania Lek',
-                                              'sign' => '&#76;&#101;&#107;'));
-                array_push($currencies, array('code' => 'DZD',
+                                              'sign' => '&#76;&#101;&#107;');
+                $currencies[] = array('code' => 'DZD',
                                               'name' => 'Algeria Dinar',
-                                              'sign' => 'دج'));
-                array_push($currencies, array('code' => 'ARS',
+                                              'sign' => 'دج');
+                $currencies[] = array('code' => 'ARS',
                                               'name' => 'Argentina Peso',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'AMD',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'AMD',
                                               'name' => 'Armenian Dram',
-                                              'sign' => '&#1423;'));
-                array_push($currencies, array('code' => 'AWG',
+                                              'sign' => '&#1423;');
+                $currencies[] = array('code' => 'AWG',
                                               'name' => 'Aruba Guilder',
-                                              'sign' => '&#402;'));
-                array_push($currencies, array('code' => 'AUD',
+                                              'sign' => '&#402;');
+                $currencies[] = array('code' => 'AUD',
                                               'name' => 'Australia Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'AZN',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'AZN',
                                               'name' => 'Azerbaijan New Manat',
-                                              'sign' => '&#1084;&#1072;&#1085;'));
-                array_push($currencies, array('code' => 'BSD',
+                                              'sign' => '&#1084;&#1072;&#1085;');
+                $currencies[] = array('code' => 'BSD',
                                               'name' => 'Bahamas Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'BDT',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'BDT',
                                               'name' => 'Bangladesh Taka',
-                                              'sign' => '&#2547;'));
-                array_push($currencies, array('code' => 'BBD',
+                                              'sign' => '&#2547;');
+                $currencies[] = array('code' => 'BBD',
                                               'name' => 'Barbados Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'BYR',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'BYR',
                                               'name' => 'Belarus Ruble',
-                                              'sign' => '&#112;&#46;'));
-                array_push($currencies, array('code' => 'BZD',
+                                              'sign' => '&#112;&#46;');
+                $currencies[] = array('code' => 'BZD',
                                               'name' => 'Belize Dollar',
-                                              'sign' => '&#66;&#90;&#36;'));
-                array_push($currencies, array('code' => 'BMD',
+                                              'sign' => '&#66;&#90;&#36;');
+                $currencies[] = array('code' => 'BMD',
                                               'name' => 'Bermuda Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'BOB',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'BOB',
                                               'name' => 'Bolivia Boliviano',
-                                              'sign' => '&#36;&#98;'));
-                array_push($currencies, array('code' => 'BAM',
+                                              'sign' => '&#36;&#98;');
+                $currencies[] = array('code' => 'BAM',
                                               'name' => 'Bosnia and Herzegovina Convertible Marka',
-                                              'sign' => '&#75;&#77;'));
-                array_push($currencies, array('code' => 'BWP',
+                                              'sign' => '&#75;&#77;');
+                $currencies[] = array('code' => 'BWP',
                                               'name' => 'Botswana Pula',
-                                              'sign' => '&#80;'));
-                array_push($currencies, array('code' => 'BGN',
+                                              'sign' => '&#80;');
+                $currencies[] = array('code' => 'BGN',
                                               'name' => 'Bulgaria Lev',
-                                              'sign' => '&#1083;&#1074;'));
-                array_push($currencies, array('code' => 'BRL',
+                                              'sign' => '&#1083;&#1074;');
+                $currencies[] = array('code' => 'BRL',
                                               'name' => 'Brazil Real',
-                                              'sign' => '&#82;&#36;'));
-                array_push($currencies, array('code' => 'BND',
+                                              'sign' => '&#82;&#36;');
+                $currencies[] = array('code' => 'BND',
                                               'name' => 'Brunei Darussalam Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'KHR',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'KHR',
                                               'name' => 'Cambodia Riel',
-                                              'sign' => '&#6107;'));
-                array_push($currencies, array('code' => 'CAD',
+                                              'sign' => '&#6107;');
+                $currencies[] = array('code' => 'CAD',
                                               'name' => 'Canada Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'KYD',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'KYD',
                                               'name' => 'Cayman Islands Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'XOF',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'XOF',
                                               'name' => 'CFA Franc',
-                                              'sign' => 'Franc'));
-                array_push($currencies, array('code' => 'CLP',
+                                              'sign' => 'Franc');
+                $currencies[] = array('code' => 'CLP',
                                               'name' => 'Chile Peso',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'CNY',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'CNY',
                                               'name' => 'China Yuan Renminbi',
-                                              'sign' => '&#165;'));
-                array_push($currencies, array('code' => 'COP',
+                                              'sign' => '&#165;');
+                $currencies[] = array('code' => 'COP',
                                               'name' => 'Colombia Peso',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'CRC',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'CRC',
                                               'name' => 'Costa Rica Colon',
-                                              'sign' => '&#8353;'));
-                array_push($currencies, array('code' => 'HRK',
+                                              'sign' => '&#8353;');
+                $currencies[] = array('code' => 'HRK',
                                               'name' => 'Croatia Kuna',
-                                              'sign' => '&#107;&#110;'));
-                array_push($currencies, array('code' => 'CUP',
+                                              'sign' => '&#107;&#110;');
+                $currencies[] = array('code' => 'CUP',
                                               'name' => 'Cuba Peso',
-                                              'sign' => '&#8369;'));
-                array_push($currencies, array('code' => 'CZK',
+                                              'sign' => '&#8369;');
+                $currencies[] = array('code' => 'CZK',
                                               'name' => 'Czech Republic Koruna',
-                                              'sign' => '&#75;&#269;'));
-                array_push($currencies, array('code' => 'DKK',
+                                              'sign' => '&#75;&#269;');
+                $currencies[] = array('code' => 'DKK',
                                               'name' => 'Denmark Krone',
-                                              'sign' => '&#107;&#114;'));
-                array_push($currencies, array('code' => 'DOP',
+                                              'sign' => '&#107;&#114;');
+                $currencies[] = array('code' => 'DOP',
                                               'name' => 'Dominican Republic Peso',
-                                              'sign' => '&#82;&#68;&#36;'));
-                array_push($currencies, array('code' => 'XCD',
+                                              'sign' => '&#82;&#68;&#36;');
+                $currencies[] = array('code' => 'XCD',
                                               'name' => 'East Caribbean Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'EGP',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'EGP',
                                               'name' => 'Egypt Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'SVC',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'SVC',
                                               'name' => 'El Salvador Colon',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'EEK',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'EEK',
                                               'name' => 'Estonia Kroon',
-                                              'sign' => '&#107;&#114;'));
-                array_push($currencies, array('code' => 'EUR',
+                                              'sign' => '&#107;&#114;');
+                $currencies[] = array('code' => 'EUR',
                                               'name' => 'Euro Member Countries',
-                                              'sign' => '&#8364;'));
-                array_push($currencies, array('code' => 'FKP',
+                                              'sign' => '&#8364;');
+                $currencies[] = array('code' => 'FKP',
                                               'name' => 'Falkland Islands (Malvinas) Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'FJD',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'FJD',
                                               'name' => 'Fiji Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'GHC',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'GHC',
                                               'name' => 'Ghana Cedis',
-                                              'sign' => '&#162;'));
-                array_push($currencies, array('code' => 'GIP',
+                                              'sign' => '&#162;');
+                $currencies[] = array('code' => 'GIP',
                                               'name' => 'Gibraltar Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'GTQ',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'GTQ',
                                               'name' => 'Guatemala Quetzal',
-                                              'sign' => '&#81;'));
-                array_push($currencies, array('code' => 'GGP',
+                                              'sign' => '&#81;');
+                $currencies[] = array('code' => 'GGP',
                                               'name' => 'Guernsey Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'GYD',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'GYD',
                                               'name' => 'Guyana Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'HNL',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'HNL',
                                               'name' => 'Honduras Lempira',
-                                              'sign' => '&#76;'));
-                array_push($currencies, array('code' => 'HKD',
+                                              'sign' => '&#76;');
+                $currencies[] = array('code' => 'HKD',
                                               'name' => 'Hong Kong Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'HUF',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'HUF',
                                               'name' => 'Hungary Forint',
-                                              'sign' => '&#70;&#116;'));
-                array_push($currencies, array('code' => 'ISK',
+                                              'sign' => '&#70;&#116;');
+                $currencies[] = array('code' => 'ISK',
                                               'name' => 'Iceland Krona',
-                                              'sign' => '&#107;&#114;'));
-                array_push($currencies, array('code' => 'INR',
+                                              'sign' => '&#107;&#114;');
+                $currencies[] = array('code' => 'INR',
                                               'name' => 'India Rupee',
-                                              'sign' => 'INR'));
-                array_push($currencies, array('code' => 'IDR',
+                                              'sign' => 'INR');
+                $currencies[] = array('code' => 'IDR',
                                               'name' => 'Indonesia Rupiah',
-                                              'sign' => 'IDR'));
-                array_push($currencies, array('code' => 'IRR',
+                                              'sign' => 'IDR');
+                $currencies[] = array('code' => 'IRR',
                                               'name' => 'Iran Rial',
-                                              'sign' => '&#65020;'));
-                array_push($currencies, array('code' => 'IMP',
+                                              'sign' => '&#65020;');
+                $currencies[] = array('code' => 'IMP',
                                               'name' => 'Isle of Man Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'ILS',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'ILS',
                                               'name' => 'Israel Shekel',
-                                              'sign' => '&#8362;'));
-                array_push($currencies, array('code' => 'JMD',
+                                              'sign' => '&#8362;');
+                $currencies[] = array('code' => 'JMD',
                                               'name' => 'Jamaica Dollar',
-                                              'sign' => '&#74;&#36;'));
-                array_push($currencies, array('code' => 'JPY',
+                                              'sign' => '&#74;&#36;');
+                $currencies[] = array('code' => 'JPY',
                                               'name' => 'Japan Yen',
-                                              'sign' => '&#165;'));
-                array_push($currencies, array('code' => 'JEP',
+                                              'sign' => '&#165;');
+                $currencies[] = array('code' => 'JEP',
                                               'name' => 'Jersey Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'KZT',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'KZT',
                                               'name' => 'Kazakhstan Tenge',
-                                              'sign' => '&#8376;')); 
-                array_push($currencies, array('code' => 'KES',
+                                              'sign' => '&#8376;'); 
+                $currencies[] = array('code' => 'KES',
                                               'name' => 'Kenya Shilling',
-                                              'sign' => 'KSh'));
-                array_push($currencies, array('code' => 'KPW',
+                                              'sign' => 'KSh');
+                $currencies[] = array('code' => 'KPW',
                                               'name' => 'Korea (North) Won',
-                                              'sign' => '&#8361;'));
-                array_push($currencies, array('code' => 'KRW',
+                                              'sign' => '&#8361;');
+                $currencies[] = array('code' => 'KRW',
                                               'name' => 'Korea (South) Won',
-                                              'sign' => '&#8361;'));
-                array_push($currencies, array('code' => 'KGS',
+                                              'sign' => '&#8361;');
+                $currencies[] = array('code' => 'KGS',
                                               'name' => 'Kyrgyzstan Som',
-                                              'sign' => '&#1083;&#1074;'));
-                array_push($currencies, array('code' => 'LAK',
+                                              'sign' => '&#1083;&#1074;');
+                $currencies[] = array('code' => 'LAK',
                                               'name' => 'Laos Kip',
-                                              'sign' => '&#8365;'));
-                array_push($currencies, array('code' => 'LVL',
+                                              'sign' => '&#8365;');
+                $currencies[] = array('code' => 'LVL',
                                               'name' => 'Latvia Lat',
-                                              'sign' => '&#76;&#115;'));
-                array_push($currencies, array('code' => 'LBP',
+                                              'sign' => '&#76;&#115;');
+                $currencies[] = array('code' => 'LBP',
                                               'name' => 'Lebanon Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'LRD',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'LRD',
                                               'name' => 'Liberia Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'LTL',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'LTL',
                                               'name' => 'Lithuania Litas',
-                                              'sign' => '&#76;&#116;'));
-                array_push($currencies, array('code' => 'MKD',
+                                              'sign' => '&#76;&#116;');
+                $currencies[] = array('code' => 'MKD',
                                               'name' => 'Macedonia Denar',
-                                              'sign' => '&#1076;&#1077;&#1085;'));
-                array_push($currencies, array('code' => 'MYR',
+                                              'sign' => '&#1076;&#1077;&#1085;');
+                $currencies[] = array('code' => 'MYR',
                                               'name' => 'Malaysia Ringgit',
-                                              'sign' => '&#82;&#77;'));
-                array_push($currencies, array('code' => 'MUR',
+                                              'sign' => '&#82;&#77;');
+                $currencies[] = array('code' => 'MUR',
                                               'name' => 'Mauritius Rupee',
-                                              'sign' => '&#8360;'));
-                array_push($currencies, array('code' => 'MXN',
+                                              'sign' => '&#8360;');
+                $currencies[] = array('code' => 'MXN',
                                               'name' => 'Mexico Peso',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'MNT',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'MNT',
                                               'name' => 'Mongolia Tughrik',
-                                              'sign' => '&#8366;'));
-                array_push($currencies, array('code' => 'MAD',
+                                              'sign' => '&#8366;');
+                $currencies[] = array('code' => 'MAD',
                                               'name' => 'Moroccan Dirham',
-                                              'sign' => '&#68;&#72;'));
-                array_push($currencies, array('code' => 'MZN',
+                                              'sign' => '&#68;&#72;');
+                $currencies[] = array('code' => 'MZN',
                                               'name' => 'Mozambique Metical',
-                                              'sign' => '&#77;&#84;'));
-                array_push($currencies, array('code' => 'NAD',
+                                              'sign' => '&#77;&#84;');
+                $currencies[] = array('code' => 'NAD',
                                               'name' => 'Namibia Dollar',
-                                              'sign' => 'N&#36;'));
-                array_push($currencies, array('code' => 'NPR',
+                                              'sign' => 'N&#36;');
+                $currencies[] = array('code' => 'NPR',
                                               'name' => 'Nepal Rupee',
-                                              'sign' => '&#8360;'));
-                array_push($currencies, array('code' => 'ANG',
+                                              'sign' => '&#8360;');
+                $currencies[] = array('code' => 'ANG',
                                               'name' => 'Netherlands Antilles Guilder',
-                                              'sign' => '&#402;'));
-                array_push($currencies, array('code' => 'NZD',
+                                              'sign' => '&#402;');
+                $currencies[] = array('code' => 'NZD',
                                               'name' => 'New Zealand Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'NIO',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'NIO',
                                               'name' => 'Nicaragua Cordoba',
-                                              'sign' => '&#67;&#36;'));
-                array_push($currencies, array('code' => 'NGN',
+                                              'sign' => '&#67;&#36;');
+                $currencies[] = array('code' => 'NGN',
                                               'name' => 'Nigeria Naira',
-                                              'sign' => '&#8358;'));
-                array_push($currencies, array('code' => 'KPW',
+                                              'sign' => '&#8358;');
+                $currencies[] = array('code' => 'KPW',
                                               'name' => 'Korea (North) Won',
-                                              'sign' => '&#8361;'));
-                array_push($currencies, array('code' => 'NOK',
+                                              'sign' => '&#8361;');
+                $currencies[] = array('code' => 'NOK',
                                               'name' => 'Norway Krone',
-                                              'sign' => '&#107;&#114;'));
-                array_push($currencies, array('code' => 'OMR',
+                                              'sign' => '&#107;&#114;');
+                $currencies[] = array('code' => 'OMR',
                                               'name' => 'Oman Rial',
-                                              'sign' => '&#65020;'));
-                array_push($currencies, array('code' => 'PKR',
+                                              'sign' => '&#65020;');
+                $currencies[] = array('code' => 'PKR',
                                               'name' => 'Pakistan Rupee',
-                                              'sign' => '&#8360;'));
-                array_push($currencies, array('code' => 'PAB',
+                                              'sign' => '&#8360;');
+                $currencies[] = array('code' => 'PAB',
                                               'name' => 'Panama Balboa',
-                                              'sign' => '&#66;&#47;&#46;'));
-                array_push($currencies, array('code' => 'PYG',
+                                              'sign' => '&#66;&#47;&#46;');
+                $currencies[] = array('code' => 'PYG',
                                               'name' => 'Paraguay Guarani',
-                                              'sign' => '&#71;&#115;'));
-                array_push($currencies, array('code' => 'PEN',
+                                              'sign' => '&#71;&#115;');
+                $currencies[] = array('code' => 'PEN',
                                               'name' => 'Peru Nuevo Sol',
-                                              'sign' => '&#83;&#47;&#46;'));
-                array_push($currencies, array('code' => 'PHP',
+                                              'sign' => '&#83;&#47;&#46;');
+                $currencies[] = array('code' => 'PHP',
                                               'name' => 'Philippines Peso',
-                                              'sign' => '&#8369;'));
-                array_push($currencies, array('code' => 'PLN',
+                                              'sign' => '&#8369;');
+                $currencies[] = array('code' => 'PLN',
                                               'name' => 'Poland Zloty',
-                                              'sign' => '&#122;&#322;'));
-                array_push($currencies, array('code' => 'QAR',
+                                              'sign' => '&#122;&#322;');
+                $currencies[] = array('code' => 'QAR',
                                               'name' => 'Qatar Riyal',
-                                              'sign' => '&#65020;'));
-                array_push($currencies, array('code' => 'RON',
+                                              'sign' => '&#65020;');
+                $currencies[] = array('code' => 'RON',
                                               'name' => 'Romania New Leu',
-                                              'sign' => '&#108;&#101;&#105;'));
-                array_push($currencies, array('code' => 'RUB',
+                                              'sign' => '&#108;&#101;&#105;');
+                $currencies[] = array('code' => 'RUB',
                                               'name' => 'Russia Ruble',
-                                              'sign' => '&#1088;&#1091;&#1073;'));
-                array_push($currencies, array('code' => 'SHP',
+                                              'sign' => '&#1088;&#1091;&#1073;');
+                $currencies[] = array('code' => 'SHP',
                                               'name' => 'Saint Helena Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'SAR',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'SAR',
                                               'name' => 'Saudi Arabia Riyal',
-                                              'sign' => '&#65020;'));
-                array_push($currencies, array('code' => 'RSD',
+                                              'sign' => '&#65020;');
+                $currencies[] = array('code' => 'RSD',
                                               'name' => 'Serbia Dinar',
-                                              'sign' => '&#1044;&#1080;&#1085;&#46;'));
-                array_push($currencies, array('code' => 'SCR',
+                                              'sign' => '&#1044;&#1080;&#1085;&#46;');
+                $currencies[] = array('code' => 'SCR',
                                               'name' => 'Seychelles Rupee',
-                                              'sign' => '&#8360;'));
-                array_push($currencies, array('code' => 'SGD',
+                                              'sign' => '&#8360;');
+                $currencies[] = array('code' => 'SGD',
                                               'name' => 'Singapore Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'SBD',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'SBD',
                                               'name' => 'Solomon Islands Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'SOS',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'SOS',
                                               'name' => 'Somalia Shilling',
-                                              'sign' => '&#83;'));
-                array_push($currencies, array('code' => 'ZAR',
+                                              'sign' => '&#83;');
+                $currencies[] = array('code' => 'ZAR',
                                               'name' => 'South Africa Rand',
-                                              'sign' => '&#82;'));
-                array_push($currencies, array('code' => 'KRW',
+                                              'sign' => '&#82;');
+                $currencies[] = array('code' => 'KRW',
                                               'name' => 'Korea (South) Won',
-                                              'sign' => '&#8361;'));
-                array_push($currencies, array('code' => 'LKR',
+                                              'sign' => '&#8361;');
+                $currencies[] = array('code' => 'LKR',
                                               'name' => 'Sri Lanka Rupee',
-                                              'sign' => '&#8360;'));
-                array_push($currencies, array('code' => 'SEK',
+                                              'sign' => '&#8360;');
+                $currencies[] = array('code' => 'SEK',
                                               'name' => 'Sweden Krona',
-                                              'sign' => '&#107;&#114;'));
-                array_push($currencies, array('code' => 'CHF',
+                                              'sign' => '&#107;&#114;');
+                $currencies[] = array('code' => 'CHF',
                                               'name' => 'Switzerland Franc',
-                                              'sign' => '&#67;&#72;&#70;'));
-                array_push($currencies, array('code' => 'SRD',
+                                              'sign' => '&#67;&#72;&#70;');
+                $currencies[] = array('code' => 'SRD',
                                               'name' => 'Suriname Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'SYP',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'SYP',
                                               'name' => 'Syria Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'TWD',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'TWD',
                                               'name' => 'Taiwan New Dollar',
-                                              'sign' => '&#78;&#84;&#36;'));
-                array_push($currencies, array('code' => 'THB',
+                                              'sign' => '&#78;&#84;&#36;');
+                $currencies[] = array('code' => 'THB',
                                               'name' => 'Thailand Baht',
-                                              'sign' => '&#3647;'));
-                array_push($currencies, array('code' => 'TTD',
+                                              'sign' => '&#3647;');
+                $currencies[] = array('code' => 'TTD',
                                               'name' => 'Trinidad and Tobago Dollar',
-                                              'sign' => '&#84;&#84;&#36;'));
-                array_push($currencies, array('code' => 'TND',
+                                              'sign' => '&#84;&#84;&#36;');
+                $currencies[] = array('code' => 'TND',
                                               'name' => 'Tunisian dinar',
-                                              'sign' => 'د.ت'));
-                array_push($currencies, array('code' => 'TRL',
+                                              'sign' => 'د.ت');
+                $currencies[] = array('code' => 'TRL',
                                               'name' => 'Turkey Lira',
-                                              'sign' => '&#8356;'));
-                array_push($currencies, array('code' => 'TVD',
+                                              'sign' => '&#8356;');
+                $currencies[] = array('code' => 'TVD',
                                               'name' => 'Tuvalu Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'AED',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'AED',
                                               'name' => 'UAE Dirham',
-                                              'sign' => 'د.إ'));
-                array_push($currencies, array('code' => 'UAH',
+                                              'sign' => 'د.إ');
+                $currencies[] = array('code' => 'UAH',
                                               'name' => 'Ukraine Hryvna',
-                                              'sign' => '&#8372;'));
-                array_push($currencies, array('code' => 'GBP',
+                                              'sign' => '&#8372;');
+                $currencies[] = array('code' => 'GBP',
                                               'name' => 'United Kingdom Pound',
-                                              'sign' => '&#163;'));
-                array_push($currencies, array('code' => 'USD',
+                                              'sign' => '&#163;');
+                $currencies[] = array('code' => 'USD',
                                               'name' => 'United States Dollar',
-                                              'sign' => '&#36;'));
-                array_push($currencies, array('code' => 'UYU',
+                                              'sign' => '&#36;');
+                $currencies[] = array('code' => 'UYU',
                                               'name' => 'Uruguay Peso',
-                                              'sign' => '&#36;&#85;'));
-                array_push($currencies, array('code' => 'UZS',
+                                              'sign' => '&#36;&#85;');
+                $currencies[] = array('code' => 'UZS',
                                               'name' => 'Uzbekistan Som',
-                                              'sign' => '&#1083;&#1074;'));
-                array_push($currencies, array('code' => 'VUV',
+                                              'sign' => '&#1083;&#1074;');
+                $currencies[] = array('code' => 'VUV',
                                               'name' => 'Vanuatu vatu',
-                                              'sign' => '&#86;&#84;'));
-                array_push($currencies, array('code' => 'VEF',
+                                              'sign' => '&#86;&#84;');
+                $currencies[] = array('code' => 'VEF',
                                               'name' => 'Venezuela Bolivar Fuerte',
-                                              'sign' => '&#66;&#115;'));
-                array_push($currencies, array('code' => 'VND',
+                                              'sign' => '&#66;&#115;');
+                $currencies[] = array('code' => 'VND',
                                               'name' => 'Viet Nam Dong',
-                                              'sign' => '&#8363;'));
-                array_push($currencies, array('code' => 'YER',
+                                              'sign' => '&#8363;');
+                $currencies[] = array('code' => 'YER',
                                               'name' => 'Yemen Rial',
-                                              'sign' => '&#65020;'));
-                array_push($currencies, array('code' => 'ZWD',
+                                              'sign' => '&#65020;');
+                $currencies[] = array('code' => 'ZWD',
                                               'name' => 'Zimbabwe Dollar',
-                                              'sign' => '&#90;&#36;'));
+                                              'sign' => '&#90;&#36;');
                 
                 return $currencies;
             }

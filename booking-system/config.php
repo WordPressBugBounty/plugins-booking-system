@@ -13,8 +13,8 @@
  * Main configuration.
  */
 define('DOT_ID', 'pbs'); // Unique aplication ID.
-define('DOT_STATUS', isset($_SERVER['SERVER_NAME']) ? ($_SERVER['SERVER_NAME'] == 'dopstudios.net' ? 'beta':'live'):'beta'); // Application status (beta, live, maintenance).
-define('DOT_VERSION', '2.9.9.5.8'); // Application version.
+define('DOT_STATUS', isset($_SERVER['SERVER_NAME']) ? ($_SERVER['SERVER_NAME'] == 'dopstudios.net' ? 'beta':'live'):'live'); // Application status (beta, live, maintenance).
+define('DOT_VERSION', '2.9.9.6.4'); // Application version.
 
 /*
  * AJAX configuration.
@@ -42,7 +42,9 @@ define('DOT_SESSION_COOKIE_HTTP', true); // Session cookie security.
 /*
  * Add config files that are not framework defaults.
  */
+include_once DOT_ABS_PATH.'/application/config/config-addons.php'; // Include addons configuration.
 include_once DOT_ABS_PATH.'/application/config/config-businesses.php'; // Include businesses configuration.
+include_once DOT_ABS_PATH.'/application/config/config-countries.php'; // Include countries configuration.
 
 /*
  * Cookies configuration.

@@ -98,11 +98,15 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                 $item_id = $_product->get_id();
 
                 if (isset($values['dopbsp_token'])){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->update($DOPBSPWooCommerce->tables->woocommerce,
                                   array('order_item_id' => $item_id),
                                   array('cart_item_key' => $cart_item_key,
                                         'token'         => $values['dopbsp_token']));
-                    $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE cart_item_key="%s" AND token="%s"',
+
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE cart_item_key=%s AND token=%s',
+                                                                           $DOPBSPWooCommerce->tables->woocommerce,
                                                                            $cart_item_key,
                                                                            $values['dopbsp_token']));
 
@@ -179,11 +183,14 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                 $dopbsp_token = $item->legacy_values['dopbsp_token'];
                 $key = $item->legacy_values['key'];
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSPWooCommerce->tables->woocommerce,
                               array('order_item_id' => $item_id),
                               array('cart_item_key' => $key,
                                     'token'         => $dopbsp_token));
-                $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE cart_item_key="%s" AND token="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE cart_item_key=%s AND token=%s',
+                                                                       $DOPBSPWooCommerce->tables->woocommerce,
                                                                        $key,
                                                                        $dopbsp_token));
 
@@ -251,7 +258,9 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
             global $DOPBSP;
             global $DOPBSPWooCommerce;
 
-            $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE transaction_id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE transaction_id=%d',
+                                                              $DOPBSP->tables->reservations,
                                                               $order_id));
             $DOPBSP->classes->translation->set();
 
@@ -276,7 +285,9 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                 $billing_phone = $order->get_billing_phone();
 
                 foreach ($order_items as $order_item_id => $order_item){
-                    $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE order_item_id=%d',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE order_item_id=%d',
+                                                                           $DOPBSPWooCommerce->tables->woocommerce,
                                                                            $order_item_id));
 
                     foreach ($reservations_data as $reservation_data){
@@ -326,6 +337,7 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                         /*
                          * Delete reservation from database.
                          */
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->delete($DOPBSPWooCommerce->tables->woocommerce,
                                       array('order_item_id' => $order_item_id));
                     }
@@ -347,7 +359,9 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
             global $wpdb;
             global $DOPBSP;
 
-            $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE transaction_id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE transaction_id=%d',
+                                                              $DOPBSP->tables->reservations,
                                                               $order_id));
 
             foreach ($reservations as $reservation){
@@ -369,93 +383,85 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
 
             $info = array();
 
-            array_push($info,
-                       '<table class="dopbsp-wc-cart">');
-            array_push($info,
-                       '     <tbody>');
+            $info[] = '<table class="dopbsp-wc-cart">';
+            $info[] = '     <tbody>';
 
             /*
              * Check in data.
              */
-            array_push($info,
-                       $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_CHECK_IN'),
-                                      $DOPBSP->classes->prototypes->setDateToFormat($reservation->check_in,
-                                                                                    $settings_calendar->date_type,
-                                                                                    array($DOPBSP->text('MONTH_JANUARY'),
-                                                                                          $DOPBSP->text('MONTH_FEBRUARY'),
-                                                                                          $DOPBSP->text('MONTH_MARCH'),
-                                                                                          $DOPBSP->text('MONTH_APRIL'),
-                                                                                          $DOPBSP->text('MONTH_MAY'),
-                                                                                          $DOPBSP->text('MONTH_JUNE'),
-                                                                                          $DOPBSP->text('MONTH_JULY'),
-                                                                                          $DOPBSP->text('MONTH_AUGUST'),
-                                                                                          $DOPBSP->text('MONTH_SEPTEMBER'),
-                                                                                          $DOPBSP->text('MONTH_OCTOBER'),
-                                                                                          $DOPBSP->text('MONTH_NOVEMBER'),
-                                                                                          $DOPBSP->text('MONTH_DECEMBER')))));
+            $info[] = $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_CHECK_IN'),
+                                     $DOPBSP->classes->prototypes->setDateToFormat($reservation->check_in,
+                                                                                   $settings_calendar->date_type,
+                                                                                   array($DOPBSP->text('MONTH_JANUARY'),
+                                                                                         $DOPBSP->text('MONTH_FEBRUARY'),
+                                                                                         $DOPBSP->text('MONTH_MARCH'),
+                                                                                         $DOPBSP->text('MONTH_APRIL'),
+                                                                                         $DOPBSP->text('MONTH_MAY'),
+                                                                                         $DOPBSP->text('MONTH_JUNE'),
+                                                                                         $DOPBSP->text('MONTH_JULY'),
+                                                                                         $DOPBSP->text('MONTH_AUGUST'),
+                                                                                         $DOPBSP->text('MONTH_SEPTEMBER'),
+                                                                                         $DOPBSP->text('MONTH_OCTOBER'),
+                                                                                         $DOPBSP->text('MONTH_NOVEMBER'),
+                                                                                         $DOPBSP->text('MONTH_DECEMBER'))));
             /*
              * Check out data.
              */
             if ($reservation->check_out != ''){
-                array_push($info,
-                           $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_CHECK_OUT'),
-                                          $DOPBSP->classes->prototypes->setDateToFormat($reservation->check_out,
-                                                                                        $settings_calendar->date_type,
-                                                                                        array($DOPBSP->text('MONTH_JANUARY'),
-                                                                                              $DOPBSP->text('MONTH_FEBRUARY'),
-                                                                                              $DOPBSP->text('MONTH_MARCH'),
-                                                                                              $DOPBSP->text('MONTH_APRIL'),
-                                                                                              $DOPBSP->text('MONTH_MAY'),
-                                                                                              $DOPBSP->text('MONTH_JUNE'),
-                                                                                              $DOPBSP->text('MONTH_JULY'),
-                                                                                              $DOPBSP->text('MONTH_AUGUST'),
-                                                                                              $DOPBSP->text('MONTH_SEPTEMBER'),
-                                                                                              $DOPBSP->text('MONTH_OCTOBER'),
-                                                                                              $DOPBSP->text('MONTH_NOVEMBER'),
-                                                                                              $DOPBSP->text('MONTH_DECEMBER')))));
+                $info[] = $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_CHECK_OUT'),
+                                         $DOPBSP->classes->prototypes->setDateToFormat($reservation->check_out,
+                                                                                       $settings_calendar->date_type,
+                                                                                       array($DOPBSP->text('MONTH_JANUARY'),
+                                                                                             $DOPBSP->text('MONTH_FEBRUARY'),
+                                                                                             $DOPBSP->text('MONTH_MARCH'),
+                                                                                             $DOPBSP->text('MONTH_APRIL'),
+                                                                                             $DOPBSP->text('MONTH_MAY'),
+                                                                                             $DOPBSP->text('MONTH_JUNE'),
+                                                                                             $DOPBSP->text('MONTH_JULY'),
+                                                                                             $DOPBSP->text('MONTH_AUGUST'),
+                                                                                             $DOPBSP->text('MONTH_SEPTEMBER'),
+                                                                                             $DOPBSP->text('MONTH_OCTOBER'),
+                                                                                             $DOPBSP->text('MONTH_NOVEMBER'),
+                                                                                             $DOPBSP->text('MONTH_DECEMBER'))));
             }
 
             /*
              * Start hour data.
              */
             if ($reservation->start_hour != ''){
-                array_push($info,
-                           $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_START_HOUR'),
-                                          $settings_calendar->hours_ampm == 'true'
-                                                  ? $DOPBSP->classes->prototypes->getAMPM($reservation->start_hour)
-                                                  : $reservation->start_hour));
+                $info[] = $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_START_HOUR'),
+                                         $settings_calendar->hours_ampm == 'true'
+                                                 ? $DOPBSP->classes->prototypes->getAMPM($reservation->start_hour)
+                                                 : $reservation->start_hour);
             }
 
             /*
              * End hour data.
              */
             if ($reservation->end_hour != ''){
-                array_push($info,
-                           $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_END_HOUR'),
-                                          $settings_calendar->hours_ampm == 'true'
-                                                  ? $DOPBSP->classes->prototypes->getAMPM($reservation->end_hour)
-                                                  : $reservation->end_hour));
+                $info[] = $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_END_HOUR'),
+                                         $settings_calendar->hours_ampm == 'true'
+                                                 ? $DOPBSP->classes->prototypes->getAMPM($reservation->end_hour)
+                                                 : $reservation->end_hour);
             }
 
             /*
              * No items data.
              */
             if ($settings_calendar->sidebar_no_items_enabled == 'true'){
-                array_push($info,
-                           $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_NO_ITEMS'),
-                                          $reservation->no_items));
+                $info[] = $this->getInfo($DOPBSP->text('SEARCH_FRONT_END_NO_ITEMS'),
+                                         $reservation->no_items);
             }
 
             /*
              * Reservation price.
              */
             if ($reservation->price>0){
-                array_push($info,
-                           $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_PRICE'),
-                                          $DOPBSP->classes->price->set($reservation->price,
-                                                                       $reservation->currency,
-                                                                       $settings_calendar->currency_position),
-                                          'price'));
+                $info[] = $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_PRICE'),
+                                         $DOPBSP->classes->price->set($reservation->price,
+                                                                      $reservation->currency,
+                                                                      $settings_calendar->currency_position),
+                                         'price');
             }
 
             /*
@@ -470,50 +476,40 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
 
                     if ($fee->price_type != 'fixed'
                             || $fee->price_by != 'once'){
-                        array_push($value,
-                                   '<span class="dopbsp-info-rule">&#9632;&nbsp;');
+                        $value[] = '<span class="dopbsp-info-rule">&#9632;&nbsp;';
 
                         if ($fee->price_type == 'fixed'){
-                            array_push($value,
-                                       $fee->operation.'&nbsp;'.$DOPBSP->classes->price->set($fee->price,
+                            $value[] = $fee->operation.'&nbsp;'.$DOPBSP->classes->price->set($fee->price,
                                                                                              $reservation->currency,
-                                                                                             $settings_calendar->currency_position));
+                                                                                             $settings_calendar->currency_position);
                         }
                         else{
-                            array_push($value,
-                                       $fee->operation.'&nbsp;'.$fee->price.'%');
+                            $value[] = $fee->operation.'&nbsp;'.$fee->price.'%';
                         }
 
                         if ($fee->price_by != 'once'){
-                            array_push($value,
-                                       '/'.($settings_calendar->hours_enabled == 'true'
-                                               ? $DOPBSP->text('FEES_FRONT_END_BY_HOUR')
-                                               : $DOPBSP->text('FEES_FRONT_END_BY_DAY')));
+                            $value[] = '/'.($settings_calendar->hours_enabled == 'true'
+                                            ? $DOPBSP->text('FEES_FRONT_END_BY_HOUR')
+                                            : $DOPBSP->text('FEES_FRONT_END_BY_DAY'));
                         }
-                        array_push($value,
-                                   '<br /></span>');
+                        $value[] = '<br /></span>';
                     }
 
                     if ($fee->included == 'true'){
-                        array_push($value,
-                                   '<span class="dopbsp-info-price">'.$DOPBSP->text('FEES_FRONT_END_INCLUDED').'</span>');
+                        $value[] = '<span class="dopbsp-info-price">'.$DOPBSP->text('FEES_FRONT_END_INCLUDED').'</span>';
                     }
                     else{
-                        array_push($value,
-                                   '<span class="dopbsp-info-price">'.$fee->operation.'&nbsp;');
-                        array_push($value,
-                                   $DOPBSP->classes->price->set($fee->price_total,
+                        $value[] = '<span class="dopbsp-info-price">'.$fee->operation.'&nbsp;';
+                        $value[] = $DOPBSP->classes->price->set($fee->price_total,
                                                                 $reservation->currency,
-                                                                $settings_calendar->currency_position));
-                        array_push($value,
-                                   '</span>');
+                                                                $settings_calendar->currency_position);
+                        $value[] = '</span>';
                     }
 
-                    array_push($info,
-                               $this->getInfo($fee->translation,
-                                              implode('',
-                                                      $value),
-                                              'price'));
+                    $info[] = $this->getInfo($fee->translation,
+                                             implode('',
+                                                     $value),
+                                             'price');
                 }
             }
 
@@ -521,12 +517,11 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
              * Reservation price total.
              */
             if ($reservation->price_total>0){
-                array_push($info,
-                           $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_TOTAL_PRICE'),
-                                          $DOPBSP->classes->price->set($reservation->price_total,
-                                                                       $reservation->currency,
-                                                                       $settings_calendar->currency_position),
-                                          'price'));
+                $info[] = $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_TOTAL_PRICE'),
+                                         $DOPBSP->classes->price->set($reservation->price_total,
+                                                                      $reservation->currency,
+                                                                      $settings_calendar->currency_position),
+                                         'price');
             }
 
             /*
@@ -536,27 +531,23 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                 //                    $deposit = json_decode(stripslashes($reservation->deposit));
                 $deposit = $reservation->deposit;
 
-                array_push($info,
-                           $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_DEPOSIT'),
-                                          ($deposit->price_type == 'percent'
-                                                  ? '<span class="info-rule">&#9632;&nbsp;'.$deposit->price.'%</span><br />'
-                                                  : '').
-                                          $DOPBSP->classes->price->set($reservation->deposit_price,
-                                                                       $reservation->currency,
-                                                                       $settings_calendar->currency_position),
-                                          'price'));
-                array_push($info,
-                           $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_DEPOSIT_LEFT'),
-                                          $DOPBSP->classes->price->set($reservation->price_total-$reservation->deposit_price,
-                                                                       $reservation->currency,
-                                                                       $settings_calendar->currency_position),
-                                          'price'));
+                $info[] = $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_DEPOSIT'),
+                                         ($deposit->price_type == 'percent'
+                                                 ? '<span class="info-rule">&#9632;&nbsp;'.$deposit->price.'%</span><br />'
+                                                 : '').
+                                         $DOPBSP->classes->price->set($reservation->deposit_price,
+                                                                      $reservation->currency,
+                                                                      $settings_calendar->currency_position),
+                                         'price');
+                $info[] = $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_FRONT_END_DEPOSIT_LEFT'),
+                                         $DOPBSP->classes->price->set($reservation->price_total-$reservation->deposit_price,
+                                                                      $reservation->currency,
+                                                                      $settings_calendar->currency_position),
+                                         'price');
             }
 
-            array_push($info,
-                       '     </tbody>');
-            array_push($info,
-                       '</table>');
+            $info[] = '     </tbody>';
+            $info[] = '</table>';
 
             return implode('',
                            $info);
@@ -586,99 +577,80 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                     $extras[$i]->displayed = false;
                 }
 
-                array_push($info,
-                           '<table class="dopbsp-wc-cart">');
-                array_push($info,
-                           '     <tbody>');
+                $info[] = '<table class="dopbsp-wc-cart">';
+                $info[] = '     <tbody>';
 
                 for ($i = 0; $i<count($extras); $i++){
                     $values = array();
 
-                    if ($extras[$i]->displayed == false){
+                    if (!$extras[$i]->displayed){
                         for ($j = 0; $j<count($extras); $j++){
                             $value = array();
                             $extra = $extras[$j];
 
                             if ($extras[$i]->group_id == $extra->group_id){
-                                array_push($value,
-                                           $extra->translation);
+                                $value[] = $extra->translation;
 
                                 if ($extra->price != 0){
-                                    array_push($value,
-                                               '<br />');
+                                    $value[] = '<br />';
 
                                     if ($extra->price_type != 'fixed'
                                             || $extra->price_by != 'once'){
-                                        array_push($value,
-                                                   '&#9632;&nbsp;');
+                                        $value[] = '&#9632;&nbsp;';
 
                                         if ($extra->price_type == 'fixed'){
-                                            array_push($value,
-                                                       $extra->operation.'&nbsp;'.$DOPBSP->classes->price->set($extra->price,
+                                            $value[] = $extra->operation.'&nbsp;'.$DOPBSP->classes->price->set($extra->price,
                                                                                                                $reservation->currency,
-                                                                                                               $settings_calendar->currency_position));
+                                                                                                               $settings_calendar->currency_position);
                                         }
                                         else{
-                                            array_push($value,
-                                                       $extra->operation.'&nbsp;'.$extra->price.'%');
+                                            $value[] = $extra->operation.'&nbsp;'.$extra->price.'%';
                                         }
 
                                         if ($extra->price_by != 'once'){
-                                            array_push($value,
-                                                       '/'.($settings_calendar->hours_enabled == 'true'
-                                                               ? $DOPBSP->text('EXTRAS_FRONT_END_BY_HOUR')
-                                                               : $DOPBSP->text('EXTRAS_FRONT_END_BY_DAY')));
+                                            $value[] = '/'.($settings_calendar->hours_enabled == 'true'
+                                                            ? $DOPBSP->text('EXTRAS_FRONT_END_BY_HOUR')
+                                                            : $DOPBSP->text('EXTRAS_FRONT_END_BY_DAY'));
                                         }
-                                        array_push($value,
-                                                   '<br />');
+                                        $value[] = '<br />';
                                     }
-                                    array_push($value,
-                                               '<strong>'.$extra->operation.'&nbsp;');
-                                    array_push($value,
-                                               $DOPBSP->classes->price->set($extra->price_total,
+                                    $value[] = '<strong>'.$extra->operation.'&nbsp;';
+                                    $value[] = $DOPBSP->classes->price->set($extra->price_total,
                                                                             $reservation->currency,
-                                                                            $settings_calendar->currency_position));
-                                    array_push($value,
-                                               '</strong>');
+                                                                            $settings_calendar->currency_position);
+                                    $value[] = '</strong>';
                                 }
 
                                 if (count($value) != 0){
                                     $extras[$j]->displayed = true;
-                                    array_push($values,
-                                               implode('',
-                                                       $value));
+                                    $values[] = implode('',
+                                                        $value);
                                 }
                             }
                         }
-                        array_push($info,
-                                   $this->getInfo($extras[$i]->group_translation,
-                                                  implode('<br /><br />',
-                                                          $values)));
+                        $info[] = $this->getInfo($extras[$i]->group_translation,
+                                                 implode('<br /><br />',
+                                                         $values));
                     }
                 }
 
                 if ($reservation->extras_price != 0){
-                    array_push($info,
-                               '<br />');
-                    array_push($info,
-                               $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_PAYMENT_PRICE_CHANGE'),
-                                              ($reservation->extras_price>0
-                                                      ? '+'
-                                                      : '-').
-                                              '&nbsp;'.
-                                              $DOPBSP->classes->price->set($reservation->extras_price,
-                                                                           $reservation->currency,
-                                                                           $settings_calendar->currency_position),
-                                              'price'));
+                    $info[] = '<br />';
+                    $info[] = $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_PAYMENT_PRICE_CHANGE'),
+                                             ($reservation->extras_price>0
+                                                     ? '+'
+                                                     : '-').
+                                             '&nbsp;'.
+                                             $DOPBSP->classes->price->set($reservation->extras_price,
+                                                                          $reservation->currency,
+                                                                          $settings_calendar->currency_position),
+                                             'price');
                 }
-                array_push($info,
-                           '     </tbody>');
-                array_push($info,
-                           '</table>');
+                $info[] = '     </tbody>';
+                $info[] = '</table>';
             }
             else{
-                array_push($info,
-                           '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_EXTRAS').'</em>');
+                $info[] = '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_EXTRAS').'</em>';
             }
 
             return implode('',
@@ -706,59 +678,47 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
             if ($discount->id != 0){
                 $value = array();
 
-                array_push($info,
-                           '<table class="dopbsp-wc-cart">');
-                array_push($info,
-                           '     <tbody>');
+                $info[] = '<table class="dopbsp-wc-cart">';
+                $info[] = '     <tbody>';
 
-                array_push($value,
-                           '&#9632;&nbsp;');
+                $value[] = '&#9632;&nbsp;';
 
                 if ($discount->price_type == 'fixed'){
-                    array_push($value,
-                               $discount->operation.'&nbsp;'.$DOPBSP->classes->price->set($discount->price,
+                    $value[] = $discount->operation.'&nbsp;'.$DOPBSP->classes->price->set($discount->price,
                                                                                           $reservation->currency,
-                                                                                          $settings_calendar->currency_position));
+                                                                                          $settings_calendar->currency_position);
                 }
                 else{
-                    array_push($value,
-                               $discount->operation.'&nbsp;'.$discount->price.'%');
+                    $value[] = $discount->operation.'&nbsp;'.$discount->price.'%';
                 }
 
                 if ($discount->price_by != 'once'){
-                    array_push($value,
-                               '/'.($settings_calendar->hours_enabled == 'true'
-                                       ? $DOPBSP->text('DISCOUNTS_FRONT_END_BY_HOUR')
-                                       : $DOPBSP->text('DISCOUNTS_FRONT_END_BY_DAY')));
+                    $value[] = '/'.($settings_calendar->hours_enabled == 'true'
+                                    ? $DOPBSP->text('DISCOUNTS_FRONT_END_BY_HOUR')
+                                    : $DOPBSP->text('DISCOUNTS_FRONT_END_BY_DAY'));
                 }
 
-                array_push($info,
-                           $this->getInfo($discount->translation,
-                                          implode('',
-                                                  $value)));
+                $info[] = $this->getInfo($discount->translation,
+                                         implode('',
+                                                 $value));
 
                 if ($reservation->discount_price != 0){
-                    array_push($info,
-                               '<br />');
-                    array_push($info,
-                               $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_PAYMENT_PRICE_CHANGE'),
-                                              ($reservation->discount_price>0
-                                                      ? '+'
-                                                      : '-').
-                                              '&nbsp;'.
-                                              $DOPBSP->classes->price->set($reservation->discount_price,
-                                                                           $reservation->currency,
-                                                                           $settings_calendar->currency_position),
-                                              'price'));
+                    $info[] = '<br />';
+                    $info[] = $this->getInfo($DOPBSP->text('RESERVATIONS_RESERVATION_PAYMENT_PRICE_CHANGE'),
+                                             ($reservation->discount_price>0
+                                                     ? '+'
+                                                     : '-').
+                                             '&nbsp;'.
+                                             $DOPBSP->classes->price->set($reservation->discount_price,
+                                                                          $reservation->currency,
+                                                                          $settings_calendar->currency_position),
+                                             'price');
                 }
-                array_push($info,
-                           '     </tbody>');
-                array_push($info,
-                           '</table>');
+                $info[] = '     </tbody>';
+                $info[] = '</table>';
             }
             else{
-                array_push($info,
-                           '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_DISCOUNT').'</em>');
+                $info[] = '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_DISCOUNT').'</em>';
             }
 
             return implode('',
@@ -779,12 +739,6 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                          $type = ''){
             $info = array();
 
-            // $label = stripslashes(mb_convert_encoding($label,
-            //                                    'ISO-8859-1',
-            //                                    'UTF-8'));
-            // $value = stripslashes(mb_convert_encoding($reservation->value,
-            //                                    'ISO-8859-1',
-            //                                    'UTF-8'));
             $label = stripslashes($label);
             $value = stripslashes($value);
 
@@ -806,14 +760,10 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                     $value = '<span style="color: #666666;">'.$value.'</em>';
             }
 
-            array_push($info,
-                       '<tr>');
-            array_push($info,
-                       '     <td style="vertical-align: top; width: 150px;">'.$label.'</td>');
-            array_push($info,
-                       '     <td style="vertical-align: top;">'.$value.'</td>');
-            array_push($info,
-                       '</tr>');
+            $info[] = '<tr>';
+            $info[] = '     <td style="vertical-align: top; width: 150px;">'.$label.'</td>';
+            $info[] = '     <td style="vertical-align: top;">'.$value.'</td>';
+            $info[] = '</tr>';
 
             return implode('',
                            $info);

@@ -1,11 +1,11 @@
 @charset "utf-8";
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
-* Version                 : 2.1.6
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
+* Version                 : 2.1.2
 * File                    : assets/gui/css/backend.css
-* File Version            : 1.2
-* Created / Last Modified : 14 February 2016
+* File Version            : 1.2.1
+* Created / Last Modified : 06 December 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -618,6 +618,7 @@
 .DOPBSP-admin .dopbsp-main table.dopbsp-content-wrapper .dopbsp-column .dopbsp-column-header .dopbsp-button.dopbsp-duplicate{
     background-image: url('../images/duplicate.png');
     background-position: 11px 11px;
+    background-repeat: no-repeat;
 }
 
 .DOPBSP-admin .dopbsp-main table.dopbsp-content-wrapper .dopbsp-column .dopbsp-column-header .dopbsp-button.dopbsp-calendar{
@@ -1183,7 +1184,7 @@
  */
 
 /* 
- * Begin text/passowrd.
+ * Begin text/password.
  */
 .DOPBSP-admin .dopbsp-input-wrapper input[type=text],
 .DOPBSP-admin .dopbsp-input-wrapper input[type=password]{

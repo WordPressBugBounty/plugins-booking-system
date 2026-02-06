@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndSettingsLicences')){
-    class DOPBSPBackEndSettingsLicences extends DOPBSPBackEndSettings{
+    class DOPBSPBackEndSettingsLicences{
         /*
          * Constructor
          */
@@ -76,7 +76,6 @@ if (!class_exists('DOPBSPBackEndSettingsLicences')){
             $id = $DOT->post('id');
             $key = $DOT->post('key');
             $email = $DOT->post('email');
-            $nonce = $DOT->post('nonce');
 
             if ($id == 'dopbsp'){
                 $item = 'DOPBSP';
@@ -123,10 +122,10 @@ if (!class_exists('DOPBSPBackEndSettingsLicences')){
                                      array('sslverify' => DOPBSP_CONFIG_SHOP_SSL_VERIFY));
 
             if (wp_remote_retrieve_response_code($request) != 200){
-                echo 'error_with_message;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_TIMEOUT_ERROR');
+                $DOT->echo('error_with_message;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_TIMEOUT_ERROR'));
             }
             elseif (is_wp_error($request)){
-                echo 'error_with_message;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_ACTIVATED_ERROR');
+                $DOT->echo('error_with_message;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_ACTIVATED_ERROR'));
             }
             else{
                 $response = json_decode(wp_remote_retrieve_body($request));
@@ -134,20 +133,18 @@ if (!class_exists('DOPBSPBackEndSettingsLicences')){
                 if ((string)$response->activated == 'inactive'){
                     $message = array();
 
-                    array_push($message,
-                               $DOPBSP->text('SETTINGS_LICENCES_STATUS_ACTIVATED_ERROR').'<br />');
-                    array_push($message,
-                               'Error: '.$response->error);
-                    array_push($message,
-                               'Code: '.$response->code);
+                    $message[] = $DOPBSP->text('SETTINGS_LICENCES_STATUS_ACTIVATED_ERROR').'<br />';
+                    $message[] = 'Error: '.$response->error;
+                    $message[] = 'Code: '.$response->code;
 
                     if (isset($response->{'additional info'})){
-                        array_push($message,
-                                   'Message: '.$response->{'additional info'});
+                        $message[] = 'Message: '.$response->{'additional info'};
                     }
 
-                    echo 'error_with_message;;;;;'.implode('<br />',
-                                                           $message);
+                    $DOT->echo('error_with_message;;;;;'.implode('<br />',
+                                                                 $message),
+                               'content',
+                               ['br' => []]);
                 }
                 else{
                     $DOPBSP->classes->backend_settings->set(array('id'            => 0,
@@ -165,7 +162,9 @@ if (!class_exists('DOPBSPBackEndSettingsLicences')){
                                                                   'key'           => $id.'_licence_email',
                                                                   'settings_type' => 'general',
                                                                   'value'         => $email));
-                    echo 'success;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_ACTIVATED_SUCCESS').'<br /><br />'.$response->message;
+                    $DOT->echo('success;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_ACTIVATED_SUCCESS').'<br /><br />'.$response->message,
+                               'content',
+                               ['br' => []]);
                 }
             }
 
@@ -235,31 +234,29 @@ if (!class_exists('DOPBSPBackEndSettingsLicences')){
                                      array('sslverify' => DOPBSP_CONFIG_SHOP_SSL_VERIFY));
 
             if (wp_remote_retrieve_response_code($request) != 200){
-                echo 'error_with_message;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_TIMEOUT_ERROR');
+                $DOT->echo('error_with_message;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_TIMEOUT_ERROR'));
             }
             elseif (is_wp_error($request)){
-                echo 'error_with_message;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_DEACTIVATED_ERROR');
+                $DOT->echo('error_with_message;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_DEACTIVATED_ERROR'));
             }
             else{
                 $response = json_decode(wp_remote_retrieve_body($request));
 
-                if ((string)$response->deactivated == false){
+                if (!$response->deactivated){
                     $message = array();
 
-                    array_push($message,
-                               $DOPBSP->text('SETTINGS_LICENCES_STATUS_DEACTIVATED_ERROR').'<br />');
-                    array_push($message,
-                               'Error: '.$response->error);
-                    array_push($message,
-                               'Code: '.$response->code);
+                    $message[] = $DOPBSP->text('SETTINGS_LICENCES_STATUS_DEACTIVATED_ERROR').'<br />';
+                    $message[] = 'Error: '.$response->error;
+                    $message[] = 'Code: '.$response->code;
 
                     if (isset($response->{'additional info'})){
-                        array_push($message,
-                                   'Message: '.$response->{'additional info'});
+                        $message[] = 'Message: '.$response->{'additional info'};
                     }
 
-                    echo 'error_with_message;;;;;'.implode('<br />',
-                                                           $message);
+                    $DOT->echo('error_with_message;;;;;'.implode('<br />',
+                                                                 $message),
+                               'content',
+                               ['br' => []]);
                 }
                 else{
                     $DOPBSP->classes->backend_settings->set(array('id'            => 0,
@@ -267,7 +264,9 @@ if (!class_exists('DOPBSPBackEndSettingsLicences')){
                                                                   'key'           => $id.'_licence_status',
                                                                   'settings_type' => 'general',
                                                                   'value'         => 'deactivated'));
-                    echo 'success;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_DEACTIVATED_SUCCESS').'<br /><br />'.$response->activations_remaining;
+                    $DOT->echo('success;;;;;'.$DOPBSP->text('SETTINGS_LICENCES_STATUS_DEACTIVATED_SUCCESS').'<br /><br />'.$response->activations_remaining,
+                               'content',
+                               ['br' => []]);
                 }
             }
 

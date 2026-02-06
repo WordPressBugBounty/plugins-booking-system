@@ -26,12 +26,6 @@ if (!class_exists('DOPBSPViews')){
 
         public object $frontend;
 
-        public object $backend_addons;
-        public object $backend_addons_filters;
-        public object $backend_addons_list;
-
-        public object $backend_amenities;
-
         public object $backend_calendars;
 
         public object $backend_coupons;
@@ -71,9 +65,6 @@ if (!class_exists('DOPBSPViews')){
         public object $backend_locations;
         public object $backend_location;
 
-        public object $backend_models;
-        public object $backend_model;
-
         public object $backend_reservations;
         public object $backend_reservations_list;
         public object $backend_reservation;
@@ -84,8 +75,6 @@ if (!class_exists('DOPBSPViews')){
         public object $backend_reservation_extras;
         public object $backend_reservation_fees;
         public object $backend_reservation_form;
-
-        public object $backend_reviews;
 
         public object $backend_rules;
         public object $backend_rule;
@@ -115,12 +104,6 @@ if (!class_exists('DOPBSPViews')){
 
         public object $backend_smses;
         public object $backend_sms;
-
-        public object $backend_templates;
-
-        public object $backend_themes;
-        public object $backend_themes_filters;
-        public object $backend_themes_list;
 
         public object $backend_tools;
         public object $backend_tools_repair_calendars_settings;
@@ -178,22 +161,6 @@ if (!class_exists('DOPBSPViews')){
              */
             $this->views[] = array('key'  => 'frontend',
                                    'name' => 'DOPBSPViewsFrontEnd');
-
-            /*
-             * Set addons view classes.
-             */
-            $this->views[] = array('key'  => 'backend_addons',
-                                   'name' => 'DOPBSPViewsBackEndAddons');
-            $this->views[] = array('key'  => 'backend_addons_filters',
-                                   'name' => 'DOPBSPViewsBackEndAddonsFilters');
-            $this->views[] = array('key'  => 'backend_addons_list',
-                                   'name' => 'DOPBSPViewsBackEndAddonsList');
-
-            /*
-             * Set amenities view classes.
-             */
-            $this->views[] = array('key'  => 'backend_amenities',
-                                   'name' => 'DOPBSPViewsBackEndAmenities');
 
             /*
              * Set calendars view classes.
@@ -294,14 +261,6 @@ if (!class_exists('DOPBSPViews')){
                                    'name' => 'DOPBSPViewsBackEndLocation');
 
             /*
-             * Set models view classes.
-             */
-            $this->views[] = array('key'  => 'backend_models',
-                                   'name' => 'DOPBSPViewsBackEndModels');
-            $this->views[] = array('key'  => 'backend_model',
-                                   'name' => 'DOPBSPViewsBackEndModel');
-
-            /*
              * Set reservations view classes.
              */
             $this->views[] = array('key'  => 'backend_reservations',
@@ -324,12 +283,6 @@ if (!class_exists('DOPBSPViews')){
                                    'name' => 'DOPBSPViewsBackEndReservationFees');
             $this->views[] = array('key'  => 'backend_reservation_form',
                                    'name' => 'DOPBSPViewsBackEndReservationForm');
-
-            /*
-             * Set reviews view classes.
-             */
-            $this->views[] = array('key'  => 'backend_reviews',
-                                   'name' => 'DOPBSPViewsBackEndReviews');
 
             /*
              * Set rules view classes.
@@ -388,22 +341,6 @@ if (!class_exists('DOPBSPViews')){
                                    'name' => 'DOPBSPViewsBackEndSmses');
             $this->views[] = array('key'  => 'backend_sms',
                                    'name' => 'DOPBSPViewsBackEndSms');
-
-            /*
-             * Set templates view classes.
-             */
-            $this->views[] = array('key'  => 'backend_templates',
-                                   'name' => 'DOPBSPViewsBackEndTemplates');
-
-            /*
-             * Set themes view classes.
-             */
-            $this->views[] = array('key'  => 'backend_themes',
-                                   'name' => 'DOPBSPViewsBackEndThemes');
-            $this->views[] = array('key'  => 'backend_themes_filters',
-                                   'name' => 'DOPBSPViewsBackEndThemesFilters');
-            $this->views[] = array('key'  => 'backend_themes_list',
-                                   'name' => 'DOPBSPViewsBackEndThemesList');
 
             /*
              * Set tools view classes.

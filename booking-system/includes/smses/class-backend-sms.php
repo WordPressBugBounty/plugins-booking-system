@@ -9,7 +9,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndSms')){
-    class DOPBSPBackEndSms extends DOPBSPBackEndSmses{
+    class DOPBSPBackEndSms{
         /*
          * Constructor
          */
@@ -37,6 +37,7 @@ if (!class_exists('DOPBSPBackEndSms')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->smses,
                           array('user_id' => wp_get_current_user()->ID,
                                 'name'    => $DOPBSP->text('SMSES_ADD_SMS_NAME')));
@@ -45,10 +46,12 @@ if (!class_exists('DOPBSPBackEndSms')){
             /*
              * Simple book.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->smses_translation,
                           array('sms_id'   => $sms_id,
                                 'template' => 'book_admin',
                                 'message'  => $DOPBSP->classes->backend_sms->defaultTemplate('SMSES_DEFAULT_BOOK_ADMIN')));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->smses_translation,
                           array('sms_id'   => $sms_id,
                                 'template' => 'book_user',
@@ -56,10 +59,12 @@ if (!class_exists('DOPBSPBackEndSms')){
             /*
              * Book with approval.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->smses_translation,
                           array('sms_id'   => $sms_id,
                                 'template' => 'book_with_approval_admin',
                                 'message'  => $DOPBSP->classes->backend_sms->defaultTemplate('SMSES_DEFAULT_BOOK_WITH_APPROVAL_ADMIN')));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->smses_translation,
                           array('sms_id'   => $sms_id,
                                 'template' => 'book_with_approval_user',
@@ -67,6 +72,7 @@ if (!class_exists('DOPBSPBackEndSms')){
             /*
              * Approved
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->smses_translation,
                           array('sms_id'   => $sms_id,
                                 'template' => 'approved',
@@ -74,6 +80,7 @@ if (!class_exists('DOPBSPBackEndSms')){
             /*
              * Canceled
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->smses_translation,
                           array('sms_id'   => $sms_id,
                                 'template' => 'canceled',
@@ -81,6 +88,7 @@ if (!class_exists('DOPBSPBackEndSms')){
             /*
              * Rejected
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->smses_translation,
                           array('sms_id'   => $sms_id,
                                 'template' => 'rejected',
@@ -94,17 +102,19 @@ if (!class_exists('DOPBSPBackEndSms')){
             for ($i = 0; $i<count($pg_list); $i++){
                 $pg_id = $pg_list[$i];
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($DOPBSP->tables->smses_translation,
                               array('sms_id'   => $sms_id,
                                     'template' => $pg_id.'_admin',
                                     'message'  => $DOPBSP->classes->backend_sms->defaultTemplate('SMSES_DEFAULT_'.strtoupper($pg_id).'_ADMIN')));
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($DOPBSP->tables->smses_translation,
                               array('sms_id'   => $sms_id,
                                     'template' => $pg_id.'_user',
                                     'message'  => $DOPBSP->classes->backend_sms->defaultTemplate('SMSES_DEFAULT_'.strtoupper($pg_id).'_USER')));
             }
 
-            echo $DOPBSP->classes->backend_smses->display();
+            $DOPBSP->classes->backend_smses->display();
 
             die();
         }
@@ -160,16 +170,21 @@ if (!class_exists('DOPBSPBackEndSms')){
             global $wpdb;
             global $DOPBSP;
 
-            $template_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->smses_translation.' WHERE sms_id=%d AND template="%s"',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $template_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE sms_id=%d AND template=%s',
+                                                           $DOPBSP->tables->smses_translation,
                                                            $id,
                                                            $template));
 
             if ($template_data == ''){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($DOPBSP->tables->smses_translation,
                               array('sms_id'   => $id,
                                     'template' => $template,
                                     'message'  => $DOPBSP->classes->backend_sms->defaultTemplate('SMSES_DEFAULT_'.strtoupper($template))));
-                $template_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->smses_translation.' WHERE sms_id=%d AND template="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $template_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE sms_id=%d AND template=%s',
+                                                               $DOPBSP->tables->smses_translation,
                                                                $id,
                                                                $template));
             }
@@ -222,7 +237,9 @@ if (!class_exists('DOPBSPBackEndSms')){
                                              'UTF-8',
                                              'ISO-8859-1');
 
-                $sms_translation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->smses_translation.' WHERE sms_id=%d AND template="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $sms_translation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE sms_id=%d AND template=%s',
+                                                                 $DOPBSP->tables->smses_translation,
                                                                  $id,
                                                                  $template));
 
@@ -230,12 +247,14 @@ if (!class_exists('DOPBSPBackEndSms')){
                 $translation->$language = $value;
                 $value = json_encode($translation);
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->smses_translation,
                               array($field => $value),
                               array('sms_id'   => $id,
                                     'template' => $template));
             }
             else{
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->smses,
                               array($field => $value),
                               array('id' => $id));
@@ -275,13 +294,18 @@ if (!class_exists('DOPBSPBackEndSms')){
             /*
              * Delete sms.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->smses,
                           array('id' => $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->smses_translation,
                           array('sms_id' => $id));
-            $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->smses.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->smses));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
             die();
         }
 

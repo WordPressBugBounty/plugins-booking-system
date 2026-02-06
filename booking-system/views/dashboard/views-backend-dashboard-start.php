@@ -1,210 +1,152 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.8
 * File                    : views/dashboard/views-backend-dashboard-start.php
-* File Version            : 1.2.0
-* Created / Last Modified : 15 March 2016
+* File Version            : 1.0.9
+* Created / Last Modified : 15 March 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
 * Description             : Back end dashboard views class.
 */
 
-    if (!class_exists('DOPBSPViewsBackEndDashboardStart')){
-        class DOPBSPViewsBackEndDashboardStart extends DOPBSPViewsBackEndDashboard{
-            /*
-             * Constructor
-             */
-            function __construct(){
-            }
-            
-            /*
-             * Returns dashboard start template.
-             * 
-             * @param args (array): function arguments
-             * 
-             * @return dashboard start HTML template
-             */
-            function template($args = array()){
-                global $DOPBSP;
-?>            
+if (!class_exists('DOPBSPViewsBackEndDashboardStart')){
+    class DOPBSPViewsBackEndDashboardStart extends DOPBSPViewsBackEndDashboard{
+        /*
+         * Returns dashboard start template.
+         *
+         * @param args (array): function arguments
+         *
+         * @return dashboard start HTML template
+         */
+        function template($args = array()){
+            global $DOPBSP;
+            global $DOT;
+            ?>
             <section class="dopbsp-content-wrapper">
-                <h3><?php echo $DOPBSP->text('DASHBOARD_SUBTITLE'); ?></h3>
-                <p><?php echo $DOPBSP->text('DASHBOARD_TEXT'); ?></p>
-                
+                <h3><?php $DOT->echo($DOPBSP->text('DASHBOARD_SUBTITLE')); ?></h3>
+                <p><?php $DOT->echo($DOPBSP->text('DASHBOARD_TEXT')); ?></p>
+
                 <div id="DOPBSP-get-started" class="dopbsp-left">
-                    <h4><?php echo $DOPBSP->text('DASHBOARD_GET_STARTED'); ?></h4>
+                    <h4><?php $DOT->echo($DOPBSP->text('DASHBOARD_GET_STARTED')); ?></h4>
                     <ul>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-calendars'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-calendars')); ?>">
                                 <span class="dopbsp-icon dopbsp-calendars"></span>
-<?php
-    if ($DOPBSP->vars->view_pro){
-	echo $DOPBSP->text('DASHBOARD_GET_STARTED_CALENDARS');
-?>
-                                <span class="dopbsp-pro"><?php echo $DOPBSP->text('MESSAGES_PRO_TITLE'); ?></span>
-<?php
-    }
-    else{
-	echo $DOPBSP->text('DASHBOARD_GET_STARTED_CALENDARS_VIEW'); 
-    }
-?>
-                            </a>    
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_GET_STARTED_CALENDARS')); ?>
+                            </a>
                         </li>
-<?php
-    if ($DOPBSP->vars->view_pro){
-?>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-pro'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-locations'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-locations"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_GET_STARTED_LOCATIONS'); ?>
-                                <span class="dopbsp-pro"><?php echo $DOPBSP->text('MESSAGES_PRO_TITLE'); ?></span>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_GET_STARTED_LOCATIONS')); ?>
                             </a>
                         </li>
-<?php
-    }
-?>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-reservations'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-reservations'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-reservations"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_GET_STARTED_RESERVATIONS'); ?>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_GET_STARTED_RESERVATIONS')); ?>
                             </a>
                         </li>
-<?php
-    if (DOPBSP_DEVELOPMENT_MODE){
-?>
-                        <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-reviews'); ?>">
-                                <span class="dopbsp-icon dopbsp-reviews"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_GET_STARTED_REVIEWS').' <em>('.$DOPBSP->text('SOON').')</em>'; ?>
-                            </a>
-                        </li>
-<?php
-    }
-?>
                     </ul>
                 </div>
-                
+
                 <div id="DOPBSP-more-actions" class="dopbsp-left">
-                    <h4><?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS'); ?></h4>
+                    <h4><?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS')); ?></h4>
                     <ul>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-coupons'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-coupons'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-coupons"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_COUPONS'); ?>
-			    </a>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_COUPONS')); ?>
+                            </a>
                         </li>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-discounts'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-discounts'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-discounts"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_DISCOUNTS'); ?>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_DISCOUNTS')); ?>
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-emails'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-emails'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-emails"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_EMAILS'); ?>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_EMAILS')); ?>
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-extras'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-extras'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-extras"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_EXTRAS'); ?>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_EXTRAS')); ?>
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-forms'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-forms'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-forms"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_FORMS'); ?>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_FORMS')); ?>
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-rules'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-rules'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-rules"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_RULES'); ?>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_RULES')); ?>
                             </a>
                         </li>
-<?php
-    if ($DOPBSP->vars->view_pro){
-?>
+                        <!--
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-pro'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-search'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-search"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_SEARCH'); ?>
-                                <span class="dopbsp-pro"><?php echo $DOPBSP->text('MESSAGES_PRO_INFO'); ?></span>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_SEARCH')); ?>
                             </a>
                         </li>
-<?php
-    }
-?>
+                        -->
                         <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-fees'); ?>">
+                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-fees'),
+                                                      'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-fees"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_FEES'); ?>
+                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_FEES')); ?>
                             </a>
                         </li>
-<?php
-    if (DOPBSP_DEVELOPMENT_MODE){
-?>
-                        <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-templates'); ?>">
-                                <span class="dopbsp-icon dopbsp-templates"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_TEMPLATES').' <em>('.$DOPBSP->text('SOON').')</em>'; ?>
-                            </a>
-                        </li>
-<?php
-    }
-    
-    if ($DOPBSP->vars->role_action == 'manage_options'){
-?>
-                        <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-settings'); ?>">
-                                <span class="dopbsp-icon dopbsp-settings"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_SETTINGS'); ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-translation'); ?>">
-                                <span class="dopbsp-icon dopbsp-translation"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_TRANSLATION'); ?>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-tools'); ?>">
-                                <span class="dopbsp-icon dopbsp-tools"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_TOOLS'); ?>
-                            </a>
-                        </li>
-<?php
-        if (DOPBSP_CONFIG_VIEW_ADDONS){
-?>
-                        <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-addons'); ?>" class="dopbsp-important">
-                                <span class="dopbsp-icon dopbsp-addons"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_ADDONS'); ?>
-                            </a>
-                        </li>
-<?php
-        }
-
-        if (DOPBSP_CONFIG_VIEW_THEMES){
-?>
-                        <li>
-                            <a href="<?php echo admin_url('admin.php?page=dopbsp-themes'); ?>" class="dopbsp-important">
-                                <span class="dopbsp-icon dopbsp-themes"></span>
-                                <?php echo $DOPBSP->text('DASHBOARD_MORE_ACTIONS_THEMES'); ?>
-                            </a>
-                        </li>
-<?php
-        }
-    }
-?>
+                        <?php
+                        if ($DOPBSP->vars->role_action == 'manage_options'){
+                            ?>
+                            <li>
+                                <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-settings'),
+                                                          'url'); ?>">
+                                    <span class="dopbsp-icon dopbsp-settings"></span>
+                                    <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_SETTINGS')); ?>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-translation'),
+                                                          'url'); ?>">
+                                    <span class="dopbsp-icon dopbsp-translation"></span>
+                                    <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_TRANSLATION')); ?>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-tools'),
+                                                          'url'); ?>">
+                                    <span class="dopbsp-icon dopbsp-tools"></span>
+                                    <?php $DOT->echo($DOPBSP->text('DASHBOARD_MORE_ACTIONS_TOOLS')); ?>
+                                </a>
+                            </li>
+                            <?php
+                        }
+                        ?>
                     </ul>
                 </div>
             </section>
-<?php
-            }
+            <?php
         }
     }
+}

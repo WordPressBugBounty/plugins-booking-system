@@ -1,9 +1,9 @@
 @charset "utf-8";
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.6
-* File                    : assets/gui/css/backend-dashboard.css
+* File                    : assets/gui/css/backend-coupons.css
 * File Version            : 1.1.1
 * Created / Last Modified : 19 February 2016
 * Author                  : Dot on Paper
@@ -83,10 +83,6 @@
     background-position: -80px -380px;
 }
 
-#DOPBSP-get-started ul li a .dopbsp-icon.dopbsp-reviews{
-    background-position: -100px -380px;
-}
-
 #DOPBSP-get-started ul li a:hover{
     background-color: #464646;
 }
@@ -146,10 +142,6 @@
     width: 20px;
 }
 
-#DOPBSP-more-actions ul li a .dopbsp-icon.dopbsp-addons{
-    background-position: -120px -380px;
-}
-
 #DOPBSP-more-actions ul li a .dopbsp-icon.dopbsp-coupons{
     background-position: -140px -380px;
 }
@@ -182,20 +174,12 @@
     background-position: -280px -380px;
 }
 
-#DOPBSP-more-actions ul li a .dopbsp-icon.dopbsp-templates{
-    background-position: -300px -380px;
-}
-
 #DOPBSP-more-actions ul li a .dopbsp-icon.dopbsp-settings{
     background-position: -320px -380px;
 }
 
 #DOPBSP-more-actions ul li a .dopbsp-icon.dopbsp-translation{
     background-position: -340px -380px;
-}
-
-#DOPBSP-more-actions ul li a .dopbsp-icon.dopbsp-themes{
-    background-position: -360px -380px;
 }
 
 #DOPBSP-more-actions ul li a .dopbsp-icon.dopbsp-tools{

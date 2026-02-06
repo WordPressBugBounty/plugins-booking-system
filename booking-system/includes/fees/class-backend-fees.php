@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndFees')){
-    class DOPBSPBackEndFees extends DOPBSPBackEnd{
+    class DOPBSPBackEndFees{
         /*
          * Constructor
          */
@@ -58,36 +58,38 @@ if (!class_exists('DOPBSPBackEndFees')){
             $user_roles = array_values(wp_get_current_user()->roles);
 
             if ($user_roles[0] == 'administrator'){
-                $fees = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->fees.' ORDER BY id DESC');
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $fees = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                                          $DOPBSP->tables->fees));
             }
             else{
-                $fees = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->fees.' WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $fees = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                                                          $DOPBSP->tables->fees,
                                                           wp_get_current_user()->ID));
             }
 
             /*
              * Create fees list HTML.
              */
-            array_push($html,
-                       '<ul>');
+            $html[] = '<ul>';
 
             if ($wpdb->num_rows != 0){
                 if ($fees){
                     foreach ($fees as $fee){
-                        array_push($html,
-                                   $this->listItem($fee));
+                        $html[] = $this->listItem($fee);
                     }
                 }
             }
             else{
-                array_push($html,
-                           '<li class="dopbsp-no-data">'.$DOPBSP->text('FEES_NO_FEES').'</li>');
+                $html[] = '<li class="dopbsp-no-data">'.$DOPBSP->text('FEES_NO_FEES').'</li>';
             }
-            array_push($html,
-                       '</ul>');
+            $html[] = '</ul>';
 
-            echo implode('',
-                         $html);
+            $DOT->echo(implode('',
+                               $html),
+                       'content',
+                       $DOT->models->allowed_html->items());
 
             die();
         }
@@ -105,41 +107,30 @@ if (!class_exists('DOPBSPBackEndFees')){
             $html = array();
             $user = get_userdata($fee->user_id); // Get data about the user who created the fees.
 
-            array_push($html,
-                       '<li class="dopbsp-item" id="DOPBSP-fee-ID-'.$fee->id.'" onclick="DOPBSPBackEndFee.display('.$fee->id.')">');
-            array_push($html,
-                       ' <div class="dopbsp-header">');
+            $html[] = '<li class="dopbsp-item" id="DOPBSP-fee-ID-'.$fee->id.'" onclick="DOPBSPBackEndFee.display('.$fee->id.')">';
+            $html[] = ' <div class="dopbsp-header">';
 
             /*
              * Display fee ID.
              */
-            array_push($html,
-                       '     <span class="dopbsp-id">ID: '.$fee->id.'</span>');
+            $html[] = '     <span class="dopbsp-id">ID: '.$fee->id.'</span>';
 
             /*
              * Display data about the user who created the fee.
              */
             if ($fee->user_id>0){
-                array_push($html,
-                           '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($fee->user_id,
-                                                                                             17));
-                array_push($html,
-                           '         <span class="dopbsp-info">'.$DOPBSP->text('FEES_CREATED_BY').': '.$user->data->display_name.'</span>');
-                array_push($html,
-                           '         <br class="dopbsp-clear" />');
-                array_push($html,
-                           '     </span>');
+                $html[] = '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($fee->user_id,
+                                                                                            17);
+                $html[] = '         <span class="dopbsp-info">'.$DOPBSP->text('FEES_CREATED_BY').': '.$user->data->display_name.'</span>';
+                $html[] = '         <br class="dopbsp-clear" />';
+                $html[] = '     </span>';
             }
-            array_push($html,
-                       '     <br class="dopbsp-clear" />');
-            array_push($html,
-                       ' </div>');
-            array_push($html,
-                       ' <div class="dopbsp-name">'.($fee->name == ''
-                               ? '&nbsp;'
-                               : $fee->name).'</div>');
-            array_push($html,
-                       '</li>');
+            $html[] = '     <br class="dopbsp-clear" />';
+            $html[] = ' </div>';
+            $html[] = ' <div class="dopbsp-name">'.($fee->name == ''
+                            ? '&nbsp;'
+                            : $fee->name).'</div>';
+            $html[] = '</li>';
 
             return implode('',
                            $html);

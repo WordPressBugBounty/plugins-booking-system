@@ -12,7 +12,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndReservationsList')){
-    class DOPBSPBackEndReservationsList extends DOPBSPBackEndReservations{
+    class DOPBSPBackEndReservationsList{
         /*
          * Constructor.
          */
@@ -41,7 +41,7 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
          * @post order (string): order direction "ASC", "DESC"
          * @post order_by (string): order by "check_in", "check_out", "start_hour", "end_hour", "id", "status", "date_created"
          *
-         * @get dopbsp_api (boolean): will initilize API calls if it is enabled
+         * @get dopbsp_api (boolean): will initialize API calls if it is enabled
          * @get calendar_id (string/integer): list of calendars or calendar
          * @get start_date (string): reservations start date
          * @get end_date (string): reservations end date
@@ -62,25 +62,25 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
             global $DOPBSP;
             global $DOT;
 
+            $api = $DOT->get('dopbsp_api') == 'true';
+
             /*
              * Verify nonce.
              */
             $nonce = $DOT->post('nonce');
 
             if (!wp_verify_nonce($nonce,
-                                 'dopbsp_user_nonce')){
+                                 'dopbsp_user_nonce')
+                    && !$api){
                 return false;
             }
             /*
              * End verify nonce.
              */
 
-            $calendars_ids = array();
             $query = array();
             $values = array();
-            $api = $DOT->get('dopbsp_api') == 'true'
-                    ? true
-                    : false;
+            $api = $DOT->get('dopbsp_api') == 'true';
 
             if (!$api){
                 $calendar_id = $DOT->post('calendar_id');
@@ -88,21 +88,11 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                 $end_date = $DOT->post('end_date');
                 $start_hour = $DOT->post('start_hour');
                 $end_hour = $DOT->post('end_hour');
-                $status_pending = $DOT->post('status_pending') == 'true'
-                        ? true
-                        : false;
-                $status_approved = $DOT->post('status_approved') == 'true'
-                        ? true
-                        : false;
-                $status_rejected = $DOT->post('status_rejected') == 'true'
-                        ? true
-                        : false;
-                $status_canceled = $DOT->post('status_canceled') == 'true'
-                        ? true
-                        : false;
-                $status_expired = $DOT->post('status_expired') == 'true'
-                        ? true
-                        : false;
+                $status_pending = $DOT->post('status_pending') == 'true';
+                $status_approved = $DOT->post('status_approved') == 'true';
+                $status_rejected = $DOT->post('status_rejected') == 'true';
+                $status_canceled = $DOT->post('status_canceled') == 'true';
+                $status_expired = $DOT->post('status_expired') == 'true';
                 $payment_methods = $DOT->post('payment_methods') == ''
                         ? array()
                         : explode(',',
@@ -134,15 +124,13 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
 
                 foreach ($calendars as $calendar){
                     if ($calendars_requested != ''){
-                        if (strpos($calendars_requested,
-                                   ','.(string)$calendar->id.',') !== false){
-                            array_push($calendars_id,
-                                       $calendar->id);
+                        if (str_contains($calendars_requested,
+                                         ','.$calendar->id.',')){
+                            $calendars_id[] = $calendar->id;
                         }
                     }
                     else{
-                        array_push($calendars_id,
-                                   $calendar->id);
+                        $calendars_id[] = $calendar->id;
                     }
                 }
 
@@ -163,26 +151,16 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                 $status = $DOT->get('status')
                         ? $DOT->get('status')
                         : '';
-                $status_pending = strpos($status,
-                                         'pending') !== false
-                        ? true
-                        : false;
-                $status_approved = strpos($status,
-                                          'approved') !== false
-                        ? true
-                        : false;
-                $status_rejected = strpos($status,
-                                          'rejected') !== false
-                        ? true
-                        : false;
-                $status_canceled = strpos($status,
-                                          'canceled') !== false
-                        ? true
-                        : false;
-                $status_expired = strpos($status,
-                                         'expired') !== false
-                        ? true
-                        : false;
+                $status_pending = str_contains($status,
+                                               'pending');
+                $status_approved = str_contains($status,
+                                                'approved');
+                $status_rejected = str_contains($status,
+                                                'rejected');
+                $status_canceled = str_contains($status,
+                                                'canceled');
+                $status_expired = str_contains($status,
+                                               'expired');
                 $payment_methods = $DOT->get('payment_methods') != ''
                         ? explode(',',
                                   $DOT->get('payment_methods'))
@@ -207,29 +185,24 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
             /*
              * Calendars query.
              */
-            if (strpos($calendar_id,
-                       ',') !== false){
+            if (str_contains($calendar_id,
+                             ',')){
                 $calendars_ids = explode(',',
                                          $calendar_id);
-                array_push($query,
-                           'SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE (calendar_id=%d');
-                array_push($values,
-                           $calendars_ids[0]);
+                $query[] = 'SELECT * FROM %i WHERE (calendar_id=%d';
+                $values[] = $DOPBSP->tables->reservations;
+                $values[] = $calendars_ids[0];
 
                 for ($i = 1; $i<count($calendars_ids); $i++){
-                    array_push($query,
-                               ' OR calendar_id=%d');
-                    array_push($values,
-                               $calendars_ids[$i]);
+                    $query[] = ' OR calendar_id=%d';
+                    $values[] = $calendars_ids[$i];
                 }
-                array_push($query,
-                           ')');
+                $query[] = ')';
             }
             else{
-                array_push($query,
-                           'SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE calendar_id=%d');
-                array_push($values,
-                           $calendar_id);
+                $query[] = 'SELECT * FROM %i WHERE calendar_id=%d';
+                $values[] = $DOPBSP->tables->reservations;
+                $values[] = $calendar_id;
             }
 
             /*
@@ -237,43 +210,30 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
              */
             if ($start_date != ''){
                 if ($end_date != ''){
-                    array_push($query,
-                               ' AND (check_in >= %s AND check_in <= %s');
-                    array_push($values,
-                               $start_date);
-                    array_push($values,
-                               $end_date);
+                    $query[] = ' AND (check_in >= %s AND check_in <= %s';
+                    $values[] = $start_date;
+                    $values[] = $end_date;
 
-                    array_push($query,
-                               ' OR check_out >= %s AND check_out <= %s AND check_out <> "")');
-                    array_push($values,
-                               $start_date);
-                    array_push($values,
-                               $end_date);
+                    $query[] = ' OR check_out >= %s AND check_out <= %s AND check_out <> "")';
+                    $values[] = $start_date;
+                    $values[] = $end_date;
                 }
                 else{
-                    array_push($query,
-                               ' AND (check_in >= %s)');
-                    array_push($values,
-                               $start_date);
+                    $query[] = ' AND (check_in >= %s)';
+                    $values[] = $start_date;
                 }
             }
             elseif ($end_date != ''){
-                array_push($query,
-                           ' AND check_in <= %s');
-                array_push($values,
-                           $end_date);
+                $query[] = ' AND check_in <= %s';
+                $values[] = $end_date;
             }
 
             /*
              * Hours query.
              */
-            array_push($query,
-                       ' AND (start_hour >= %s AND end_hour <= %s OR start_hour = "")');
-            array_push($values,
-                       $start_hour);
-            array_push($values,
-                       $end_hour);
+            $query[] = ' AND (start_hour >= %s AND end_hour <= %s OR start_hour = "")';
+            $values[] = $start_hour;
+            $values[] = $end_hour;
 
             /*
              * Status query.
@@ -286,62 +246,46 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                 $status_init = false;
 
                 if ($status_pending){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'pending');
+                    $query[] = ' AND (status = %s';
+                    $values[] = 'pending';
                     $status_init = true;
                 }
 
                 if ($status_approved){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'approved');
+                    $query[] = $status_init
+                            ? ' OR status = %s'
+                            : ' AND (status = %s';
+                    $values[] = 'approved';
                     $status_init = true;
                 }
 
                 if ($status_rejected){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'rejected');
+                    $query[] = $status_init
+                            ? ' OR status = %s'
+                            : ' AND (status = %s';
+                    $values[] = 'rejected';
                     $status_init = true;
                 }
 
                 if ($status_canceled){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'canceled');
+                    $query[] = $status_init
+                            ? ' OR status = %s'
+                            : ' AND (status = %s';
+                    $values[] = 'canceled';
                     $status_init = true;
                 }
 
                 if ($status_expired){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'expired');
-                    $status_init = true;
+                    $query[] = $status_init
+                            ? ' OR status = %s'
+                            : ' AND (status = %s';
+                    $values[] = 'expired';
                 }
-                array_push($query,
-                           ')');
+                $query[] = ')';
             }
             else{
-                array_push($query,
-                           ' AND status <> %s');
-                array_push($values,
-                           'expired');
+                $query[] = ' AND status <> %s';
+                $values[] = 'expired';
             }
 
             /*
@@ -351,37 +295,29 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                 $payment_init = false;
 
                 for ($i = 0; $i<count($payment_methods); $i++){
-                    array_push($query,
-                               $payment_init
-                                       ? ' OR payment_method=%s'
-                                       : ' AND (payment_method=%s');
-                    array_push($values,
-                               $payment_methods[$i]);
+                    $query[] = $payment_init
+                            ? ' OR payment_method=%s'
+                            : ' AND (payment_method=%s';
+                    $values[] = $payment_methods[$i];
                     $payment_init = true;
                 }
-                array_push($query,
-                           ')');
+                $query[] = ')';
             }
 
             /*
              * Search query.
              */
             if ($search != ''){
-                array_push($query,
-                           ' AND (id=%s OR transaction_id=%s OR form LIKE %s)');
-                array_push($values,
-                           $search);
-                array_push($values,
-                           $search);
-                array_push($values,
-                           '%'.$search.'%');
+                $query[] = ' AND (id=%s OR transaction_id=%s OR form LIKE %s)';
+                $values[] = $search;
+                $values[] = $search;
+                $values[] = '%'.$search.'%';
             }
 
             /*
              * Exclude reservations with incomplete payment.
              */
-            array_push($query,
-                       ' AND (token="" OR (token<>"" AND (payment_method="none" OR payment_method="default")))');
+            $query[] = ' AND (token="" OR (token<>"" AND (payment_method="none" OR payment_method="default")))';
 
             /*
              * Order query.
@@ -390,36 +326,23 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                     ? 'DESC'
                     : 'ASC';
 
-            switch ($order_by){
-                case 'check_out':
-                    $order_by_value = 'check_out';
-                    break;
-                case 'start_hour':
-                    $order_by_value = 'start_hour';
-                    break;
-                case 'end_hour':
-                    $order_by_value = 'end_hour';
-                    break;
-                case 'id':
-                    $order_by_value = 'id';
-                    break;
-                case 'status':
-                    $order_by_value = 'status';
-                    break;
-                case 'date_created':
-                    $order_by_value = 'date_created';
-                    break;
-                default:
-                    $order_by_value = 'check_in';
-            }
+            $order_by_value = match ($order_by) {
+                'check_out'    => 'check_out',
+                'start_hour'   => 'start_hour',
+                'end_hour'     => 'end_hour',
+                'id'           => 'id',
+                'status'       => 'status',
+                'date_created' => 'date_created',
+                default        => 'check_in',
+            };
 
-            array_push($query,
-                       ' ORDER BY '.$order_by_value.' '.($order_value));
+            $query[] = ' ORDER BY '.$order_by_value.' '.($order_value);
 
             /*
              * ************************************************************* Get number of reservations.
              */
             if (!$api){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $reservations_total = $wpdb->get_var($wpdb->prepare(str_replace('*',
                                                                                 'COUNT(*)',
                                                                                 implode('',
@@ -433,16 +356,14 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
             /*
              * Pagination query.
              */
-            array_push($query,
-                       ' LIMIT %d, %d');
-            array_push($values,
-                    (($page-1)*$per_page));
-            array_push($values,
-                       $per_page);
+            $query[] = ' LIMIT %d, %d';
+            $values[] = (($page-1)*$per_page);
+            $values[] = $per_page;
 
             /*
              * ************************************************************* Get reservations.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $reservations = $wpdb->get_results($wpdb->prepare(implode('',
                                                                       $query),
                                                               $values));
@@ -479,7 +400,7 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
          * @post order (string): order direction "ASC", "DESC"
          * @post order_by (string): order by "check_in", "check_out", "start_hour", "end_hour", "id", "status", "date_created"
          *
-         * @get dopbsp_api (boolean): will initilize API calls if it is enabled
+         * @get dopbsp_api (boolean): will initialize API calls if it is enabled
          * @get calendar_id (string/integer): list of calendars or calendar
          * @get start_date (string): reservations start date
          * @get end_date (string): reservations end date
@@ -513,12 +434,9 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
              * End verify nonce.
              */
 
-            $calendars_ids = array();
             $query = array();
             $values = array();
-            $api = $DOT->get('dopbsp_api') == 'true'
-                    ? true
-                    : false;
+            $api = $DOT->get('dopbsp_api') == 'true';
 
             if (!$api){
                 $calendar_id = $DOT->post('calendar_id');
@@ -526,21 +444,11 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                 $end_date = $DOT->post('end_date');
                 $start_hour = $DOT->post('start_hour');
                 $end_hour = $DOT->post('end_hour');
-                $status_pending = $DOT->post('status_pending') == 'true'
-                        ? true
-                        : false;
-                $status_approved = $DOT->post('status_approved') == 'true'
-                        ? true
-                        : false;
-                $status_rejected = $DOT->post('status_rejected') == 'true'
-                        ? true
-                        : false;
-                $status_canceled = $DOT->post('status_canceled') == 'true'
-                        ? true
-                        : false;
-                $status_expired = $DOT->post('status_expired') == 'true'
-                        ? true
-                        : false;
+                $status_pending = $DOT->post('status_pending') == 'true';
+                $status_approved = $DOT->post('status_approved') == 'true';
+                $status_rejected = $DOT->post('status_rejected') == 'true';
+                $status_canceled = $DOT->post('status_canceled') == 'true';
+                $status_expired = $DOT->post('status_expired') == 'true';
                 $payment_methods = $DOT->post('payment_methods') == ''
                         ? array()
                         : explode(',',
@@ -569,15 +477,13 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
 
                 foreach ($calendars as $calendar){
                     if ($calendars_requested != ''){
-                        if (strpos($calendars_requested,
-                                   ','.(string)$calendar->id.',') !== false){
-                            array_push($calendars_id,
-                                       $calendar->id);
+                        if (str_contains($calendars_requested,
+                                         ','.$calendar->id.',')){
+                            $calendars_id[] = $calendar->id;
                         }
                     }
                     else{
-                        array_push($calendars_id,
-                                   $calendar->id);
+                        $calendars_id[] = $calendar->id;
                     }
                 }
 
@@ -598,26 +504,16 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                 $status = $DOT->get('status')
                         ? $DOT->get('status')
                         : '';
-                $status_pending = strpos($status,
-                                         'pending') !== false
-                        ? true
-                        : false;
-                $status_approved = strpos($status,
-                                          'approved') !== false
-                        ? true
-                        : false;
-                $status_rejected = strpos($status,
-                                          'rejected') !== false
-                        ? true
-                        : false;
-                $status_canceled = strpos($status,
-                                          'canceled') !== false
-                        ? true
-                        : false;
-                $status_expired = strpos($status,
-                                         'expired') !== false
-                        ? true
-                        : false;
+                $status_pending = str_contains($status,
+                                               'pending');
+                $status_approved = str_contains($status,
+                                                'approved');
+                $status_rejected = str_contains($status,
+                                                'rejected');
+                $status_canceled = str_contains($status,
+                                                'canceled');
+                $status_expired = str_contains($status,
+                                               'expired');
                 $payment_methods = $DOT->get('payment_methods') != ''
                         ? explode(',',
                                   $DOT->get('payment_methods'))
@@ -642,29 +538,24 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
             /*
              * Calendars query.
              */
-            if (strpos($calendar_id,
-                       ',') !== false){
+            if (str_contains($calendar_id,
+                             ',')){
                 $calendars_ids = explode(',',
                                          $calendar_id);
-                array_push($query,
-                           'SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE (calendar_id=%d');
-                array_push($values,
-                           $calendars_ids[0]);
+                $query[] = 'SELECT * FROM %i WHERE (calendar_id=%d';
+                $values[] = $DOPBSP->tables->reservations;
+                $values[] = $calendars_ids[0];
 
                 for ($i = 1; $i<count($calendars_ids); $i++){
-                    array_push($query,
-                               ' OR calendar_id=%d');
-                    array_push($values,
-                               $calendars_ids[$i]);
+                    $query[] = ' OR calendar_id=%d';
+                    $values[] = $calendars_ids[$i];
                 }
-                array_push($query,
-                           ')');
+                $query[] = ')';
             }
             else{
-                array_push($query,
-                           'SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE calendar_id=%d');
-                array_push($values,
-                           $calendar_id);
+                $query[] = 'SELECT * FROM %i WHERE calendar_id=%d';
+                $values[] = $DOPBSP->tables->reservations;
+                $values[] = $calendar_id;
             }
 
             /*
@@ -672,43 +563,30 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
              */
             if ($start_date != ''){
                 if ($end_date != ''){
-                    array_push($query,
-                               ' AND (check_in >= %s AND check_in <= %s');
-                    array_push($values,
-                               $start_date);
-                    array_push($values,
-                               $end_date);
+                    $query[] = ' AND (check_in >= %s AND check_in <= %s';
+                    $values[] = $start_date;
+                    $values[] = $end_date;
 
-                    array_push($query,
-                               ' OR check_out >= %s AND check_out <= %s AND check_out <> "")');
-                    array_push($values,
-                               $start_date);
-                    array_push($values,
-                               $end_date);
+                    $query[] = ' OR check_out >= %s AND check_out <= %s AND check_out <> "")';
+                    $values[] = $start_date;
+                    $values[] = $end_date;
                 }
                 else{
-                    array_push($query,
-                               ' AND (check_in >= %s)');
-                    array_push($values,
-                               $start_date);
+                    $query[] = ' AND (check_in >= %s)';
+                    $values[] = $start_date;
                 }
             }
             elseif ($end_date != ''){
-                array_push($query,
-                           ' AND check_in <= %s');
-                array_push($values,
-                           $end_date);
+                $query[] = ' AND check_in <= %s';
+                $values[] = $end_date;
             }
 
             /*
              * Hours query.
              */
-            array_push($query,
-                       ' AND (start_hour >= %s AND end_hour <= %s OR start_hour = "")');
-            array_push($values,
-                       $start_hour);
-            array_push($values,
-                       $end_hour);
+            $query[] = ' AND (start_hour >= %s AND end_hour <= %s OR start_hour = "")';
+            $values[] = $start_hour;
+            $values[] = $end_hour;
 
             /*
              * Status query.
@@ -721,62 +599,46 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                 $status_init = false;
 
                 if ($status_pending){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'pending');
+                    $query[] = ' AND (status = %s';
+                    $values[] = 'pending';
                     $status_init = true;
                 }
 
                 if ($status_approved){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'approved');
+                    $query[] = $status_init
+                            ? ' OR status = %s'
+                            : ' AND (status = %s';
+                    $values[] = 'approved';
                     $status_init = true;
                 }
 
                 if ($status_rejected){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'rejected');
+                    $query[] = $status_init
+                            ? ' OR status = %s'
+                            : ' AND (status = %s';
+                    $values[] = 'rejected';
                     $status_init = true;
                 }
 
                 if ($status_canceled){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'canceled');
+                    $query[] = $status_init
+                            ? ' OR status = %s'
+                            : ' AND (status = %s';
+                    $values[] = 'canceled';
                     $status_init = true;
                 }
 
                 if ($status_expired){
-                    array_push($query,
-                               $status_init
-                                       ? ' OR status = %s'
-                                       : ' AND (status = %s');
-                    array_push($values,
-                               'expired');
-                    $status_init = true;
+                    $query[] = $status_init
+                            ? ' OR status = %s'
+                            : ' AND (status = %s';
+                    $values[] = 'expired';
                 }
-                array_push($query,
-                           ')');
+                $query[] = ')';
             }
             else{
-                array_push($query,
-                           ' AND status <> %s');
-                array_push($values,
-                           'expired');
+                $query[] = ' AND status <> %s';
+                $values[] = 'expired';
             }
 
             /*
@@ -786,37 +648,29 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                 $payment_init = false;
 
                 for ($i = 0; $i<count($payment_methods); $i++){
-                    array_push($query,
-                               $payment_init
-                                       ? ' OR payment_method=%s'
-                                       : ' AND (payment_method=%s');
-                    array_push($values,
-                               $payment_methods[$i]);
+                    $query[] = $payment_init
+                            ? ' OR payment_method=%s'
+                            : ' AND (payment_method=%s';
+                    $values[] = $payment_methods[$i];
                     $payment_init = true;
                 }
-                array_push($query,
-                           ')');
+                $query[] = ')';
             }
 
             /*
              * Search query.
              */
             if ($search != ''){
-                array_push($query,
-                           ' AND (id=%s OR transaction_id=%s OR form LIKE %s)');
-                array_push($values,
-                           $search);
-                array_push($values,
-                           $search);
-                array_push($values,
-                           '%'.$search.'%');
+                $query[] = ' AND (id=%s OR transaction_id=%s OR form LIKE %s)';
+                $values[] = $search;
+                $values[] = $search;
+                $values[] = '%'.$search.'%';
             }
 
             /*
              * Exclude reservations with incomplete payment.
              */
-            array_push($query,
-                       ' AND (token="" OR (token<>"" AND (payment_method="none" OR payment_method="default")))');
+            $query[] = ' AND (token="" OR (token<>"" AND (payment_method="none" OR payment_method="default")))';
 
             /*
              * Order query.
@@ -825,36 +679,23 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
                     ? 'DESC'
                     : 'ASC';
 
-            switch ($order_by){
-                case 'check_out':
-                    $order_by_value = 'check_out';
-                    break;
-                case 'start_hour':
-                    $order_by_value = 'start_hour';
-                    break;
-                case 'end_hour':
-                    $order_by_value = 'end_hour';
-                    break;
-                case 'id':
-                    $order_by_value = 'id';
-                    break;
-                case 'status':
-                    $order_by_value = 'status';
-                    break;
-                case 'date_created':
-                    $order_by_value = 'date_created';
-                    break;
-                default:
-                    $order_by_value = 'check_in';
-            }
+            $order_by_value = match ($order_by) {
+                'check_out'    => 'check_out',
+                'start_hour'   => 'start_hour',
+                'end_hour'     => 'end_hour',
+                'id'           => 'id',
+                'status'       => 'status',
+                'date_created' => 'date_created',
+                default        => 'check_in',
+            };
 
-            array_push($query,
-                       ' ORDER BY '.$order_by_value.' '.($order_value));
+            $query[] = ' ORDER BY '.$order_by_value.' '.($order_value);
 
             /*
              * ************************************************************* Get number of reservations.
              */
             if (!$api){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $reservations_total = $wpdb->get_var($wpdb->prepare(str_replace('*',
                                                                                 'COUNT(*)',
                                                                                 implode('',
@@ -868,16 +709,14 @@ if (!class_exists('DOPBSPBackEndReservationsList')){
             /*
              * Pagination query.
              */
-            array_push($query,
-                       ' LIMIT %d, %d');
-            array_push($values,
-                    (($page-1)*$per_page));
-            array_push($values,
-                       $per_page);
+            $query[] = ' LIMIT %d, %d';
+            $values[] = (($page-1)*$per_page);
+            $values[] = $per_page;
 
             /*
              * ************************************************************* Get reservations.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $reservations = $wpdb->get_results($wpdb->prepare(implode('',
                                                                       $query),
                                                               $values));

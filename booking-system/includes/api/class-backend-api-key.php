@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndAPIKey')){
-    class DOPBSPBackEndAPIKey extends DOPBSPBackEnd{
+    class DOPBSPBackEndAPIKey{
         /*
          * Constructor
          */
@@ -31,7 +31,9 @@ if (!class_exists('DOPBSPBackEndAPIKey')){
 
             $user_id = wp_get_current_user()->ID;
 
-            $data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->api_keys.' WHERE user_id=%d ORDER BY id DESC',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE user_id=%d ORDER BY id DESC',
+                                                  $DOPBSP->tables->api_keys,
                                                   $user_id));
 
             if ($wpdb->num_rows>0){
@@ -43,9 +45,11 @@ if (!class_exists('DOPBSPBackEndAPIKey')){
                  */
                 $new_api_key = $DOPBSP->classes->prototypes->getRandomString(32);
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($DOPBSP->tables->api_keys,
                               array('user_id' => $user_id,
                                     'api_key' => $new_api_key));
+
                 return $new_api_key.'-'.$user_id;
             }
         }
@@ -66,13 +70,13 @@ if (!class_exists('DOPBSPBackEndAPIKey')){
             $api_key = $tokens[0];
             $user_id = $tokens[1];
 
-            $control_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->api_keys.' WHERE api_key=%s AND user_id=%d ORDER BY id DESC',
-                                                          $api_key,
-                                                          $user_id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE api_key=%s AND user_id=%d ORDER BY id DESC',
+                                          $DOPBSP->tables->api_keys,
+                                          $api_key,
+                                          $user_id));
 
-            return $wpdb->num_rows>0
-                    ? true
-                    : false;
+            return $wpdb->num_rows>0;
         }
 
         /*
@@ -105,10 +109,11 @@ if (!class_exists('DOPBSPBackEndAPIKey')){
 
             $new_api_key = $DOPBSP->classes->prototypes->getRandomString(32);
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->api_keys,
                           array('api_key' => $new_api_key),
                           array('user_id' => $user_id));
-            echo $new_api_key.'-'.$user_id;
+            $DOT->echo($new_api_key.'-'.$user_id);
 
             die();
         }

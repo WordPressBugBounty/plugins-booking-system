@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndLanguages')){
-    class DOPBSPBackEndLanguages extends DOPBSPBackEnd{
+    class DOPBSPBackEndLanguages{
         /*
          * Constructor
          */
@@ -28,7 +28,9 @@ if (!class_exists('DOPBSPBackEndLanguages')){
             global $DOPBSP;
 
             $languages = $DOPBSP->classes->languages->languages;
-            $languages_db = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages.' ORDER BY id ASC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $languages_db = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id ASC',
+                                                              $DOPBSP->tables->languages));
 
             for ($l = 0; $l<count($languages); $l++){
                 $found = false;
@@ -41,6 +43,7 @@ if (!class_exists('DOPBSPBackEndLanguages')){
                 }
 
                 if (!$found){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->insert($DOPBSP->tables->languages,
                                   array('code'    => $languages[$l]['code'],
                                         'enabled' => 'false',
@@ -59,6 +62,7 @@ if (!class_exists('DOPBSPBackEndLanguages')){
                 }
 
                 if (!$found){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->delete($DOPBSP->tables->languages,
                                   array('code' => $languages_db[$l_db]->code));
                 }
@@ -88,11 +92,15 @@ if (!class_exists('DOPBSPBackEndLanguages')){
              * End verify nonce.
              */
 
-            $languages = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages.' ORDER BY id ASC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $languages = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id ASC',
+                                                           $DOPBSP->tables->languages));
 
             if (count($languages) != count($DOPBSP->classes->languages->languages)){
                 $this->database();
-                $languages = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages.' ORDER BY id ASC');
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $languages = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id ASC',
+                                                               $DOPBSP->tables->languages));
             }
 
             $DOPBSP->views->backend_languages->template(array('languages' => $languages));

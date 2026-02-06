@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndFormFields')){
-    class DOPBSPBackEndFormFields extends DOPBSPBackEndForm{
+    class DOPBSPBackEndFormFields{
         /*
          * Constructor
          */
@@ -49,6 +49,8 @@ if (!class_exists('DOPBSPBackEndFormFields')){
 
             foreach ($ids as $id){
                 $i++;
+
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->forms_fields,
                               array('position' => $i),
                               array('id' => $id));

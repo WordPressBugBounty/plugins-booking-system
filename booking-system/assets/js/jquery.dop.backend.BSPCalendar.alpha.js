@@ -1,10 +1,10 @@
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.2
 * File                    : assets/js/jquery.dop.backend.BSPCalendar.js
 * File Version            : 1.0
-* Created / Last Modified : 26 August 2015
+* Created / Last Modified : 11 October 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net

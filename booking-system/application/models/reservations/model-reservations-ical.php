@@ -135,7 +135,9 @@ if (!class_exists('DOTModelReservationsIcal')){
                  */
                 if (!array_key_exists($reservation->calendar_id,
                                       $calendars)){
-                    $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                              $DOPBSP->tables->calendars,
                                                               $reservation->calendar_id));
                     $calendar_settings = $DOPBSP->classes->backend_settings->values($reservation->calendar_id,
                                                                                     'calendar');
@@ -217,15 +219,14 @@ if (!class_exists('DOTModelReservationsIcal')){
                 /*
                  * Add event.
                  */
-                array_push($events,
-                           $event);
+                $events[] = $event;
             }
 
             /*
              * Get iCal.
              */
-            echo $DOT->models->ical->get($events,
-                                         $timezones);
+            $DOT->echo($DOT->models->ical->get($events,
+                                               $timezones));
 
             exit;
         }

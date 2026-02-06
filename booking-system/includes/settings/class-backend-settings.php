@@ -13,15 +13,15 @@
 */
 
 if (!class_exists('DOPBSPBackEndSettings')){
-    class DOPBSPBackEndSettings extends DOPBSPBackEnd{
+    class DOPBSPBackEndSettings{
         /*
          * Public variables.
          */
-        public $default_calendar = array();
-        public $default_general = array();
-        public $default_notifications = array();
-        public $default_payment = array();
-        public $default_search = array();
+        public array $default_calendar = array();
+        public array $default_general = array();
+        public array $default_notifications = array();
+        public array $default_payment = array();
+        public array $default_search = array();
 
         /*
          * Constructor
@@ -68,7 +68,7 @@ if (!class_exists('DOPBSPBackEndSettings')){
          *
          * @param args (array): function arguments
          *                          "id" (integer): calendar/search ID
-         *                          "is_ajax" (boolean): set it to false if the function is not called using a AJAX request
+         *                          "is_ajax" (boolean): set it to false if the function is not called using an AJAX request
          *                          "key" (string): option key
          *                          "settings_type" (string): settings type
          *                          "value" (combined): the value with which the option will be modified
@@ -117,7 +117,7 @@ if (!class_exists('DOPBSPBackEndSettings')){
                     : $post_value;
             $nonce = $is_ajax
                     ? $DOT->post('nonce')
-                    : $DOT->sanitize($args['nonce']);
+                    : '';
 
             if ($is_ajax
                     && !wp_verify_nonce($nonce,
@@ -150,15 +150,20 @@ if (!class_exists('DOPBSPBackEndSettings')){
             /*
              * Update settings tables.
              */
-            $control_data = $id_type == 'none'
-                    ? $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$table.' WHERE name=%s',
+            $id_type == 'none'
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    ? $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE name=%s',
+                                                    $table,
                                                     $key))
-                    :
-                    $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$table.' WHERE '.$id_type.'=%d AND name=%s',
-                                                  $id,
-                                                  $key));
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    : $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE %i=%d AND name=%s',
+                                                    $table,
+                                                    $id_type,
+                                                    $id,
+                                                    $key));
 
             if ($wpdb->num_rows == 0){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($table,
                               $id_type == 'none'
                                       ? array('name'  => $key,
@@ -169,6 +174,7 @@ if (!class_exists('DOPBSPBackEndSettings')){
                                             'value'  => $value));
             }
             else{
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($table,
                               array('value' => $value),
                               $id_type == 'none'
@@ -196,6 +202,7 @@ if (!class_exists('DOPBSPBackEndSettings')){
                 switch ($key){
                     case 'currency':
                         if ($settings_type == 'search'){
+                            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                             $wpdb->update($DOPBSP->tables->searches,
                                           array('currency' => $value),
                                           array('id' => $id));
@@ -203,6 +210,7 @@ if (!class_exists('DOPBSPBackEndSettings')){
                         break;
                     case 'currency_position':
                         if ($settings_type == 'search'){
+                            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                             $wpdb->update($DOPBSP->tables->searches,
                                           array('currency_position' => $value),
                                           array('id' => $id));
@@ -210,11 +218,13 @@ if (!class_exists('DOPBSPBackEndSettings')){
                         break;
                     case 'hours_enabled':
                         if ($settings_type == 'calendar'){
+                            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                             $wpdb->update($DOPBSP->tables->calendars,
                                           array('hours_enabled' => $value),
                                           array('id' => $id));
                         }
                         elseif ($settings_type == 'search'){
+                            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                             $wpdb->update($DOPBSP->tables->searches,
                                           array('hours_enabled' => $value),
                                           array('id' => $id));
@@ -222,6 +232,7 @@ if (!class_exists('DOPBSPBackEndSettings')){
                         break;
                     case 'hours_interval_enabled':
                         if ($settings_type == 'calendar'){
+                            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                             $wpdb->update($DOPBSP->tables->calendars,
                                           array('hours_interval_enabled' => $value),
                                           array('id' => $id));
@@ -233,6 +244,8 @@ if (!class_exists('DOPBSPBackEndSettings')){
             if ($is_ajax){
                 die();
             }
+
+            return true;
         }
 
         /*
@@ -278,13 +291,19 @@ if (!class_exists('DOPBSPBackEndSettings')){
             }
 
             $settings = $id_type == 'none'
-                    ? $wpdb->get_results('SELECT name, value FROM '.$table,
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    ? $wpdb->get_results($wpdb->prepare('SELECT name, value FROM %i',
+                                                        $table),
                                          OBJECT_K)
-                    :
-                    $wpdb->get_results($wpdb->prepare('SELECT name, value FROM '.$table.' WHERE '.$id_type.'=%d',
-                                                      $id),
-                                       OBJECT_K);
-            $columns = $wpdb->get_results('DESCRIBE '.$table);
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    : $wpdb->get_results($wpdb->prepare('SELECT name, value FROM %i WHERE %i=%d',
+                                                        $table,
+                                                        $id_type,
+                                                        $id),
+                                         OBJECT_K);
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $columns = $wpdb->get_results($wpdb->prepare('DESCRIBE %i',
+                                                         $table));
 
             foreach ($defaults as $key => $default){
                 $values->$key = isset($settings[$key])
@@ -321,52 +340,49 @@ if (!class_exists('DOPBSPBackEndSettings')){
             switch ($settings_type){
                 case 'calendar':
                     $table = $DOPBSP->tables->settings_calendar;
-                    $value_default = isset($this->default_calendar[$key])
-                            ? $this->default_calendar[$key]
-                            : 'Key is invalid!';
+                    $value_default = $this->default_calendar[$key] ?? 'Key is invalid!';
                     $id_type = 'calendar_id';
                     break;
                 case 'notifications':
                     $table = $DOPBSP->tables->settings_notifications;
-                    $value_default = isset($this->default_notifications[$key])
-                            ? $this->default_notifications[$key]
-                            : 'Key is invalid!';
+                    $value_default = $this->default_notifications[$key] ?? 'Key is invalid!';
                     $id_type = 'calendar_id';
                     break;
                 case 'payment':
                     $table = $DOPBSP->tables->settings_payment;
-                    $value_default = isset($this->default_payment[$key])
-                            ? $this->default_payment[$key]
-                            : 'Key is invalid!';
+                    $value_default = $this->default_payment[$key] ?? 'Key is invalid!';
                     $id_type = 'calendar_id';
                     break;
                 case 'search':
                     $table = $DOPBSP->tables->settings_search;
-                    $value_default = isset($this->default_search[$key])
-                            ? $this->default_search[$key]
-                            : 'Key is invalid!';
+                    $value_default = $this->default_search[$key] ?? 'Key is invalid!';
                     $id_type = 'search_id';
                     break;
                 default:
                     $table = $DOPBSP->tables->settings;
-                    $value_default = isset($this->default_general[$key])
-                            ? $this->default_general[$key]
-                            : 'Key is invalid!';
+                    $value_default = $this->default_general[$key] ?? 'Key is invalid!';
                     $id_type = 'none';
             }
 
             if ($value_default != 'Key is invalid!'){
                 $value_data = $id_type == 'none'
-                        ? $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$table.' WHERE name="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        ? $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE name=%s',
+                                                        $table,
                                                         $key))
-                        :
-                        $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$table.' WHERE '.$id_type.'=%d AND name="%s"',
-                                                      $id,
-                                                      $key));
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        : $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE %i=%d AND name=%s',
+                                                        $table,
+                                                        $id_type,
+                                                        $id,
+                                                        $key));
 
                 if ($wpdb->num_rows == 0){
                     if ($id_type != 'none'){
-                        $value_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$table.' WHERE '.$id_type.'=%d AND name=""',
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $value_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE %i=%d AND name=""',
+                                                                    $table,
+                                                                    $id_type,
                                                                     $id));
                     }
 
@@ -375,9 +391,7 @@ if (!class_exists('DOPBSPBackEndSettings')){
                         $value = $value_default;
                     }
                     else{
-                        $value = isset($value_data->$key)
-                                ? $value_data->$key
-                                : $value_default;
+                        $value = $value_data->$key ?? $value_default;
                     }
                 }
                 else{

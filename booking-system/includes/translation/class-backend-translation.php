@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndTranslation')){
-    class DOPBSPBackEndTranslation extends DOPBSPBackEnd{
+    class DOPBSPBackEndTranslation{
         /*
          * Constructor
          */
@@ -52,11 +52,13 @@ if (!class_exists('DOPBSPBackEndTranslation')){
             $table = esc_sql($DOPBSP->tables->translation.'_'.$language);
 
             if ($text_group == 'all'){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $translation = $wpdb->get_results($wpdb->prepare('SELECT t1.* FROM '.$table.' t1 ORDER BY IF (t1.parent_key=%s, t1.translation, (SELECT t2.translation FROM '.$table.' t2 WHERE t1.parent_key=t2.key_data)), IF (t1.parent_key=%s, " ", t1.text_data)  ASC',
                                                                  '',
                                                                  ''));
             }
             else{
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $translation = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$table.' WHERE parent_key=%s OR key_data=%s ORDER BY IF (parent_key="", " ", text_data) ASC',
                                                                  $text_group,
                                                                  $text_group));
@@ -89,7 +91,8 @@ if (!class_exists('DOPBSPBackEndTranslation')){
             /*
              * Exit the function if languages table does not exist.
              */
-            $wpdb->query('SHOW TABLES LIKE "'.$DOPBSP->tables->languages.'"');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->query('SHOW TABLES LIKE "'.esc_sql($DOPBSP->tables->languages).'"');
 
             if ($wpdb->num_rows == 0
                     || !is_admin()){
@@ -100,23 +103,32 @@ if (!class_exists('DOPBSPBackEndTranslation')){
              * Add languages to database.
              */
             if ($lang_code == 'all'){
-                $wpdb->get_row('SELECT * FROM '.$DOPBSP->tables->languages);
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $wpdb->get_row('SELECT * FROM '.esc_sql($DOPBSP->tables->languages));
 
                 if ($wpdb->num_rows == 0){
                     for ($i = 0; $i<count($languages); $i++){
-                        $query_values[] = '(\''.$languages[$i]['name'].'\', \''.$languages[$i]['code'].'\', \''.(strpos(DOPBSP_CONFIG_TRANSLATION_LANGUAGES_TO_INSTALL,
-                                                                                                                        $languages[$i]['code']) !== false
-                                        ? 'true'
-                                        : 'false').'\')';
+                        $query_values[] = '(\''
+                                .esc_sql($languages[$i]['name'])
+                                .'\', \''
+                                .esc_sql($languages[$i]['code'])
+                                .'\', \''
+                                .(esc_sql(str_contains(DOPBSP_CONFIG_TRANSLATION_LANGUAGES_TO_INSTALL,
+                                                       $languages[$i]['code'])
+                                                  ? 'true'
+                                                  : 'false')).'\')';
                     }
 
                     if (count($query_values)>0){
-                        $wpdb->query('INSERT INTO '.$DOPBSP->tables->languages.' (name, code, enabled) VALUES '.implode(', ',
-                                                                                                                        $query_values));
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $wpdb->query('INSERT INTO '.esc_sql($DOPBSP->tables->languages).' (name, code, enabled) VALUES '.implode(', ',
+                                                                                                                                 $query_values));
                     }
                 }
 
-                $languages = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages.' WHERE enabled="true"');
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $languages = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE enabled="true"',
+                                                               $DOPBSP->tables->languages));
 
                 foreach ($languages as $language){
                     $languages_codes[] = $language->code;
@@ -139,13 +151,14 @@ if (!class_exists('DOPBSPBackEndTranslation')){
             for ($i = 0; $i<count($DOPBSP->classes->translation->text); $i++){
                 $text[$DOPBSP->classes->translation->text[$i]['key']] = $i;
                 $DOPBSP->classes->translation->text[$i]['add'] = true;
-                $query_insert[] = '\'%s\'';
+                $query_insert[] = '%s';
                 $query_values[] = $DOPBSP->classes->translation->text[$i]['key'];
                 // array_push($query_values, '\''.$DOPBSP->classes->translation->text[$i]['key'].'\'');
             }
 
-            $current_translation = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$table.' WHERE key_data IN ('.implode(', ',
-                                                                                                                            $query_insert).')',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $current_translation = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.esc_sql($table).' WHERE key_data IN ('.implode(', ',
+                                                                                                                                     $query_insert).')',
                                                                      $query_values));
 
             foreach ($current_translation as $translation_item){
@@ -171,21 +184,21 @@ if (!class_exists('DOPBSPBackEndTranslation')){
                      */
                     if ($DOPBSP->classes->translation->text[$i]['add']){
                         $query_values[] = '(\''
-                                .$DOPBSP->classes->translation->text[$i]['key']
+                                .esc_sql($DOPBSP->classes->translation->text[$i]['key'])
                                 .'\', \''
-                                .$DOPBSP->classes->translation->text[$i]['parent']
+                                .esc_sql($DOPBSP->classes->translation->text[$i]['parent'])
                                 .'\', \''
-                                .$DOPBSP->classes->translation->text[$i]['text']
+                                .esc_sql($DOPBSP->classes->translation->text[$i]['text'])
                                 .'\', \''
-                                .($DOPBSP->classes->translation->text[$i][$languages_codes[$l]] ?? $DOPBSP->classes->translation->text[$i]['text'])
+                                .esc_sql(($DOPBSP->classes->translation->text[$i][$languages_codes[$l]] ?? $DOPBSP->classes->translation->text[$i]['text']))
                                 .'\', \''
-                                .($DOPBSP->classes->translation->text[$i]['location'] ?? 'backend').'\')';
+                                .esc_sql(($DOPBSP->classes->translation->text[$i]['location'] ?? 'backend')).'\')';
                     }
 
                     /*
                      * Set delete query values.
                      */
-                    $query_values_delete[] = '\''.$DOPBSP->classes->translation->text[$i]['key'].'\'';
+                    $query_values_delete[] = '\''.esc_sql($DOPBSP->classes->translation->text[$i]['key']).'\'';
                 }
 
                 $table = esc_sql($DOPBSP->tables->translation.'_'.$languages_codes[$l]);
@@ -194,6 +207,7 @@ if (!class_exists('DOPBSPBackEndTranslation')){
                  * Add new translation.
                  */
                 if (count($query_values)>0){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->query('INSERT INTO '.$table.' (key_data, parent_key, text_data, translation, location) VALUES '.implode(', ',
                                                                                                                                    $query_values));
                 }
@@ -201,14 +215,17 @@ if (!class_exists('DOPBSPBackEndTranslation')){
                 /*
                  * Delete duplicated keys.
                  */
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->query('DELETE t1 FROM '.$table.' t1, '.$table.' t2 WHERE t1.id > t2.id AND t1.key_data = t2.key_data');
 
                 /*
                  * Delete old translation.
                  */
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->query('SELECT * FROM '.$table);
 
                 if ($wpdb->num_rows != count($query_values_delete)){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->query('DELETE FROM '.$table.' WHERE key_data NOT IN ('.implode(', ',
                                                                                           $query_values_delete).')');
                 }
@@ -252,6 +269,7 @@ if (!class_exists('DOPBSPBackEndTranslation')){
 
             $table = esc_sql($DOPBSP->tables->translation.'_'.$DOT->post('language'));
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($table,
                           array('translation' => $value),
                           array('id' => $DOT->post('id',
@@ -281,7 +299,8 @@ if (!class_exists('DOPBSPBackEndTranslation')){
              * End verify nonce.
              */
 
-            $languages = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages);
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $languages = $wpdb->get_results('SELECT * FROM '.esc_sql($DOPBSP->tables->languages));
 
             /*
              * Delete or empty translation tables.
@@ -290,9 +309,11 @@ if (!class_exists('DOPBSPBackEndTranslation')){
                 $table = esc_sql($DOPBSP->tables->translation.'_'.$language->code);
 
                 if ($language->enabled == 'true'){
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->query('TRUNCATE TABLE '.$table);
                 }
                 else{
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->query('DROP TABLE IF EXISTS '.$table);
                 }
             }
@@ -305,6 +326,8 @@ if (!class_exists('DOPBSPBackEndTranslation')){
             if ($DOT->post('ajax_request')){
                 die();
             }
+
+            return true;
         }
     }
 }

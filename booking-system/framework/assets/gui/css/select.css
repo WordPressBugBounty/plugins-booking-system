@@ -2,8 +2,8 @@
  * Title                   : DOT Framework
  * File                    : framework/assets/gui/css/select.css
  * Author                  : Dot on Paper
- * Copyright               : © 2017 Dot on Paper
- * Website                 : https://www.dotonpaper.net
+ * Copyright               : © 2016 Dot on Paper
+ * Website                 : https://dotonpaper.net
  * Description             : DOT select stylesheet.
  */
 
@@ -28,28 +28,41 @@
 .dot-select.dot-select-single .dot-select-select .dot-select-selection{
     color: #acacac;
     float: left;
-    font-size: 13px;
+    font-size: 16px;
     height: 34px;
     line-height: 34px;
     overflow: hidden;
-    padding: 0 0 0 10px;
-    width: calc(100% - 44px);
-    word-break: break-all;
+    padding: 0 10px 0 19px;
+    text-overflow: ellipsis;
+    width: calc(100% - 64px);
+    white-space: nowrap;
     transition: color 300ms linear;
 }
 
 .dot-select.dot-select-single .dot-select-select .dot-select-icon{
     color: #c9c9c9;
     float: right;
+    font-size: 10px;
     line-height: 34px;
     height: 34px;
+    margin: 0 19px 0 0;
     text-align: center;
-    width: 34px;
+    width: 14px;
     transition: color 300ms linear;
 }
 
 .dot-select.dot-select-single .dot-select-select:hover .dot-select-icon{
     color: #464646;
+}
+
+.dot-select.dot-select-single .dot-select-select .dot-select-icon-up,
+.dot-select.dot-select-single .dot-select-select.dot-select-focus .dot-select-icon-down{
+    display: none;
+}
+
+.dot-select.dot-select-single .dot-select-select.dot-select-focus .dot-select-icon-up,
+.dot-select.dot-select-single .dot-select-select .dot-select-icon-down{
+    display: block;
 }
 
 /*
@@ -62,37 +75,46 @@
     display: none;
     list-style: none;
     margin: 2px 0 0 0 !important;
-    max-height: 216px;
+    max-height: 198px;
     padding: 11px 0;
     position: absolute;
-    overflow-y: scroll !important;
+    overflow-y: auto !important;
     overflow-x: hidden;
     width: calc(100% - 2px);
-    z-index: 10000;
+    z-index: 10100;
+}
+
+.dot-select.dot-select-single.dot-select-has-search .dot-select-list{
+    margin: 40px 0 0 0 !important;
 }
 
 .dot-select.dot-select-single .dot-select-list-item{
     background: #ffffff;
     color: #acacac;
     cursor: pointer;
-    font-size: 12px;
+    display: block;
+    font-size: 14px;
     height: 24px;
     line-height: 24px;
     list-style: none;
     overflow: hidden;
     margin: 0 !important;
-    padding: 0 10px;
-    width: calc(100% - 20px);
-    word-break: break-all;
+    padding: 0 9px 0 19px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     transition: background-color 300ms linear, color 300ms linear;
 }
 
-.dot-select.dot-select-single .dot-select-list-item:hover,
-.dot-select.dot-select-single .dot-select-list-item.dot-select-selected{
+.dot-select.dot-select-single .dot-select-list-item:not(.dot-select-list-item-disabled):hover,
+.dot-select.dot-select-single .dot-select-list-item:not(.dot-select-list-item-disabled).dot-select-selected{
     background: #464646;
     color: #ffffff;
-    width: 100%;
 }
+
+.dot-select.dot-select-single .dot-select-list-item.dot-select-list-item-disabled{
+    cursor: default;
+}
+
 /*
  * ***************************************************************************** End single select.
  */
@@ -102,7 +124,6 @@
  */
 .dot-select.dot-select-multiple{
     margin: 0;
-    overflow: hidden;
     width: 100%;
 }
 
@@ -115,8 +136,13 @@
     list-style: none;
     margin: 0 !important;
     max-height: 96px;
-    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
     padding: 11px;
+}
+
+.dot-select.dot-select-multiple:not(.dot-select-disabled) .dot-select-list{
+    overflow-y: auto !important;
 }
 
 .dot-select.dot-select-multiple .dot-select-list-item{
@@ -192,6 +218,7 @@
 .dot-select.dot-select-multiple .dot-select-label:hover{
     color: #464646;
 }
+
 /*
  * ***************************************************************************** End multiple select.
  */
@@ -207,10 +234,6 @@
     cursor: default;
 }
 
-.dot-select.dot-select-multiple.dot-select-disabled .dot-select-list{
-    overflow: hidden;
-}
-
 .dot-select.dot-select-multiple.dot-select-disabled .dot-select-checkbox:hover{
     border: 1px solid #acacac;
     color: #acacac;
@@ -224,6 +247,88 @@
 .dot-select.dot-select-multiple.dot-select-disabled .dot-select-label:hover{
     color: #acacac;
 }
+
 /*
  * ***************************************************************************** End disabled.
+ */
+
+.dot-select .dot-select-hidden{
+    display: none !important;
+}
+
+.dot-select .dot-select-visible{
+    display: block !important;
+}
+
+/*
+ * ***************************************************************************** Begin search.
+ */
+.dot-select .dot-select-search{
+    background: #ffffff;
+    border: 1px solid #c9c9c9;
+    box-sizing: content-box;
+    display: none;
+    height: 24px;
+    margin: 2px 0 0 0 !important;
+    overflow: hidden;
+    padding: 5px 19px;
+    position: absolute;
+    width: calc(100% - 40px);
+}
+
+.dot-select.dot-select-single .dot-select-search{
+    z-index: 10000;
+}
+
+.dot-select.dot-select-multiple .dot-select-search{
+    display: block;
+    margin: 0 0 2px 0 !important;
+    position: relative;
+}
+
+.dot-select .dot-select-search-icon{
+    color: #c9c9c9;
+    display: block;
+    float: left;
+    font-size: 14px;
+    line-height: 24px;
+    margin: 0 20px 0 0;
+    width: 14px;
+}
+
+.dot-select .dot-select-search-input{
+    border: none !important;
+    border-bottom: 1px dashed #c9c9c9 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #acacac;
+    display: block;
+    float: left;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 23px;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: calc(100% - 68px);
+}
+
+.dot-select .dot-select-search-input:focus{
+    outline: none !important;
+}
+
+.dot-select .dot-select-search-reset{
+    color: #c9c9c9;
+    display: none;
+    float: right;
+    font-size: 14px;
+    line-height: 24px;
+    width: 14px;
+}
+
+.dot-select .dot-select-search-reset:hover{
+    color: #464646;
+}
+
+/*
+ * ***************************************************************************** End search.
  */

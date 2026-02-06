@@ -15,25 +15,20 @@
 if (!class_exists('DOPBSPViewsBackEndReservationFees')){
     class DOPBSPViewsBackEndReservationFees extends DOPBSPViewsBackEndReservation{
         /*
-         * Constructor
-         */
-        function __construct(){
-        }
-
-        /*
          * @param args (array): function arguments
          *                      * reservation (object): reservation data
          *                      * settings_calendar (object): calendar settings data
          */
         function template($args = array()){
             global $DOPBSP;
+            global $DOT;
 
             $reservation = $args['reservation'];
             $settings_calendar = $args['settings_calendar'];
             ?>
             <div class="dopbsp-data-module">
                 <div class="dopbsp-data-head">
-                    <h3><?php echo $DOPBSP->text('FEES_FRONT_END_TITLE'); ?></h3>
+                    <h3><?php $DOT->echo($DOPBSP->text('FEES_FRONT_END_TITLE')); ?></h3>
                 </div>
                 <div class="dopbsp-data-body">
                     <?php
@@ -84,7 +79,9 @@ if (!class_exists('DOPBSPViewsBackEndReservationFees')){
                         }
 
                         if ($reservation->fees_price != 0){
-                            echo '<br />';
+                            ?>
+                            <br />
+                            <?php
                             $this->displayData($DOPBSP->text('RESERVATIONS_RESERVATION_PAYMENT_PRICE_CHANGE'),
                                                ($reservation->fees_price>0
                                                        ? '+'
@@ -97,7 +94,9 @@ if (!class_exists('DOPBSPViewsBackEndReservationFees')){
                         }
                     }
                     else{
-                        echo '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_FEES').'</em>';
+                        ?>
+                        <em><?php $DOT->echo($DOPBSP->text('RESERVATIONS_RESERVATION_NO_FEES')); ?></em>
+                        <?php
                     }
                     ?>
                 </div>

@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndReservationsAdd')){
-    class DOPBSPBackEndReservationsAdd extends DOPBSPBackEndReservations{
+    class DOPBSPBackEndReservationsAdd{
         /*
          * Constructor.
          */
@@ -45,8 +45,6 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
              * End verify nonce.
              */
 
-            $data = array();
-
             $id = $DOT->post('calendar_id',
                              'int');
             $language = $DOPBSP->classes->backend_language->get();
@@ -55,7 +53,9 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
                                                                             'calendar');
             $settings_payment = $DOPBSP->classes->backend_settings->values($id,
                                                                            'payment');
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $id));
 
             /*
@@ -68,9 +68,7 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
                                                                       'pluginURL'    => $DOPBSP->paths->url,
                                                                       'maxYear'      => $DOPBSP->classes->backend_calendar->getMaxYear($id),
                                                                       'reinitialize' => false,
-                                                                      'view'         => $settings_calendar->view_only == 'true'
-                                                                              ? true
-                                                                              : false),
+                                                                      'view'         => $settings_calendar->view_only == 'true'),
                                                       'text' => array('addMonth'          => $DOPBSP->text('CALENDARS_CALENDAR_ADD_MONTH_VIEW'),
                                                                       'available'         => $DOPBSP->text('CALENDARS_CALENDAR_AVAILABLE_ONE_TEXT'),
                                                                       'availableMultiple' => $DOPBSP->text('CALENDARS_CALENDAR_AVAILABLE_TEXT'),
@@ -91,16 +89,8 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
                           'days'             => array('data' => array('available'       => $DOPBSP->classes->frontend_calendar->getAvailableDays($settings_calendar->days_available),
                                                                       'first'           => (int)$settings_calendar->days_first,
                                                                       'firstDisplayed'  => $settings_calendar->days_first_displayed,
-                                                                      'morningCheckOut' => $settings_calendar->days_multiple_select == 'false' || $settings_calendar->hours_enabled == 'true'
-                                                                              ? false
-                                                                              : ($settings_calendar->days_morning_check_out == 'true'
-                                                                                      ? true
-                                                                                      : false),
-                                                                      'multipleSelect'  => $settings_calendar->hours_enabled == 'true'
-                                                                              ? false
-                                                                              : ($settings_calendar->days_multiple_select == 'true'
-                                                                                      ? true
-                                                                                      : false)),
+                                                                      'morningCheckOut' => !($settings_calendar->days_multiple_select == 'false' || $settings_calendar->hours_enabled == 'true') && $settings_calendar->days_morning_check_out == 'true',
+                                                                      'multipleSelect'  => !($settings_calendar->hours_enabled == 'true') && $settings_calendar->days_multiple_select == 'true'),
                                                       'text' => array('names'      => array($DOPBSP->text('DAY_SUNDAY'),
                                                                                             $DOPBSP->text('DAY_MONDAY'),
                                                                                             $DOPBSP->text('DAY_TUESDAY'),
@@ -127,32 +117,14 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
                                                                                      $language),
                           'form'             => $DOPBSP->classes->frontend_forms->get($settings_calendar->form,
                                                                                       $language),
-                          'hours'            => array('data' => array('addLastHourToTotalPrice' => $settings_calendar->hours_multiple_select == 'false'
-                                  ? true
-                                  : ($settings_calendar->hours_add_last_hour_to_total_price == 'true' && $settings_calendar->hours_interval_enabled == 'false'
-                                          ? true
-                                          : false),
-                                                                      'ampm'                    => $settings_calendar->hours_ampm == 'true'
-                                                                              ? true
-                                                                              : false,
+                          'hours'            => array('data' => array('addLastHourToTotalPrice' => $settings_calendar->hours_multiple_select == 'false' || $settings_calendar->hours_add_last_hour_to_total_price == 'true' && $settings_calendar->hours_interval_enabled == 'false',
+                                                                      'ampm'                    => $settings_calendar->hours_ampm == 'true',
                                                                       'definitions'             => json_decode($settings_calendar->hours_definitions),
-                                                                      'enabled'                 => $settings_calendar->hours_enabled == 'true'
-                                                                              ? true
-                                                                              : false,
-                                                                      'info'                    => $settings_calendar->hours_info_enabled == 'true'
-                                                                              ? true
-                                                                              : false,
-                                                                      'interval'                => $settings_calendar->hours_interval_enabled == 'true'
-                                                                              ? true
-                                                                              : false,
-                                                                      'interval_autobreak'      => $settings_calendar->hours_interval_enabled == 'false'
-                                                                              ? false
-                                                                              : ($settings_calendar->hours_interval_autobreak_enabled == 'true'
-                                                                                      ? true
-                                                                                      : false),
-                                                                      'multipleSelect'          => $settings_calendar->hours_multiple_select == 'true'
-                                                                              ? true
-                                                                              : false),
+                                                                      'enabled'                 => $settings_calendar->hours_enabled == 'true',
+                                                                      'info'                    => $settings_calendar->hours_info_enabled == 'true',
+                                                                      'interval'                => $settings_calendar->hours_interval_enabled == 'true',
+                                                                      'interval_autobreak'      => !($settings_calendar->hours_interval_enabled == 'false') && $settings_calendar->hours_interval_autobreak_enabled == 'true',
+                                                                      'multipleSelect'          => $settings_calendar->hours_multiple_select == 'true'),
                                                       'text' => array()),
                           'ID'               => $id,
                           'default_schedule' => $calendar->default_availability != ''
@@ -269,7 +241,7 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
                                                                                        $reservation['check_in'],
                                                                                        $reservation['check_out'],
                                                                                        $reservation['no_items'])){
-                            echo 'unavailable';
+                            $DOT->echo('unavailable');
                             die();
                         }
                     }
@@ -279,7 +251,7 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
                                                                                         $reservation['start_hour'],
                                                                                         $reservation['end_hour'],
                                                                                         $reservation['no_items'])){
-                            echo 'unavailable';
+                            $DOT->echo('unavailable');
                             die();
                         }
                     }
@@ -291,7 +263,7 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
 
                     if ($coupon['id'] != 0){
                         if (!$DOPBSP->classes->backend_coupon->validate($coupon['id'])){
-                            echo 'unavailable-coupon';
+                            $DOT->echo('unavailable-coupon');
                             die();
                         }
                     }
@@ -302,7 +274,7 @@ if (!class_exists('DOPBSPBackEndReservationsAdd')){
                  */
                 if (!$DOPBSP->classes->frontend_reservations->validate($calendar_id,
                                                                        $reservation)){
-                    echo 'security';
+                    $DOT->echo('security');
                     die();
                 }
             }

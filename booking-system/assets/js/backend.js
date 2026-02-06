@@ -1,9 +1,9 @@
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.8
 * File                    : assets/js/backend.js
-* File Version            : 1.1.5
+* File Version            : 1.1.4
 * Created / Last Modified : 15 March 2016
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
@@ -31,12 +31,6 @@ var DOPBSPBackEnd = new function(){
         $(document).ready(function(){
             if (typeof DOPBSP_curr_page !== 'undefined'){
                 switch (DOPBSP_curr_page){
-                    case 'Addons':
-                        DOPBSPBackEndAddons.display();
-                        break;
-                    case 'Amenities':
-                        DOPBSPBackEndAmenities.display();
-                        break;
                     case 'Calendars':
                         DOPBSPBackEndCalendars.display();
                         break;
@@ -64,31 +58,19 @@ var DOPBSPBackEnd = new function(){
                     case 'Locations':
                         DOPBSPBackEndLocations.init();
                         break;
-                    case 'Models':
-                        DOPBSPBackEndModels.display();
-                        break;
-                    case 'PRO':
-                        DOPBSPBackEndPRO.display();
-                        break;
                     case 'Reservations':
                         DOPBSPBackEndReservations.display();
                         break;
-                    case 'Reviews':
-                        DOPBSPBackEndReviews.display();
-                        break;
                     case 'Rules':
                         DOPBSPBackEndRules.display();
+                        break;
+                    case 'Search':
+                        DOPBSPBackEndSearches.display();
                         break;
                     case 'Settings':
                         break;
                     case 'Smses':
                         DOPBSPBackEndSmses.display();
-                        break;
-                    case 'Templates':
-                        DOPBSPBackEndTemplates.display();
-                        break;
-                    case 'Themes':
-                        DOPBSPBackEndThemes.display();
                         break;
                     case 'Tools':
                         DOPBSPBackEndTools.display();

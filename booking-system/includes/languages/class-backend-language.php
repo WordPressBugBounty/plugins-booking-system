@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndLanguage')){
-    class DOPBSPBackEndLanguage extends DOPBSPBackEndLanguages{
+    class DOPBSPBackEndLanguage{
         /*
          * Constructor
          */
@@ -92,6 +92,7 @@ if (!class_exists('DOPBSPBackEndLanguage')){
             $db_config = $DOPBSP->classes->database->db_config;
             $db_collation = $DOPBSP->classes->database->db_collation;
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->languages,
                           array('enabled' => $value),
                           array('code' => $language));
@@ -154,16 +155,18 @@ if (!class_exists('DOPBSPBackEndLanguage')){
                     $language = DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE;
                 }
                 else{
-                    $language_status = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->languages.' WHERE code="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $language_status = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE code=%s',
+                                                                     $DOPBSP->tables->languages,
                                                                      $language));
 
-                    if ($language_status->enabled == 'false'){
-                        add_user_meta($user_id,
-                                      'DOPBSP_backend_language',
-                                      DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE,
-                                      true);
-                        $language = DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE;
-                    }
+//                    if ($language_status->enabled == 'false'){
+//                        add_user_meta($user_id,
+//                                      'DOPBSP_backend_language',
+//                                      DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE,
+//                                      true);
+//                        $language = DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE;
+//                    }
                 }
             }
             else{

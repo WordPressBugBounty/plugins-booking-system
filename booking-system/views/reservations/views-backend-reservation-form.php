@@ -15,25 +15,24 @@
 if (!class_exists('DOPBSPViewsBackEndReservationForm')){
     class DOPBSPViewsBackEndReservationForm extends DOPBSPViewsBackEndReservation{
         /*
-         * Constructor
-         */
-        function __construct(){
-        }
-
-        /*
          * @param args (array): function arguments
          *                      * reservation (object): reservation data
          */
         function template($args = array()){
             global $DOPBSP;
+            global $DOT;
 
             $reservation = $args['reservation'];
             ?>
             <div class="dopbsp-data-module">
                 <div class="dopbsp-reservation-form dopbsp-data-head">
-                    <h3><?php echo $DOPBSP->text('FORMS_FRONT_END_TITLE'); ?></h3>
-                    <span id="dopbsp-reservation-form-<?php echo $reservation->id; ?>">Edit</span>
-                    <span id="dopbsp-reservation-form-<?php echo $reservation->id; ?>-save" class="dopbsp-hidden">Save</span>
+                    <h3><?php $DOT->echo($DOPBSP->text('FORMS_FRONT_END_TITLE')); ?></h3>
+                    <span id="<?php $DOT->echo('dopbsp-reservation-form-'.$reservation->id,
+                                               'attr'); ?>">Edit
+                    </span>
+                    <span id="<?php $DOT->echo('dopbsp-reservation-form-'.$reservation->id.'-save',
+                                               'attr'); ?>" class="dopbsp-hidden">Save
+                    </span>
                 </div>
                 <div class="dopbsp-data-body">
                     <?php
@@ -49,7 +48,8 @@ if (!class_exists('DOPBSPViewsBackEndReservationForm')){
                                                                  'UTF-8');
 
                         ?>
-                        <input type="hidden" id="dopbsp-reservation-form-<?php echo $reservation->id; ?>-data" value='<?php echo $reservation->form; ?>' />
+                        <input type="hidden" id="<?php $DOT->echo('dopbsp-reservation-form-'.$reservation->id.'-data',
+                                                                  'attr'); ?>" value='<?php $DOT->echo($reservation->form); ?>' />
                         <?php
                         $form = json_decode($reservation->form);
 
@@ -102,7 +102,9 @@ if (!class_exists('DOPBSPViewsBackEndReservationForm')){
                         }
                     }
                     else{
-                        echo '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM').'</em>';
+                        ?>
+                        <em><?php $DOT->echo($DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM')); ?></em>
+                        <?php
                     }
                     ?>
                 </div>
@@ -116,12 +118,13 @@ if (!class_exists('DOPBSPViewsBackEndReservationForm')){
          */
         function templatePrint($args = array()){
             global $DOPBSP;
+            global $DOT;
 
             $reservation = $args['reservation'];
             ?>
             <div class="dopbsp-data-module">
                 <div class="dopbsp-reservation-form dopbsp-data-head">
-                    <h3><?php echo $DOPBSP->text('FORMS_FRONT_END_TITLE'); ?></h3>
+                    <h3><?php $DOT->echo($DOPBSP->text('FORMS_FRONT_END_TITLE')); ?></h3>
                 </div>
                 <div class="dopbsp-data-body">
                     <?php
@@ -130,13 +133,12 @@ if (!class_exists('DOPBSPViewsBackEndReservationForm')){
                                                                  'ISO-8859-1',
                                                                  'UTF-8');
                         ?>
-                        <input type="hidden" id="dopbsp-reservation-form-<?php echo $reservation->id; ?>-data" value='<?php echo $reservation->form; ?>' />
+                        <input type="hidden" id="<?php $DOT->echo('dopbsp-reservation-form-'.$reservation->id.'-data',
+                                                                  'attr'); ?>" value='<?php $DOT->echo($reservation->form); ?>' />
                         <?php
                         $form = json_decode($reservation->form);
 
                         for ($i = 0; $i<count($form); $i++){
-                            $is_email = false;
-
                             if (!is_array($form[$i])){
                                 $form_item = get_object_vars($form[$i]);
                             }
@@ -176,7 +178,9 @@ if (!class_exists('DOPBSPViewsBackEndReservationForm')){
                         }
                     }
                     else{
-                        echo '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM').'</em>';
+                        ?>
+                        <em><?php $DOT->echo($DOPBSP->text('RESERVATIONS_RESERVATION_NO_FORM')); ?></em>
+                        <?php
                     }
                     ?>
                 </div>

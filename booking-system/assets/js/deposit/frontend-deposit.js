@@ -1,6 +1,6 @@
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.2
 * File                    : assets/js/deposit/frontend-deposit.js
 * File Version            : 1.0
@@ -8,7 +8,7 @@
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
-* Description             : Front end deposit JavaScript class.
+* Description             : Frontend end deposit JavaScript class.
 */
 
 var DOPBSPFrontEndDeposit = new function(){
@@ -47,7 +47,7 @@ var DOPBSPFrontEndDeposit = new function(){
                 return deposit;
             }
         }
-
+        
         if (dataDeposit['deposit'] !== 0){
             deposit['price'] = dataDeposit['deposit'];
             deposit['price_type'] = dataDeposit['type'];

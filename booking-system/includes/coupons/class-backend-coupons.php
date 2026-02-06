@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndCoupons')){
-    class DOPBSPBackEndCoupons extends DOPBSPBackEnd{
+    class DOPBSPBackEndCoupons{
         /*
          * Constructor
          */
@@ -58,36 +58,38 @@ if (!class_exists('DOPBSPBackEndCoupons')){
             $user_roles = array_values(wp_get_current_user()->roles);
 
             if ($user_roles[0] == 'administrator'){
-                $coupons = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->coupons.' ORDER BY id DESC');
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $coupons = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                                             $DOPBSP->tables->coupons));
             }
             else{
-                $coupons = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->coupons.' WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $coupons = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                                                             $DOPBSP->tables->coupons,
                                                              wp_get_current_user()->ID));
             }
 
             /*
              * Create coupons list HTML.
              */
-            array_push($html,
-                       '<ul>');
+            $html[] = '<ul>';
 
             if ($wpdb->num_rows != 0){
                 if ($coupons){
                     foreach ($coupons as $coupon){
-                        array_push($html,
-                                   $this->listItem($coupon));
+                        $html[] = $this->listItem($coupon);
                     }
                 }
             }
             else{
-                array_push($html,
-                           '<li class="dopbsp-no-data">'.$DOPBSP->text('COUPONS_NO_COUPONS').'</li>');
+                $html[] = '<li class="dopbsp-no-data">'.$DOT->escape($DOPBSP->text('COUPONS_NO_COUPONS')).'</li>';
             }
-            array_push($html,
-                       '</ul>');
+            $html[] = '</ul>';
 
-            echo implode('',
-                         $html);
+            $DOT->echo(implode('',
+                               $html),
+                       'content',
+                       $DOT->models->allowed_html->items());
 
             die();
         }
@@ -101,45 +103,37 @@ if (!class_exists('DOPBSPBackEndCoupons')){
          */
         function listItem($coupon){
             global $DOPBSP;
+            global $DOT;
 
             $html = array();
             $user = get_userdata($coupon->user_id); // Get data about the user who created the coupons.
 
-            array_push($html,
-                       '<li class="dopbsp-item" id="DOPBSP-coupon-ID-'.$coupon->id.'" onclick="DOPBSPBackEndCoupon.display('.$coupon->id.')">');
-            array_push($html,
-                       ' <div class="dopbsp-header">');
+            $html[] = '<li class="dopbsp-item" id="'.$DOT->escape('DOPBSP-coupon-ID-'.$coupon->id,
+                                                                  'attr').'" onclick="DOPBSPBackEndCoupon.display('.$DOT->escape($coupon->id,
+                                                                                                                                 'attr').')">';
+            $html[] = ' <div class="dopbsp-header">';
 
             /*
              * Display coupon ID.
              */
-            array_push($html,
-                       '     <span class="dopbsp-id">ID: '.$coupon->id.'</span>');
+            $html[] = '     <span class="dopbsp-id">ID: '.$DOT->escape($coupon->id).'</span>';
 
             /*
              * Display data about the user who created the coupon.
              */
             if ($coupon->user_id>0){
-                array_push($html,
-                           '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($coupon->user_id,
-                                                                                             17));
-                array_push($html,
-                           '         <span class="dopbsp-info">'.$DOPBSP->text('COUPONS_CREATED_BY').': '.$user->data->display_name.'</span>');
-                array_push($html,
-                           '         <br class="dopbsp-clear" />');
-                array_push($html,
-                           '     </span>');
+                $html[] = '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($coupon->user_id,
+                                                                                            17);
+                $html[] = '         <span class="dopbsp-info">'.$DOT->escape($DOPBSP->text('COUPONS_CREATED_BY').': '.$user->data->display_name).'</span>';
+                $html[] = '         <br class="dopbsp-clear" />';
+                $html[] = '     </span>';
             }
-            array_push($html,
-                       '     <br class="dopbsp-clear" />');
-            array_push($html,
-                       ' </div>');
-            array_push($html,
-                       ' <div class="dopbsp-name">'.($coupon->name == ''
-                               ? '&nbsp;'
-                               : $coupon->name).'</div>');
-            array_push($html,
-                       '</li>');
+            $html[] = '     <br class="dopbsp-clear" />';
+            $html[] = ' </div>';
+            $html[] = ' <div class="dopbsp-name">'.$DOT->escape($coupon->name == ''
+                                                                        ? '&nbsp;'
+                                                                        : $coupon->name).'</div>';
+            $html[] = '</li>';
 
             return implode('',
                            $html);

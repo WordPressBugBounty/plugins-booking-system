@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndExtraGroupItems')){
-    class DOPBSPBackEndExtraGroupItems extends DOPBSPBackEndExtraGroup{
+    class DOPBSPBackEndExtraGroupItems{
         /*
          * Constructor
          */
@@ -49,6 +49,7 @@ if (!class_exists('DOPBSPBackEndExtraGroupItems')){
 
             foreach ($ids as $id){
                 $i++;
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->extras_groups_items,
                               array('position' => $i),
                               array('id' => $id));

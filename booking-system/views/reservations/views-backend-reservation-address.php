@@ -15,12 +15,6 @@
 if (!class_exists('DOPBSPViewsBackEndReservationAddress')){
     class DOPBSPViewsBackEndReservationAddress extends DOPBSPViewsBackEndReservation{
         /*
-         * Constructor
-         */
-        function __construct(){
-        }
-
-        /*
          * @param args (array): function arguments
          *                      * reservation (object): reservation data
          *                      * settings_payment (object): payment settings data
@@ -28,6 +22,7 @@ if (!class_exists('DOPBSPViewsBackEndReservationAddress')){
          */
         function template($args = array()){
             global $DOPBSP;
+            global $DOT;
 
             $fields = array('first_name',
                             'last_name',
@@ -51,13 +46,15 @@ if (!class_exists('DOPBSPViewsBackEndReservationAddress')){
             ?>
             <div class="dopbsp-data-module">
                 <div class="dopbsp-data-head">
-                    <h3><?php echo $DOPBSP->text('ORDER_ADDRESS_'.strtoupper($type)); ?></h3>
+                    <h3><?php $DOT->echo($DOPBSP->text('ORDER_ADDRESS_'.strtoupper($type))); ?></h3>
                 </div>
                 <div class="dopbsp-data-body">
                     <?php
                     if ($type == 'shipping'
                             && $reservation_address == 'billing_address'){
-                        echo '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_ADDRESS_SHIPPING_COPY').'</em>';
+                        ?>
+                        <em><?php $DOT->echo($DOPBSP->text('RESERVATIONS_RESERVATION_ADDRESS_SHIPPING_COPY')); ?></em>
+                        <?php
                     }
                     elseif ($reservation_address != ''){
                         $address = json_decode(mb_convert_encoding($reservation_address,
@@ -83,7 +80,9 @@ if (!class_exists('DOPBSPViewsBackEndReservationAddress')){
                         }
                     }
                     else{
-                        echo '<em>'.$DOPBSP->text('RESERVATIONS_RESERVATION_NO_ADDRESS_'.strtoupper($type)).'</em>';
+                        ?>
+                        <em><?php $DOT->echo($DOPBSP->text('RESERVATIONS_RESERVATION_NO_ADDRESS_'.strtoupper($type))); ?></em>
+                        <?php
                     }
                     ?>
                 </div>

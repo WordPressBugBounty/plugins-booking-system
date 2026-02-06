@@ -1,11 +1,11 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.2
 * File                    : addons/woocommerce/dopbsp-woocommerce.php
 * File Version            : 1.0
-* Created / Last Modified : 04 December 2015
+* Created / Last Modified : 24 November 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -43,15 +43,13 @@ if (!class_exists('DOPBSPWooCommerce')){
         /*
          * Public variables.
          */
-        public $classes;
-        public $tables;
+        public stdClass $classes;
+        public stdClass $tables;
 
         /*
          * Constructor
          */
         function __construct(){
-            global $DOT;
-
             $this->classes = new stdClass;
             $this->tables = new stdClass;
 
@@ -61,11 +59,7 @@ if (!class_exists('DOPBSPWooCommerce')){
              * Initialize classes.
              */
             $this->initClasses();
-
-            //                if (!is_admin()
-            //                        || $DOT->post('dopbsp_frontend_ajax_request')){
             $this->initFrontEndAJAX();
-            //                }
         }
 
         /*
@@ -155,7 +149,9 @@ if (!class_exists('DOPBSPWooCommerce')){
         function clean(){
             global $wpdb;
 
-            $wpdb->query('SELECT * FROM '.$this->tables->woocommerce.' WHERE date_created < DATE_SUB(CURDATE(),INTERVAL 2 MONTH)');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->query($wpdb->prepare('SELECT * FROM %i WHERE date_created < DATE_SUB(CURDATE(),INTERVAL 2 MONTH)',
+                                        $this->tables->woocommerce));
         }
     }
 

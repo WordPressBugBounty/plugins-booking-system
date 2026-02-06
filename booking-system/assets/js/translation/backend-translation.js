@@ -55,10 +55,7 @@ var DOPBSPBackEndTranslation = new function(){
         $('#DOPBSP-translation-search')
         .val('');
         $('#DOPBSP-translation-check')
-        .css('display',
-             DOPBSP_DEVELOPMENT_MODE
-                     ? 'block'
-                     : 'none');
+        .css('display', 'none');
 
         DOPBSPBackEnd.toggleMessages('active',
                                      DOPBSPBackEnd.text('MESSAGES_LOADING'));

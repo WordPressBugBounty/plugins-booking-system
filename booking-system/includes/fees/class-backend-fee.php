@@ -13,9 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndFee')){
-    class DOPBSPBackEndFee extends DOPBSPBackEndFees{
-        private $views;
-
+    class DOPBSPBackEndFee{
         /*
          * Constructor
          */
@@ -40,12 +38,13 @@ if (!class_exists('DOPBSPBackEndFee')){
                 return false;
             }
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->fees,
                           array('user_id'     => wp_get_current_user()->ID,
                                 'name'        => $DOPBSP->text('FEES_ADD_FEE_NAME'),
                                 'translation' => $DOPBSP->classes->translation->encodeJSON('FEES_ADD_FEE_LABEL')));
 
-            echo $DOPBSP->classes->backend_fees->display();
+            $DOPBSP->classes->backend_fees->display();
 
             die();
         }
@@ -122,7 +121,9 @@ if (!class_exists('DOPBSPBackEndFee')){
                                              'UTF-8',
                                              'ISO-8859-1');
 
-                $fee_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->fees.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $fee_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                          $DOPBSP->tables->fees,
                                                           $id));
 
                 $translation = json_decode($fee_data->translation);
@@ -132,6 +133,7 @@ if (!class_exists('DOPBSPBackEndFee')){
                 $field = 'translation';
             }
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->fees,
                           array($field => $value),
                           array('id' => $id));
@@ -167,11 +169,15 @@ if (!class_exists('DOPBSPBackEndFee')){
             /*
              * Delete fee.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->fees,
                           array('id' => $id));
-            $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->fees.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->fees));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }

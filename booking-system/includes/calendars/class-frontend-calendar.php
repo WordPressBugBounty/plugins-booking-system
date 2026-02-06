@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPFrontEndCalendar')){
-    class DOPBSPFrontEndCalendar extends DOPBSPFrontEnd{
+    class DOPBSPFrontEndCalendar{
         /*
          * Constructor.
          */
@@ -36,14 +36,20 @@ if (!class_exists('DOPBSPFrontEndCalendar')){
             /*
              * Do not display anything if the shortcode is invalid.
              */
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $id));
             if ($wpdb->num_rows == 0){
                 return false;
             }
-            $referral_id = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->settings.' WHERE name=%s',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $referral_id = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE name=%s',
+                                                         $DOPBSP->tables->settings,
                                                          'referral_id'));
-            $referral_display = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->settings.' WHERE name=%s',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $referral_display = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE name=%s',
+                                                              $DOPBSP->tables->settings,
                                                               'referral_display'));
 
             // HOOK (dopbsp_action_calendar_init_before) ********************************* Add action before calendar init.
@@ -165,7 +171,9 @@ if (!class_exists('DOPBSPFrontEndCalendar')){
                 date_default_timezone_set($settings_calendar->timezone);
             }
 
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $id));
 
             /*

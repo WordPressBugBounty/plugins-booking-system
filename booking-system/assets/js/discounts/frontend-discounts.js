@@ -21,13 +21,13 @@ var DOPBSPFrontEndDiscounts = new function(){
 
     /*
      * Get discount data.
-     *
+     * 
      * @param ID (Number): calendar ID
      * @param ciDay (String): check in day
      * @param ciDay (String): check in day
      * @param startHour (String): start hour
      * @param endHour (String): start hour
-     *
+     * 
      * @retun discount data
      */
     this.get = function(ID,
@@ -154,7 +154,7 @@ var DOPBSPFrontEndDiscounts = new function(){
 
     /*
      * Get discount value.
-     *
+     * 
      * @param ID (Number): calendar ID
      * @param discount (Object): discount data
      * @param reservationPrice (Number): reservation price
@@ -164,7 +164,7 @@ var DOPBSPFrontEndDiscounts = new function(){
      * @param startHour (String): start hour
      * @param endHour (String): start hour
      * @param noItems (Number): number of reserved items
-     *
+     * 
      * @retun discount price value
      */
     this.getPrice = function(ID,
@@ -225,7 +225,7 @@ var DOPBSPFrontEndDiscounts = new function(){
 
     /*
      * Set discount details.
-     *
+     * 
      * @param ID (Number): calendar ID
      * @param discount (Object): discount data
      * @param reservationPrice (Number): reservation price
@@ -235,7 +235,7 @@ var DOPBSPFrontEndDiscounts = new function(){
      * @param startHour (String): start hour
      * @param endHour (String): start hour
      * @param noItems (Number): number of reserved items
-     *
+     * 
      * @retun HTML
      */
     this.set = function(ID,

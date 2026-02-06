@@ -39,7 +39,6 @@ if (!class_exists('DOPBSPDatabase')){
         private float $db_version_forms_select_options = 1.0;
         private float $db_version_languages = 1.0;
         private float $db_version_locations = 1.0;
-        private float $db_version_models = 1.0;
         private float $db_version_reservations = 1.02;
         private float $db_version_rules = 1.0;
         private float $db_version_searches = 1.0;
@@ -201,7 +200,6 @@ if (!class_exists('DOPBSPDatabase')){
                 $current_db_version_forms_select_options = get_option('DOPBSP_db_version_forms_select_options');
                 $current_db_version_languages = get_option('DOPBSP_db_version_languages');
                 $current_db_version_locations = get_option('DOPBSP_db_version_locations');
-                $current_db_version_models = get_option('DOPBSP_db_version_models');
                 $current_db_version_reservations = get_option('DOPBSP_db_version_reservations');
                 $current_db_version_rules = get_option('DOPBSP_db_version_rules');
                 $current_db_version_searches = get_option('DOPBSP_db_version_searches');
@@ -536,21 +534,6 @@ if (!class_exists('DOPBSPDatabase')){
                                         );";
 
                 /*
-                 * Models table.
-                 */
-                $sql_models = "CREATE TABLE ".$DOPBSP->tables->models." (
-                                            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-                                            user_id BIGINT UNSIGNED DEFAULT ".$this->db_config->models['user_id']." NOT NULL,
-                                            name VARCHAR(128) DEFAULT '".$this->db_config->models['name']."' COLLATE ".$this->db_collation." NOT NULL,
-                                            enabled VARCHAR(6) DEFAULT '".$this->db_config->models['enabled']."' COLLATE ".$this->db_collation." NOT NULL,
-				            multiple_calendars VARCHAR(6) DEFAULT '".$this->db_config->models['multiple_calendars']."' COLLATE ".$this->db_collation." NOT NULL,
-                                            translation TEXT COLLATE ".$this->db_collation." NOT NULL,
-                                            translation_calendar TEXT COLLATE ".$this->db_collation." NOT NULL,
-                                            UNIQUE KEY id (id),
-                                            KEY user_id (user_id)
-                                        );";
-
-                /*
                  * Reservations table.
                  */
                 $sql_reservations = "CREATE TABLE ".$DOPBSP->tables->reservations." (
@@ -802,9 +785,6 @@ if (!class_exists('DOPBSPDatabase')){
                 $this->db_version_locations != $current_db_version_locations
                         ? dbDelta($sql_locations)
                         : '';
-                $this->db_version_models != $current_db_version_models
-                        ? dbDelta($sql_models)
-                        : '';
                 $this->db_version_reservations != $current_db_version_reservations
                         ? dbDelta($sql_reservations)
                         : '';
@@ -991,12 +971,6 @@ if (!class_exists('DOPBSPDatabase')){
                         :
                         update_option('DOPBSP_db_version_locations',
                                       $this->db_version_locations);
-                $current_db_version_models == ''
-                        ? add_option('DOPBSP_db_version_models',
-                                     $this->db_version_models)
-                        :
-                        update_option('DOPBSP_db_version_models',
-                                      $this->db_version_models);
                 $current_db_version_reservations == ''
                         ? add_option('DOPBSP_db_version_reservations',
                                      $this->db_version_reservations)

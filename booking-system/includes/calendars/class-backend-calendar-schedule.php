@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndCalendarSchedule')){
-    class DOPBSPBackEndCalendarSchedule extends DOPBSPBackEndCalendar{
+    class DOPBSPBackEndCalendarSchedule{
         /*
          * Constructor
          */
@@ -33,11 +33,8 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
          * @return schedule JSON
          */
         function get($args = array()){
-            global $wpdb;
             global $DOPBSP;
             global $DOT;
-
-            $schedule = array();
 
             $calendar_id = !empty($args)
                     ? $args['calendar_id']
@@ -46,10 +43,6 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $year = !empty($args)
                     ? $args['year']
                     : $DOT->post('year',
-                                 'int');
-            $firstYear = !empty($args)
-                    ? $args['firstYear']
-                    : $DOT->post('firstYear',
                                  'int');
 
             $year = $year == ''
@@ -69,16 +62,12 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                 date_default_timezone_set($settings_calendar->timezone);
             }
 
-            //                if($year == date('Y')) {
-            //                    // Sync with iCal
-            //                    $this->sync($calendar_id);
-            //                }
-
             $schedule = $DOT->models->calendar_schedule->get($calendar_id,
                                                              $year);
 
             if (count($schedule)>0){
-                echo json_encode($schedule);
+                $DOT->echo($schedule,
+                           'json');
             }
 
             die();
@@ -111,11 +100,10 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             }
             // Google Calendar Sync
             if ($settings_calendar->google_enabled == 'true'){
-                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
-                                                          $calendar_id));
-                //                $google_update = (strtotime(date('Y-m-d H:i:s'))-strtotime($calendar->last_update_google))>=$settings_calendar->google_sync_time
-                //                        ? 'true'
-                //                        : 'false';
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                              $DOPBSP->tables->calendars,
+                                              $calendar_id));
                 $google_update = 'true';
 
                 if ($adding_reservation){
@@ -124,15 +112,15 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
 
                 if ($google_update == 'true'){
                     // Update Google
-                    $current_date = date('Y-m-d');
 
                     $events = $DOT->models->google_calendar->getAll($calendar_id);
 
                     if (!empty($events)){
                         // Remove deleted events from Google Calendar.
 
-                        $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM '
-                                                                          .$DOPBSP->tables->reservations.' WHERE calendar_id=%d AND reservation_from="google" and status="approved"',
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND reservation_from="google" and status="approved"',
+                                                                          $DOPBSP->tables->reservations,
                                                                           $calendar_id));
 
                         foreach ($reservations as $reservation){
@@ -192,12 +180,14 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                             }
                             if (!$found){
                                 $DOPBSP->classes->backend_calendar_schedule->setCanceled($reservation->id);
+                                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                                 $wpdb->delete($DOPBSP->tables->reservations,
                                               array('id' => $reservation->id));
                             }
                         }
 
                         // Save last update time
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->update($DOPBSP->tables->calendars,
                                       array('last_update_google' => date('Y-m-d H:i:s')),
                                       array('id' => $calendar_id));
@@ -286,7 +276,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             // Airbnb Sync
             if ($settings_calendar->airbnb_enabled == 'true'
                     && $settings_calendar->airbnb_feed_url != ''){
-                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                          $DOPBSP->tables->calendars,
                                                           $calendar_id));
                 $airbnb_update = (strtotime(date('Y-m-d H:i:s'))-strtotime($calendar->last_update_airbnb))>=$settings_calendar->airbnb_sync_time
                         ? 'true'
@@ -371,6 +363,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                                                       '',
                                                                       'airbnb');
                         // Save last update time
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->update($DOPBSP->tables->calendars,
                                       array('last_update_airbnb' => date('Y-m-d H:i:s')),
                                       array('id' => $calendar_id));
@@ -387,7 +380,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             global $DOPBSP;
 
             // delete deleted events from airbnb
-            $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE calendar_id=%d AND reservation_from="%s" AND status="%s"',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND reservation_from=%s AND status=%s',
+                                                              $DOPBSP->tables->reservations,
                                                               $calendar_id,
                                                               $source,
                                                               'approved'));
@@ -418,6 +413,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                 }
                 if (!$found){
                     $DOPBSP->classes->backend_calendar_schedule->setCanceled($reservation->id);
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->delete($DOPBSP->tables->reservations,
                                   array('id' => $reservation->id));
                 }
@@ -462,7 +458,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             if ($default_availability == 'false'){
                 $days = array();
                 $query_insert = array();
-                $query_insert_values = array();
+                $query_insert_values = array($DOPBSP->tables->days);
                 $schedule = (array)$schedule;
 
                 /*
@@ -474,12 +470,13 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     $min_available = 0;
 
                     $day = key($schedule);
-                    array_push($days,
-                               $day);
+                    $days[] = $day;
                     $day_items = explode('-',
                                          $day);
 
-                    $control_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $control_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                                      $DOPBSP->tables->days,
                                                                       $id,
                                                                       $day));
 
@@ -497,12 +494,10 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                     : (float)$hour->available;
 
                             if ($hour->price != '0'){
-                                $price_min = $price<$price_min
-                                        ? $price
-                                        : $price_min;
-                                $price_max = $price>$price_max
-                                        ? $price
-                                        : $price_max;
+                                $price_min = min($price,
+                                                 $price_min);
+                                $price_max = max($price,
+                                                 $price_max);
                             }
 
                             if ($hour->available != '0'){
@@ -527,6 +522,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     }
 
                     if ($wpdb->num_rows != 0){
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->update($DOPBSP->tables->days,
                                       array('data'          => json_encode($data),
                                             'min_available' => $min_available,
@@ -536,8 +532,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                             'day'         => $day));
                     }
                     else{
-                        array_push($query_insert,
-                                   '(\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')');
+                        $query_insert[] = '(\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')';
                         array_push($query_insert_values,
                                    $id.'_'.$day,
                                    $id,
@@ -547,18 +542,15 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                    $min_available,
                                    $price_min,
                                    $price_max);
-                        //                        array_push($query_insert_values,
-                        //                                    '(\''.$id.'_'.$day.'\', \''.$id.'\', \''.$day.'\', \''.$day_items[0].'\', \''.json_encode($data).'\', \''.$min_available.'\', \''.$price_min.'\', \''.$price_max.'\')');
                     }
                     next($schedule);
                 }
 
                 if (count($query_insert_values)>0){
-                    $wpdb->query($wpdb->prepare('INSERT INTO '.$DOPBSP->tables->days.' (unique_key, calendar_id, day, year, data, min_available, price_min, price_max) VALUES '.implode(', ',
-                                                                                                                                                                                        $query_insert),
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $wpdb->query($wpdb->prepare('INSERT INTO %i (unique_key, calendar_id, day, year, data, min_available, price_min, price_max) VALUES '.implode(', ',
+                                                                                                                                                                 $query_insert),
                                                 $query_insert_values));
-                    //                    $wpdb->query('INSERT INTO '.$DOPBSP->tables->days.' (unique_key, calendar_id, day, year, data, min_available, price_min, price_max) VALUES '.implode(', ',
-                    //                                                                                                                                                                         $query_insert_values));
                 }
 
                 $this->clean();
@@ -590,7 +582,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $schedule = array();
             $selectedHours = array();
 
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $calendar_id));
 
             $default_schedule = $calendar->default_availability != ''
@@ -609,7 +603,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $default_schedule = json_decode($default_schedule);
             $default_schedule = (array)$default_schedule;
 
-            $day_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $day_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                      $DOPBSP->tables->days,
                                                       $calendar_id,
                                                       $day));
             if ($wpdb->num_rows != 0){
@@ -668,7 +664,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $selectedDays = array();
             $schedule = array();
 
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $calendar_id));
 
             $settings_calendar = $DOPBSP->classes->backend_settings->values($calendar_id,
@@ -690,7 +688,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $default_schedule = json_decode($default_schedule);
             $default_schedule = (array)$default_schedule;
 
-            $day_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $day_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                      $DOPBSP->tables->days,
                                                       $calendar_id,
                                                       $day));
             if ($wpdb->num_rows != 0){
@@ -796,14 +796,18 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $selectedDays = array();
             $schedule = array();
 
-            $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d',
+                                                      $DOPBSP->tables->days,
                                                       $calendar_id));
             foreach ($days as $day):
                 $schedule[$day->day] = json_decode($day->data);
                 $schedule[$day->day] = (array)$schedule[$day->day];
             endforeach;
 
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $calendar_id));
 
             $default_availability = $calendar->default_availability;
@@ -878,7 +882,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $new_info_info = new stdClass;
             $new_info_body = new stdClass;
 
-            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                         $DOPBSP->tables->reservations,
                                                          $reservation_id));
 
             $settings_calendar = $DOPBSP->classes->backend_settings->values($reservation->calendar_id,
@@ -905,19 +911,25 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
              * Select days to be updated.
              */
             if ($reservation->check_out == ''){
-                $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                     $DOPBSP->tables->days,
                                                      $reservation->calendar_id,
                                                      $reservation->check_in));
             }
             else{
                 if ($settings_calendar->days_morning_check_out == 'true'){
-                    $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day>="%s" AND day<"%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day>=%s AND day<%s',
+                                                              $DOPBSP->tables->days,
                                                               $reservation->calendar_id,
                                                               $reservation->check_in,
                                                               $reservation->check_out));
                 }
                 else{
-                    $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day>="%s" AND day<="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day>=%s AND day<=%s',
+                                                              $DOPBSP->tables->days,
                                                               $reservation->calendar_id,
                                                               $reservation->check_in,
                                                               $reservation->check_out));
@@ -967,6 +979,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                $new_info_body);
                 }
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
@@ -1012,6 +1025,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                         array_push($data->info_body,
                                    $new_info_body);
                     }
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->update($DOPBSP->tables->days,
                                   array('data' => json_encode($data)),
                                   array('calendar_id' => $reservation->calendar_id,
@@ -1063,6 +1077,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                 }
 
                 $data->hours->$start_hour = $hour;
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
@@ -1137,6 +1152,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     }
                 }
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
@@ -1162,7 +1178,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             global $wpdb;
             global $DOPBSP;
 
-            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->reservations.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                         $DOPBSP->tables->reservations,
                                                          $reservation_id));
             $settings_calendar = $DOPBSP->classes->backend_settings->values($reservation->calendar_id,
                                                                             'calendar');
@@ -1183,19 +1201,25 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
              * Select days to be updated.
              */
             if ($reservation->check_out == ''){
-                $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                     $DOPBSP->tables->days,
                                                      $reservation->calendar_id,
                                                      $reservation->check_in));
             }
             else{
                 if ($settings_calendar->days_morning_check_out == 'true'){
-                    $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day>="%s" AND day<"%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day>=%s AND day<%s',
+                                                              $DOPBSP->tables->days,
                                                               $reservation->calendar_id,
                                                               $reservation->check_in,
                                                               $reservation->check_out));
                 }
                 else{
-                    $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day>="%s" AND day<="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $days = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day>=%s AND day<=%s',
+                                                              $DOPBSP->tables->days,
                                                               $reservation->calendar_id,
                                                               $reservation->check_in,
                                                               $reservation->check_out));
@@ -1227,14 +1251,11 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     }
                 }
                 $data->info_info = $this->deleteFormInfo($reservation_id,
-                                                         isset($data->info_info)
-                                                                 ? $data->info_info
-                                                                 : array());
+                                                         $data->info_info ?? array());
                 $data->info_body = $this->deleteFormInfo($reservation_id,
-                                                         isset($data->info_body)
-                                                                 ? $data->info_body
-                                                                 : array());
+                                                         $data->info_body ?? array());
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
@@ -1265,14 +1286,11 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                         }
                     }
                     $data->info_info = $this->deleteFormInfo($reservation_id,
-                                                             isset($data->info_info)
-                                                                     ? $data->info_info
-                                                                     : array());
+                                                             $data->info_info ?? array());
                     $data->info_body = $this->deleteFormInfo($reservation_id,
-                                                             isset($data->info_body)
-                                                                     ? $data->info_body
-                                                                     : array());
+                                                             $data->info_body ?? array());
 
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->update($DOPBSP->tables->days,
                                   array('data' => json_encode($data)),
                                   array('calendar_id' => $reservation->calendar_id,
@@ -1303,16 +1321,13 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     }
                 }
                 $hour->info_info = $this->deleteFormInfo($reservation_id,
-                                                         isset($data->info_info)
-                                                                 ? $data->info_info
-                                                                 : array());
+                                                         $data->info_info ?? array());
                 $hour->info_body = $this->deleteFormInfo($reservation_id,
-                                                         isset($data->info_body)
-                                                                 ? $data->info_body
-                                                                 : array());
+                                                         $data->info_body ?? array());
 
                 $data->hours->$hour_time = $hour;
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->days,
                               array('data' => json_encode($data)),
                               array('calendar_id' => $reservation->calendar_id,
@@ -1367,6 +1382,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                         $data->hours->{$hour_time} = $hour;
                     }
 
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                     $wpdb->update($DOPBSP->tables->days,
                                   array('data' => json_encode($data)),
                                   array('calendar_id' => $reservation->calendar_id,
@@ -1394,7 +1410,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             global $wpdb;
             global $DOPBSP;
 
-            $day_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $day_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                      $DOPBSP->tables->days,
                                                       $calendar_id,
                                                       $day));
             $data = json_decode($day_data->data);
@@ -1460,6 +1478,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     : $available;
             $data->status = $status;
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->days,
                           array('data' => json_encode($data)),
                           array('calendar_id' => $calendar_id,
@@ -1495,21 +1514,18 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $schedule = json_decode(stripslashes($DOT->post('schedule',
                                                             false)));
 
-            $days = array();
+            $days = array($DOPBSP->tables->days);
             $query = array();
 
-            while ($data = current($schedule)){
-                $day = key($schedule);
-                array_push($days,
-                           $day);
-                array_push($query,
-                           'day=%s');
-                next($schedule);
+            foreach ($schedule as $day => $item){
+                $days[] = $day;
+                $query[] = 'day=%s';
             }
 
             if (count($query)>0){
-                $wpdb->query($wpdb->prepare('DELETE FROM '.$DOPBSP->tables->days.' WHERE calendar_id="'.$id.'" AND ('.implode(' OR ',
-                                                                                                                              $query).')',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $wpdb->query($wpdb->prepare('DELETE FROM %i WHERE calendar_id="'.$id.'" AND ('.implode(' OR ',
+                                                                                                       $query).')',
                                             $days));
             }
 
@@ -1525,7 +1541,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             global $wpdb;
             global $DOPBSP;
 
-            $wpdb->query('DELETE FROM '.$DOPBSP->tables->days.' WHERE day < "'.date('Y-m-d').'"');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->query($wpdb->prepare('DELETE FROM %i WHERE day < "'.date('Y-m-d').'"',
+                                        $DOPBSP->tables->days));
         }
 
         /*
@@ -1557,7 +1575,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                                      $check_out);
 
             // Default Availability
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $calendar_id));
 
             if ($calendar->default_availability != ''){
@@ -1567,7 +1587,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             for ($i = 0; $i<count($selected_days)-($settings_calendar->days_morning_check_out == 'true'
                     ? 1
                     : 0); $i++){
-                $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                     $DOPBSP->tables->days,
                                                      $calendar_id,
                                                      $selected_days[$i]));
 
@@ -1628,7 +1650,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                             ? 1
                             : 0); $j++){
                         if (!isset($days[$selected_days[$j]])){
-                            $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                            $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                                 $DOPBSP->tables->days,
                                                                  $calendar_id,
                                                                  $selected_days[$j]));
                             $days[$selected_days[$j]] = isset($day->data)
@@ -1688,12 +1712,16 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             $settings_calendar = $DOPBSP->classes->backend_settings->values($calendar_id,
                                                                             'calendar');
             // Default Availability
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $calendar_id));
 
             $default_availability = json_decode($calendar->default_availability);
             //Custom Availability
-            $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $day = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                 $DOPBSP->tables->days,
                                                  $calendar_id,
                                                  $day));
 
@@ -1759,7 +1787,9 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                                          $end_hour,
                                          $no_items)){
                     if (!isset($days[$day])){
-                        $day_result = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->days.' WHERE calendar_id=%d AND day="%s"',
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $day_result = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE calendar_id=%d AND day=%s',
+                                                                    $DOPBSP->tables->days,
                                                                     $calendar_id,
                                                                     $day));
                         $days[$day] = isset($day_result->data)
@@ -1836,8 +1866,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
                     $option = 'add_to_day_hour_'.$for;
 
                     if ($field->$option == 'true'){
-                        array_push($data,
-                                   $field->value);
+                        $data[] = $field->value;
                     }
                 }
             }
@@ -1861,8 +1890,7 @@ if (!class_exists('DOPBSPBackEndCalendarSchedule')){
             if ($info != ''){
                 for ($i = 0; $i<count($info); $i++){
                     if ($info[$i]->reservation_id != $reservation_id){
-                        array_push($data,
-                                   $info[$i]);
+                        $data[] = $info[$i];
                     }
                 }
             }

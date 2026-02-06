@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndEmail')){
-    class DOPBSPBackEndEmail extends DOPBSPBackEndEmails{
+    class DOPBSPBackEndEmail{
         /*
          * Constructor
          */
@@ -41,6 +41,7 @@ if (!class_exists('DOPBSPBackEndEmail')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->emails,
                           array('user_id' => wp_get_current_user()->ID,
                                 'name'    => $DOPBSP->text('EMAILS_ADD_EMAIL_NAME')));
@@ -49,11 +50,13 @@ if (!class_exists('DOPBSPBackEndEmail')){
             /*
              * Simple book.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->emails_translation,
                           array('email_id' => $email_id,
                                 'template' => 'book_admin',
                                 'subject'  => $DOPBSP->classes->translation->encodeJSON('EMAILS_DEFAULT_BOOK_ADMIN_SUBJECT'),
                                 'message'  => $DOPBSP->classes->backend_email->defaultTemplate('EMAILS_DEFAULT_BOOK_ADMIN')));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->emails_translation,
                           array('email_id' => $email_id,
                                 'template' => 'book_user',
@@ -62,11 +65,13 @@ if (!class_exists('DOPBSPBackEndEmail')){
             /*
              * Book with approval.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->emails_translation,
                           array('email_id' => $email_id,
                                 'template' => 'book_with_approval_admin',
                                 'subject'  => $DOPBSP->classes->translation->encodeJSON('EMAILS_DEFAULT_BOOK_WITH_APPROVAL_ADMIN_SUBJECT'),
                                 'message'  => $DOPBSP->classes->backend_email->defaultTemplate('EMAILS_DEFAULT_BOOK_WITH_APPROVAL_ADMIN')));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->emails_translation,
                           array('email_id' => $email_id,
                                 'template' => 'book_with_approval_user',
@@ -75,6 +80,7 @@ if (!class_exists('DOPBSPBackEndEmail')){
             /*
              * Approved
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->emails_translation,
                           array('email_id' => $email_id,
                                 'template' => 'approved',
@@ -83,6 +89,7 @@ if (!class_exists('DOPBSPBackEndEmail')){
             /*
              * Canceled
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->emails_translation,
                           array('email_id' => $email_id,
                                 'template' => 'canceled',
@@ -91,6 +98,7 @@ if (!class_exists('DOPBSPBackEndEmail')){
             /*
              * Rejected
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->emails_translation,
                           array('email_id' => $email_id,
                                 'template' => 'rejected',
@@ -105,11 +113,13 @@ if (!class_exists('DOPBSPBackEndEmail')){
             for ($i = 0; $i<count($pg_list); $i++){
                 $pg_id = $pg_list[$i];
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($DOPBSP->tables->emails_translation,
                               array('email_id' => $email_id,
                                     'template' => $pg_id.'_admin',
                                     'subject'  => $DOPBSP->classes->translation->encodeJSON('EMAILS_DEFAULT_'.strtoupper($pg_id).'_ADMIN_SUBJECT'),
                                     'message'  => $DOPBSP->classes->backend_email->defaultTemplate('EMAILS_DEFAULT_'.strtoupper($pg_id).'_ADMIN')));
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($DOPBSP->tables->emails_translation,
                               array('email_id' => $email_id,
                                     'template' => $pg_id.'_user',
@@ -117,7 +127,7 @@ if (!class_exists('DOPBSPBackEndEmail')){
                                     'message'  => $DOPBSP->classes->backend_email->defaultTemplate('EMAILS_DEFAULT_'.strtoupper($pg_id).'_USER')));
             }
 
-            echo $DOPBSP->classes->backend_emails->display();
+            $DOPBSP->classes->backend_emails->display();
 
             die();
         }
@@ -173,17 +183,22 @@ if (!class_exists('DOPBSPBackEndEmail')){
             global $wpdb;
             global $DOPBSP;
 
-            $template_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->emails_translation.' WHERE email_id=%d AND template="%s"',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $template_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE email_id=%d AND template=%s',
+                                                           $DOPBSP->tables->emails_translation,
                                                            $id,
                                                            $template));
 
             if ($template_data == ''){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->insert($DOPBSP->tables->emails_translation,
                               array('email_id' => $id,
                                     'template' => $template,
                                     'subject'  => $DOPBSP->classes->translation->encodeJSON('EMAILS_DEFAULT_'.strtoupper($template).'_SUBJECT'),
                                     'message'  => $DOPBSP->classes->backend_email->defaultTemplate('EMAILS_DEFAULT_'.strtoupper($template))));
-                $template_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->emails_translation.' WHERE email_id=%d AND template="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $template_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE email_id=%d AND template=%s',
+                                                               $DOPBSP->tables->emails_translation,
                                                                $id,
                                                                $template));
             }
@@ -237,7 +252,9 @@ if (!class_exists('DOPBSPBackEndEmail')){
                                              'UTF-8',
                                              'ISO-8859-1');
 
-                $email_translation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->emails_translation.' WHERE email_id=%d AND template="%s"',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $email_translation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE email_id=%d AND template=%s',
+                                                                   $DOPBSP->tables->emails_translation,
                                                                    $id,
                                                                    $template));
 
@@ -245,12 +262,14 @@ if (!class_exists('DOPBSPBackEndEmail')){
                 $translation->$language = $value;
                 $value = json_encode($translation);
 
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->emails_translation,
                               array($field => $value),
                               array('email_id' => $id,
                                     'template' => $template));
             }
             else{
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->update($DOPBSP->tables->emails,
                               array($field => $value),
                               array('id' => $id));
@@ -290,13 +309,18 @@ if (!class_exists('DOPBSPBackEndEmail')){
             /*
              * Delete email.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->emails,
                           array('id' => $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->emails_translation,
                           array('email_id' => $id));
-            $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->emails.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->emails));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }

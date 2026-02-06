@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndExtra')){
-    class DOPBSPBackEndExtra extends DOPBSPBackEndExtras{
+    class DOPBSPBackEndExtra{
         /*
          * Constructor
          */
@@ -21,7 +21,7 @@ if (!class_exists('DOPBSPBackEndExtra')){
         }
 
         /*
-         * Add a extra.
+         * Add an extra.
          */
         function add(){
             global $wpdb;
@@ -41,10 +41,12 @@ if (!class_exists('DOPBSPBackEndExtra')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->extras,
                           array('user_id' => wp_get_current_user()->ID,
                                 'name'    => $DOPBSP->text('EXTRAS_ADD_EXTRA_NAME')));
-            echo $DOPBSP->classes->backend_extras->display();
+
+            $DOPBSP->classes->backend_extras->display();
 
             die();
         }
@@ -111,6 +113,7 @@ if (!class_exists('DOPBSPBackEndExtra')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->extras,
                           array($DOT->post('field') => $DOT->post('value')),
                           array('id' => $DOT->post('id',
@@ -150,14 +153,18 @@ if (!class_exists('DOPBSPBackEndExtra')){
             /*
              * Delete extra.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->extras,
                           array('id' => $id));
 
             /*
              * Delete extra groups.
              */
-            $groups = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->extras_groups.' WHERE extra_id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $groups = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE extra_id=%d',
+                                                        $DOPBSP->tables->extras_groups,
                                                         $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->extras_groups,
                           array('extra_id' => $id));
 
@@ -165,13 +172,17 @@ if (!class_exists('DOPBSPBackEndExtra')){
              * Delete extra groups items.
              */
             foreach ($groups as $group){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->delete($DOPBSP->tables->extras_groups_items,
                               array('group_id' => $group->id));
             }
 
-            $extras = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->extras.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->extras));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }

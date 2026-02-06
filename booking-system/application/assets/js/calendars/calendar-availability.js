@@ -133,9 +133,9 @@ DOT.methods.calendar_availability = new function(){
 	/*
 	 * Verify time values.
 	 */
-	timeStart = timeStart === undefined ? '00:00:00':timeStart+':00';
-	timeEnd = timeEnd === undefined ? '23:59:59':DOPPrototypes.getPrevTime(timeEnd+':00', 1, 'seconds');
-	
+        timeStart = timeStart === undefined ? '00:00:00':timeStart+':00';
+        timeEnd = timeEnd === undefined ? '23:59:59':DOPPrototypes.getPrevTime(timeEnd+':00', 1, 'seconds');
+               
 	/*
 	 * Set search dates.
 	 */

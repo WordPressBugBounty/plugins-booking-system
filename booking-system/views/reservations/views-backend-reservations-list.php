@@ -15,12 +15,6 @@
     if (!class_exists('DOPBSPViewsBackEndReservationsList')){
         class DOPBSPViewsBackEndReservationsList extends DOPBSPViewsBackEndReservations{
             /*
-             * Constructor
-             */
-            function __construct(){
-            }
-            
-            /*
              * Returns reservations template.
              * 
              * @param args (array): function arguments
@@ -31,11 +25,12 @@
              */
             function template($args = array()){
                 global $DOPBSP;
+                global $DOT;
                 
                 $reservations = $args['reservations'];
                 $reservations_total = $args['reservations_total'];
                 
-                echo $reservations_total.';;;;;;;;;;;';
+                $DOT->echo($reservations_total.';;;;;;;;;;;');
 ?>
                 <ul class="dopbsp-reservations-list">
 <?php
@@ -49,7 +44,7 @@
                 }
                 else{
 ?>                    
-                    <li class="dopbsp-no-data"><?php echo $DOPBSP->text('RESERVATIONS_NO_RESERVATIONS'); ?></li>
+                    <li class="dopbsp-no-data"><?php $DOT->echo($DOPBSP->text('RESERVATIONS_NO_RESERVATIONS')); ?></li>
 <?php                    
                 }
 ?>
@@ -68,16 +63,16 @@
              */
             function templatePrint($args = array()){
                 global $DOPBSP;
+                global $DOT;
                 
                 $reservations = $args['reservations'];
-                $reservations_total = $args['reservations_total'];
                 
                 $styles = $DOPBSP->classes->backend->getStyles();
 ?>
                 <head>
 <?php
                 foreach ($styles as $style) {
-                    echo $style;
+                    $DOT->echo($style);
                 }
 ?>
                     <style>
@@ -116,7 +111,7 @@
                                             }
                                             else{
 ?>                    
-                                                <li class="dopbsp-no-data"><?php echo $DOPBSP->text('RESERVATIONS_NO_RESERVATIONS'); ?></li>
+                                                <li class="dopbsp-no-data"><?php $DOT->echo($DOPBSP->text('RESERVATIONS_NO_RESERVATIONS')); ?></li>
 <?php                    
                                             }
 ?>

@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndDiscount')){
-    class DOPBSPBackEndDiscount extends DOPBSPBackEndDiscounts{
+    class DOPBSPBackEndDiscount{
         /*
          * Constructor
          */
@@ -41,10 +41,12 @@ if (!class_exists('DOPBSPBackEndDiscount')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->discounts,
                           array('user_id' => wp_get_current_user()->ID,
                                 'name'    => $DOPBSP->text('DISCOUNTS_ADD_DISCOUNT_NAME')));
-            echo $DOPBSP->classes->backend_discounts->display();
+
+            $DOPBSP->classes->backend_discounts->display();
 
             die();
         }
@@ -111,6 +113,7 @@ if (!class_exists('DOPBSPBackEndDiscount')){
              * End verify nonce.
              */
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->discounts,
                           array($DOT->post('field') => $DOT->post('value')),
                           array('id' => $DOT->post('id',
@@ -150,14 +153,18 @@ if (!class_exists('DOPBSPBackEndDiscount')){
             /*
              * Delete discount.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->discounts,
                           array('id' => $id));
 
             /*
              * Delete discount items.
              */
-            $items = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->discounts_items.' WHERE discount_id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $items = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE discount_id=%d',
+                                                       $DOPBSP->tables->discounts_items,
                                                        $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->discounts_items,
                           array('discount_id' => $id));
 
@@ -165,13 +172,17 @@ if (!class_exists('DOPBSPBackEndDiscount')){
              * Delete discount items rules.
              */
             foreach ($items as $item){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 $wpdb->delete($DOPBSP->tables->discounts_items_rules,
                               array('discount_item_id' => $item->id));
             }
 
-            $discounts = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->discounts.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->discounts));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }

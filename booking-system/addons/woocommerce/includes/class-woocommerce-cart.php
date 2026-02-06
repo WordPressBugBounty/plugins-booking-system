@@ -106,7 +106,9 @@ if (!class_exists('DOPBSPWooCommerceCart')){
 
             if (!$this->validateAvailability($calendar_id,
                                              $reservation)){
-                echo 'unavailable;;;;;'.$DOPBSP->text('WOOCOMMERCE_UNAVAILABLE').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>';
+                $DOT->echo('unavailable;;;;;'.$DOPBSP->text('WOOCOMMERCE_UNAVAILABLE').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>',
+                           'content',
+                           ['a' => ['href' => []]]);
                 die();
             }
 
@@ -114,13 +116,13 @@ if (!class_exists('DOPBSPWooCommerceCart')){
              * Reservation data.
              */
             $reservation_data = array('cart_item_key' => '',
-                                      'token' => '',
-                                      'product_id' => $product_id,
-                                      'calendar_id' => $calendar_id,
-                                      'language' => $language,
-                                      'currency' => $currency,
+                                      'token'         => '',
+                                      'product_id'    => $product_id,
+                                      'calendar_id'   => $calendar_id,
+                                      'language'      => $language,
+                                      'currency'      => $currency,
                                       'currency_code' => $currency_code,
-                                      'data' => json_encode($cart_data[0]));
+                                      'data'          => json_encode($cart_data[0]));
 
             /*
              * Verify if product already exists and attach the reservation to the cart key.
@@ -137,15 +139,19 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                                                 $reservation_data['cart_item_key'],
                                                 $reservation_data['token'],
                                                 $reservation)){
-                        echo 'overlap;;;;;'.$DOPBSP->text('WOOCOMMERCE_OVERLAP').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>';
-                        die();
+                        $DOT->echo('overlap;;;;;'.$DOPBSP->text('WOOCOMMERCE_OVERLAP').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>',
+                                   'content',
+                                   ['a' => ['href' => []]]);
                     }
                     else{
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                         $wpdb->insert($DOPBSPWooCommerce->tables->woocommerce,
                                       $reservation_data);
-                        echo 'success;;;;;'.$DOPBSP->text('WOOCOMMERCE_SUCCESS').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>';
-                        die();
+                        $DOT->echo('success;;;;;'.$DOPBSP->text('WOOCOMMERCE_SUCCESS').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>',
+                                   'content',
+                                   ['a' => ['href' => []]]);
                     }
+                    die();
                 }
             }
 
@@ -161,12 +167,15 @@ if (!class_exists('DOPBSPWooCommerceCart')){
             $woocommerce->cart->maybe_set_cart_cookies();
             $reservation_data['cart_item_key'] = $cart_item_key;
             $reservation_data['token'] = $token;
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSPWooCommerce->tables->woocommerce,
                           $reservation_data);
 
             wp_cache_flush();
 
-            echo 'success;;;;;'.$DOPBSP->text('WOOCOMMERCE_SUCCESS').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>';
+            $DOT->echo('success;;;;;'.$DOPBSP->text('WOOCOMMERCE_SUCCESS').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>',
+                       'content',
+                       ['a' => ['href' => []]]);
 
             die();
         }
@@ -186,8 +195,6 @@ if (!class_exists('DOPBSPWooCommerceCart')){
             global $DOPBSP;
             global $DOPBSPWooCommerce;
 
-            $product_id = $cart_item['product_id'];
-
             /*
              * Skip products without reservations.
              */
@@ -195,7 +202,9 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                 return $other_data;
             }
 
-            $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE token="%s" ORDER BY id',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE token=%s ORDER BY id',
+                                                                   $DOPBSPWooCommerce->tables->woocommerce,
                                                                    $cart_item['dopbsp_token']));
 
             foreach ($reservations_data as $reservation_data){
@@ -216,7 +225,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                 /*
                  * Display reservation data.
                  */
-                $other_data[] = array('name' => $DOPBSP->text('RESERVATIONS_RESERVATION_ID').' #'.$reservation_data->id,
+                $other_data[] = array('name'  => $DOPBSP->text('RESERVATIONS_RESERVATION_ID').' #'.$reservation_data->id,
                                       'value' => count($reservations_data)>1
                                               ? '<a href="'.add_query_arg(array('dopbsp_remove_item_id' => $reservation_data->id),
                                                                           get_permalink($post->ID),
@@ -226,7 +235,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                 /*
                  * Display details data.
                  */
-                $other_data[] = array('name' => $DOPBSP->text('RESERVATIONS_RESERVATION_DETAILS_TITLE'),
+                $other_data[] = array('name'  => $DOPBSP->text('RESERVATIONS_RESERVATION_DETAILS_TITLE'),
                                       'value' => $DOPBSPWooCommerce->classes->order->getDetails($reservation,
                                                                                                 $settings_calendar));
 
@@ -234,7 +243,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                  * Display extra data.
                  */
                 if ((int)$settings_calendar->extra != 0){
-                    $other_data[] = array('name' => $DOPBSP->text('EXTRAS_FRONT_END_TITLE'),
+                    $other_data[] = array('name'  => $DOPBSP->text('EXTRAS_FRONT_END_TITLE'),
                                           'value' => $DOPBSPWooCommerce->classes->order->getExtras($reservation,
                                                                                                    $settings_calendar));
                 }
@@ -243,7 +252,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                  * Display discount data.
                  */
                 if ((int)$settings_calendar->discount != 0){
-                    $other_data[] = array('name' => $DOPBSP->text('DISCOUNTS_FRONT_END_TITLE'),
+                    $other_data[] = array('name'  => $DOPBSP->text('DISCOUNTS_FRONT_END_TITLE'),
                                           'value' => $DOPBSPWooCommerce->classes->order->getDiscount($reservation,
                                                                                                      $settings_calendar));
                 }
@@ -262,9 +271,11 @@ if (!class_exists('DOPBSPWooCommerceCart')){
             global $DOPBSPWooCommerce;
             global $woocommerce;
 
-            foreach ($cart_object->cart_contents as $cart_item_key => $cart_item){
+            foreach ($cart_object->cart_contents as $cart_item){
                 if (isset($cart_item['dopbsp_token'])){
-                    $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE token="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE token=%s',
+                                                                           $DOPBSPWooCommerce->tables->woocommerce,
                                                                            $cart_item['dopbsp_token']));
                     $price = 0;
 
@@ -277,7 +288,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                         $price += $reservation->price_total;
 
                         if ($woocommerce->version>='3'
-                            || $woocommerce->version>='10'){
+                                || $woocommerce->version>='10'){
                             $product = $cart_item['data'];
                             $product->set_price($price);
                         }
@@ -298,6 +309,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
             global $DOPBSPWooCommerce;
 
             if ($DOT->get('remove_item')){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 if ($wpdb->delete($DOPBSPWooCommerce->tables->woocommerce,
                                   array('cart_item_key' => $DOT->get('remove_item')))){
                     /*
@@ -308,8 +320,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                                                        array('frontend',
                                                              'woocommerce_frontend'));
 
-                    wc_add_notice($DOPBSP->text('WOOCOMMERCE_DELETED'),
-                                  'success');
+                    wc_add_notice($DOPBSP->text('WOOCOMMERCE_DELETED'));
                 }
             }
         }
@@ -327,6 +338,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
 
             if ($DOT->get('dopbsp_remove_item_id',
                           'int')){
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
                 if ($wpdb->delete($DOPBSPWooCommerce->tables->woocommerce,
                                   array('id' => $DOT->get('dopbsp_remove_item_id',
                                                           'int')))){
@@ -337,8 +349,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                                                        false,
                                                        array('frontend',
                                                              'woocommerce_frontend'));
-                    wc_add_notice($DOPBSP->text('WOOCOMMERCE_DELETED'),
-                                  'success');
+                    wc_add_notice($DOPBSP->text('WOOCOMMERCE_DELETED'));
                 }
             }
         }
@@ -384,15 +395,16 @@ if (!class_exists('DOPBSPWooCommerceCart')){
 
             foreach ($cart as $cart_item_key => $cart_item){
                 if (isset($cart_item['dopbsp_token'])){
-                    $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE cart_item_key="%s" AND token="%s" ORDER BY date_created',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $reservations = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE cart_item_key=%s AND token=%s ORDER BY date_created',
+                                                                      $DOPBSPWooCommerce->tables->woocommerce,
                                                                       $cart_item_key,
                                                                       $cart_item['dopbsp_token']));
 
                     foreach ($reservations as $reservation){
                         if (!$this->validateAvailability($reservation->calendar_id,
                                                          json_decode($reservation->data))){
-                            array_push($errors,
-                                       '<a href="'.get_permalink($reservation->product_id).'">'.get_the_title($reservation->product_id).'</a> - Reservation #'.$reservation->id.': '.$DOPBSP->text('WOOCOMMERCE_UNAVAILABLE'));
+                            $errors[] = '<a href="'.get_permalink($reservation->product_id).'">'.get_the_title($reservation->product_id).'</a> - Reservation #'.$reservation->id.': '.$DOPBSP->text('WOOCOMMERCE_UNAVAILABLE');
                         }
                     }
 
@@ -469,7 +481,9 @@ if (!class_exists('DOPBSPWooCommerceCart')){
              */
             $reservations = array();
 
-            $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSPWooCommerce->tables->woocommerce.' WHERE cart_item_key="%s" AND token="%s" AND product_id=%d ORDER BY date_created',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE cart_item_key=%s AND token=%s AND product_id=%d ORDER BY date_created',
+                                                                   $DOPBSPWooCommerce->tables->woocommerce,
                                                                    $cart_item_key,
                                                                    $token,
                                                                    $product_id));
@@ -478,8 +492,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
              * Verify reservations.
              */
             foreach ($reservations_data as $reservation_data){
-                array_push($reservations,
-                           json_decode($reservation_data->data));
+                $reservations[] = json_decode($reservation_data->data);
             }
             $reservation != ''
                     ? array_push($reservations,

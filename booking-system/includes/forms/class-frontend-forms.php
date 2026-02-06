@@ -1,11 +1,11 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.1
 * File                    : includes/forms/class-frontend-forms.php
 * File Version            : 1.0.3
-* Created / Last Modified : 26 August 2015
+* Created / Last Modified : 25 August 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -13,7 +13,7 @@
 */
 
     if (!class_exists('DOPBSPFrontEndForms')){
-        class DOPBSPFrontEndForms extends DOPBSPFrontEnd{
+        class DOPBSPFrontEndForms{
             /*
              * Constructor.
              */
@@ -32,8 +32,10 @@
                          $language = DOPBSP_CONFIG_TRANSLATION_DEFAULT_LANGUAGE){
                 global $wpdb;
                 global $DOPBSP;
-                
-                $fields = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields.' WHERE form_id=%d ORDER BY position',
+
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $fields = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE form_id=%d ORDER BY position',
+                                                            $DOPBSP->tables->forms_fields,
                                                             $id));
                 
                 foreach ($fields as $field){
@@ -41,7 +43,9 @@
                                                                                     $language);
                     
                     if ($field->type == 'select'){
-                        $options = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->forms_fields_options.' WHERE field_id=%d ORDER BY position',
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $options = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE field_id=%d ORDER BY position',
+                                                                     $DOPBSP->tables->forms_fields_options,
                                                                      $field->id));
                         
                         foreach ($options as $option){

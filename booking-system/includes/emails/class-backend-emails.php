@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndEmails')){
-    class DOPBSPBackEndEmails extends DOPBSPBackEnd{
+    class DOPBSPBackEndEmails{
         /*
          * Constructor
          */
@@ -58,37 +58,39 @@ if (!class_exists('DOPBSPBackEndEmails')){
             $user_roles = array_values(wp_get_current_user()->roles);
 
             if ($user_roles[0] == 'administrator'){
-                $emails = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->emails.' ORDER BY id DESC');
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $emails = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                                            $DOPBSP->tables->emails));
             }
             else{
-                $emails = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->emails.' WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $emails = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                                                            $DOPBSP->tables->emails,
                                                             wp_get_current_user()->ID));
             }
 
             /*
              * Create emails list HTML.
              */
-            array_push($html,
-                       '<ul>');
+            $html[] = '<ul>';
 
             if ($wpdb->num_rows != 0){
                 if ($emails){
                     foreach ($emails as $email){
                         $email->name = esc_js($email->name);
-                        array_push($html,
-                                   $this->listItem($email));
+                        $html[] = $this->listItem($email);
                     }
                 }
             }
             else{
-                array_push($html,
-                           '<li class="dopbsp-no-data">'.$DOPBSP->text('EMAILS_NO_EMAILS').'</li>');
+                $html[] = '<li class="dopbsp-no-data">'.$DOT->escape($DOPBSP->text('EMAILS_NO_EMAILS')).'</li>';
             }
-            array_push($html,
-                       '</ul>');
+            $html[] = '</ul>';
 
-            echo implode('',
-                         $html);
+            $DOT->echo(implode('',
+                               $html),
+                       'content',
+                       $DOT->models->allowed_html->items());
 
             die();
         }
@@ -102,45 +104,37 @@ if (!class_exists('DOPBSPBackEndEmails')){
          */
         function listItem($email){
             global $DOPBSP;
+            global $DOT;
 
             $html = array();
             $user = get_userdata($email->user_id); // Get data about the user who created the emails.
 
-            array_push($html,
-                       '<li class="dopbsp-item" id="DOPBSP-email-ID-'.$email->id.'" onclick="DOPBSPBackEndEmail.display('.$email->id.')">');
-            array_push($html,
-                       ' <div class="dopbsp-header">');
+            $html[] = '<li class="dopbsp-item" id="'.$DOT->escape('DOPBSP-email-ID-'.$email->id,
+                                                                  'attr').'" onclick="DOPBSPBackEndEmail.display('.$DOT->escape($email->id,
+                                                                                                                                'attr').')">';
+            $html[] = ' <div class="dopbsp-header">';
 
             /*
              * Display email ID.
              */
-            array_push($html,
-                       '     <span class="dopbsp-id">ID: '.$email->id.'</span>');
+            $html[] = '     <span class="dopbsp-id">ID: '.$DOT->escape($email->id).'</span>';
 
             /*
              * Display data about the user who created the email.
              */
             if ($email->user_id>0){
-                array_push($html,
-                           '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($email->user_id,
-                                                                                             17));
-                array_push($html,
-                           '         <span class="dopbsp-info">'.$DOPBSP->text('EMAILS_CREATED_BY').': '.$user->data->display_name.'</span>');
-                array_push($html,
-                           '         <br class="dopbsp-clear" />');
-                array_push($html,
-                           '     </span>');
+                $html[] = '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($email->user_id,
+                                                                                            17);
+                $html[] = '         <span class="dopbsp-info">'.$DOT->escape($DOPBSP->text('EMAILS_CREATED_BY').': '.$user->data->display_name).'</span>';
+                $html[] = '         <br class="dopbsp-clear" />';
+                $html[] = '     </span>';
             }
-            array_push($html,
-                       '     <br class="dopbsp-clear" />');
-            array_push($html,
-                       ' </div>');
-            array_push($html,
-                       ' <div class="dopbsp-name">'.($email->name == ''
-                               ? '&nbsp;'
-                               : $email->name).'</div>');
-            array_push($html,
-                       '</li>');
+            $html[] = '     <br class="dopbsp-clear" />';
+            $html[] = ' </div>';
+            $html[] = ' <div class="dopbsp-name">'.$DOT->escape($email->name == ''
+                                                                        ? '&nbsp;'
+                                                                        : $email->name).'</div>';
+            $html[] = '</li>';
 
             return implode('',
                            $html);

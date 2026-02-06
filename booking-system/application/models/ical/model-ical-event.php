@@ -201,13 +201,12 @@ if (!class_exists('DOTModelIcalEvent')){
                  */
                 $time = $event->time_end ?? ($event->time_start ?? '');
 
-                array_push($ical,
-                           'DTEND'
-                           .($time != ''
-                                   ? ';TZID='.$event->timezone.';VALUE=DATE-TIME:'
-                                   : ';VALUE=DATE:')
-                           .$DOT->models->ical->dt($date,
-                                                   $time));
+                $ical[] = 'DTEND'
+                        .($time != ''
+                                ? ';TZID='.$event->timezone.';VALUE=DATE-TIME:'
+                                : ';VALUE=DATE:')
+                        .$DOT->models->ical->dt($date,
+                                                $time);
             }
         }
 
@@ -282,15 +281,14 @@ if (!class_exists('DOTModelIcalEvent')){
                  */
                 $time = $event->time_start ?? '';
 
-                array_push($ical,
-                           'DTSTART'
-                           .($time != ''
-                                   ? ($event->timezone != 'GMT'
-                                           ? ';TZID='.$event->timezone
-                                           : '').';VALUE=DATE-TIME:'
-                                   : ';VALUE=DATE:')
-                           .$DOT->models->ical->dt($date,
-                                                   $time));
+                $ical[] = 'DTSTART'
+                        .($time != ''
+                                ? ($event->timezone != 'GMT'
+                                        ? ';TZID='.$event->timezone
+                                        : '').';VALUE=DATE-TIME:'
+                                : ';VALUE=DATE:')
+                        .$DOT->models->ical->dt($date,
+                                                $time);
             }
         }
 
@@ -439,8 +437,7 @@ if (!class_exists('DOTModelIcalEvent')){
             /*
              * Start event.
              */
-            array_push($ical,
-                       'BEGIN:VEVENT');
+            $ical[] = 'BEGIN:VEVENT';
 
             /*
              * Set start date.
@@ -492,8 +489,7 @@ if (!class_exists('DOTModelIcalEvent')){
             /*
              * End event.
              */
-            array_push($ical,
-                       'END:VEVENT');
+            $ical[] = 'END:VEVENT';
 
             return $ical;
         }
@@ -620,8 +616,7 @@ if (!class_exists('DOTModelIcalEvent')){
         function timestamp(&$ical){
             date_default_timezone_set('UTC');
 
-            array_push($ical,
-                       'DTSTAMP:'.gmdate("Ymd\THis\Z"));
+            $ical[] = 'DTSTAMP:'.gmdate("Ymd\THis\Z");
         }
 
         /*
@@ -746,8 +741,7 @@ if (!class_exists('DOTModelIcalEvent')){
          */
         function uid(&$ical,
                      $event){
-            array_push($ical,
-                       'UID:'.$event->uid);
+            $ical[] = 'UID:'.$event->uid;
         }
     }
 }

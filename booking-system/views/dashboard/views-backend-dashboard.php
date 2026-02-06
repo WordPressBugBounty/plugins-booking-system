@@ -1,11 +1,11 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.1
 * File                    : views/dashboard/views-backend-dashboard.php
 * File Version            : 1.0.5
-* Created / Last Modified : 26 August 2015
+* Created / Last Modified : 25 August 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -14,12 +14,6 @@
 
     if (!class_exists('DOPBSPViewsBackEndDashboard')){
         class DOPBSPViewsBackEndDashboard extends DOPBSPViewsBackEnd{
-            /*
-             * Constructor
-             */
-            function __construct(){
-            }
-            
             /*
              * Returns dashboard template.
              * 

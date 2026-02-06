@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndDiscountItem')){
-    class DOPBSPBackEndDiscountItem extends DOPBSPBackEndDiscountItems{
+    class DOPBSPBackEndDiscountItem{
         /*
          * Constructor
          */
@@ -53,12 +53,15 @@ if (!class_exists('DOPBSPBackEndDiscountItem')){
                                    'int');
             $language = $DOT->post('language');
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->insert($DOPBSP->tables->discounts_items,
                           array('discount_id' => $discount_id,
                                 'position'    => $position,
                                 'translation' => $DOPBSP->classes->translation->encodeJSON('DISCOUNTS_DISCOUNT_ADD_ITEM_LABEL')));
             $id = $wpdb->insert_id;
-            $item = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->discounts_items.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $item = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                  $DOPBSP->tables->discounts_items,
                                                   $id));
 
             $DOPBSP->views->backend_discount_item->template(array('item'     => $item,
@@ -110,16 +113,19 @@ if (!class_exists('DOPBSPBackEndDiscountItem')){
                                              'UTF-8',
                                              'ISO-8859-1');
 
-                $item_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->discounts_items.' WHERE id=%d',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $item_data = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                           $DOPBSP->tables->discounts_items,
                                                            $id));
 
                 $translation = json_decode($item_data->translation);
                 $translation->$language = $value;
 
-                $value = json_encode($translation);
+                $value = wp_json_encode($translation);
                 $field = 'translation';
             }
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->discounts_items,
                           array($field => $value),
                           array('id' => $id));
@@ -153,8 +159,10 @@ if (!class_exists('DOPBSPBackEndDiscountItem')){
             $id = $DOT->post('id',
                              'int');
 
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->discounts_items,
                           array('id' => $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->discounts_items_rules,
                           array('discount_item_id' => $id));
 

@@ -99,13 +99,8 @@ if (!class_exists('DOPBSPTranslation')){
                                0,
                                2);
 
-            $translation = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->translation.'_'.$language.' WHERE location '.$locations_in);
-
-            //                if (count($this->text) != 0
-            //                        && count($this->text) != count($translation)){
-            //                    $DOPBSP->classes->backend_translation->database($language);
-            //                    $translation = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->translation.'_'.$language.' WHERE location '.$locations_in);
-            //                }
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $translation = $wpdb->get_results('SELECT * FROM '.esc_sql($DOPBSP->tables->translation.'_'.$language).' WHERE location '.$locations_in);
 
             $DOPBSP->vars->translation_text = array();
 
@@ -128,11 +123,15 @@ if (!class_exists('DOPBSPTranslation')){
 
             $json = array();
 
-            $languages = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages.' WHERE enabled="true"');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $languages = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE enabled="true"',
+                                                           $DOPBSP->tables->languages));
 
             foreach ($languages as $language){
                 if ($key != ''){
-                    $translation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->translation.'_'.$language->code.' WHERE key_data="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $translation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE key_data=%s',
+                                                                 $DOPBSP->tables->translation.'_'.$language->code,
                                                                  $key));
                     $json[] = '"'
                             .$language->code
@@ -218,13 +217,15 @@ if (!class_exists('DOPBSPTranslation')){
             $this->checkFolder($DOPBSP->paths->abs);
 
             for ($i = 0; $i<count($this->text); $i++){
-                if (strpos($this->text[$i]['key'],
-                           'PARENT_') === false){
-                    if ($this->text[$i]['check'] == true){
-                        // echo '<span class="dopbsp-used">'.$this->text[$i]['key'].'</span><br />';
-                    }
-                    else{
-                        echo '<span class="dopbsp-unused">'.$this->text[$i]['key'].'</span><br />';
+                if (!str_contains($this->text[$i]['key'],
+                                  'PARENT_')){
+                    if (!$this->text[$i]['check']){
+                        $DOT->echo('<span class="dopbsp-unused">'.$this->text[$i]['key'].'</span><br />',
+                                   'content',
+                                   [
+                                           'br'   => [],
+                                           'span' => ['class' => []]
+                                   ]);
                     }
                 }
             }
@@ -254,16 +255,16 @@ if (!class_exists('DOPBSPTranslation')){
                             $file_data = file_get_contents($folder.$file);
 
                             for ($i = 0; $i<count($this->text); $i++){
-                                if (strpos($file_data,
-                                           $this->text[$i]['key']) !== false
-                                        || strpos($this->text[$i]['key'],
-                                                  'AUTHORIZENET') !== false
-                                        || strpos($this->text[$i]['key'],
-                                                  'PAYPAL') !== false
-                                        || strpos($this->text[$i]['key'],
-                                                  'STRIPE') !== false
-                                        || strpos($this->text[$i]['key'],
-                                                  'TWOCHECKOUT') !== false){
+                                if (str_contains($file_data,
+                                                 $this->text[$i]['key'])
+                                        || str_contains($this->text[$i]['key'],
+                                                        'AUTHORIZENET')
+                                        || str_contains($this->text[$i]['key'],
+                                                        'PAYPAL')
+                                        || str_contains($this->text[$i]['key'],
+                                                        'STRIPE')
+                                        || str_contains($this->text[$i]['key'],
+                                                        'TWOCHECKOUT')){
                                     $this->text[$i]['check'] = true;
                                 }
                             }

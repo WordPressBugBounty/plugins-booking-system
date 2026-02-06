@@ -1,16 +1,13 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
-* Version                 : 2.1.8
-* File                    : config.php
-* File Version            : 1.2.4
-* Created / Last Modified : 17 March 2016
-* Author                  : Dot on Paper
-* Copyright               : © 2012 Dot on Paper
-* Website                 : http://www.dotonpaper.net
-* Description             : Configuration file.
-*/
+ * Title                   : Pinpoint Booking System
+ * File                    : config.php
+ * Author                  : Dot on Paper
+ * Copyright               : © 2017 Dot on Paper
+ * Website                 : https://www.dotonpaper.net
+ * Description             : Configuration file. The file is mandatory.
+ */
 
 // ***************************************************************************** Begin general defaults.
 
@@ -22,8 +19,6 @@ define('DOPBSP_CONFIG_DELETE_DATA_ON_DELETE',
        false);  // Set to "true" if you want to delete all data when you delete the plugin from admin.
 define('DOPBSP_CONFIG_WOOCOMMERCE_ENABLE_CODE',
        false);  // Set to "true" if you want WooCommerce code to be enabled, even if WooComemrce is not installed/detected.
-define('DOPBSP_CONFIG_API_KEY',
-       'D0PBSPAP1');  // Set API Key
 
 // ***************************************************************************** End general defaults.
 
@@ -70,6 +65,19 @@ define('DOPBSP_CONFIG_USERS_PERMISSIONS_CUSTOM_POSTS_OTHERS',
 
 // ***************************************************************************** End users permissions defaults.
 
+// ***************************************************************************** Begin custom post type defaults.
+
+if (!defined('DOPBSP_CONFIG_CUSTOM_POSTS_SLUG')){
+    define('DOPBSP_CONFIG_CUSTOM_POSTS_SLUG',
+           'booking-system'); // Set Custom post type slug.
+}
+define('DOPBSP_CONFIG_CUSTOM_POSTS_OVERWRITE_POSTS_LOOP',
+       false); // Set to "true" if you want to add booking system custom posts in blog posts.
+define('DOPBSP_CONFIG_CUSTOM_POSTS_NOT_ALLOWED_POST_TYPES_IN_LOOP',
+       'page,attachment,nav_menu_item,revision'); // The slugs of the post types, separated by comma, that will not appear in blog posts.
+
+// ***************************************************************************** End custom post type defaults.
+
 // ***************************************************************************** Begin server requirements.
 
 define('DOPBSP_CONFIG_SERVER_WORDPRESS_VERSION',
@@ -79,7 +87,7 @@ define('DOPBSP_CONFIG_SERVER_WOOCOMMERCE_VERSION',
 define('DOPBSP_CONFIG_SERVER_PHP_VERSION',
        '8.0'); // PHP version
 define('DOPBSP_CONFIG_SERVER_MYSQL_VERSION',
-       '5.7'); // MySQL version
+       '8.0'); // MySQL version
 define('DOPBSP_CONFIG_SERVER_MEMORY_LIMIT',
        '32M'); // Memory limit
 define('DOPBSP_CONFIG_SERVER_MEMORY_LIMIT_WP',
@@ -96,9 +104,13 @@ define('DOPBSP_CONFIG_SERVER_CURL_VERSION',
 // ***************************************************************************** Begin help defaults.
 
 define('DOPBSP_CONFIG_HELP_DOCUMENTATION_URL',
-       'https://pinpoint.world/documentation-booking?utm_source=WordPress&utm_medium=Plugin%20FREE'); // Link to plugin documentation.
+       'https://pinpoint.world/documentation-booking?utm_source=WordPress&utm_medium=Plugin%20PRO'); // Link to plugin documentation.
 define('DOPBSP_CONFIG_SHOP_URL',
-       'https://pinpoint.world/shop/'); // Link to Dot on Paper shop.
+        (isset($_SERVER['SERVER_NAME'])
+                ? ($_SERVER['SERVER_NAME'] == 'dopstudios.net'
+                        ? 'https://dopstudios.com/shop/'
+                        : 'https://pinpoint.world/shop/')
+                : 'https://pinpoint.world/shop/')); // Link to Dot on Paper shop.
 define('DOPBSP_CONFIG_SHOP_SSL_VERIFY',
        false); // Verify Dot on Paper shop when activating a plugin.
 
@@ -106,12 +118,8 @@ define('DOPBSP_CONFIG_SHOP_SSL_VERIFY',
 
 // ***************************************************************************** Begin views display.
 
-define('DOPBSP_CONFIG_VIEW_ADDONS',
-       false); // Display add-ons.
 define('DOPBSP_CONFIG_VIEW_DOCUMENTATION',
        true); // Display documentation.
-define('DOPBSP_CONFIG_VIEW_THEMES',
-       false); // Display themes.
 define('DOPBSP_CONFIG_VIEW_PRO',
        true); // Display pro tips.
 

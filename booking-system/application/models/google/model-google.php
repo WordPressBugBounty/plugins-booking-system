@@ -133,14 +133,12 @@ if (!class_exists('DOTModelGoogle')){
                 }
                 else{
                     $authUrl = $client->createAuthUrl();
-                    $link = sprintf(wp_kses(__('<a href="%s" style="background-color: #dbdfea; border-radius: 2px; color: #3e3f40; display: block; font-size: 16px; line-height: 24px; margin: auto; max-width: 200px; min-width: 200px; padding: 12px 0; text-align: center; text-decoration: none; width: 200px;">Google Sync</a>',
-                                               '$text_domain'),
-                                            array('a' =>
-                                                          array(
-                                                                  'href'  => array(),
-                                                                  'style' => array()))),
+                    $link = sprintf(wp_kses('<a href="%s" style="background-color: #dbdfea; border-radius: 2px; color: #3e3f40; display: block; font-size: 16px; line-height: 24px; margin: auto; max-width: 200px; min-width: 200px; padding: 12px 0; text-align: center; text-decoration: none; width: 200px;">Google Sync</a>',
+                                            array('a' => array('href'  => array(),
+                                                               'style' => array()))),
                                     esc_url($authUrl));
-                    echo $link;
+                    $DOT->echo($link,
+                               'none');
                     // exit;
                 }
                 // If there is no previous token or it's expired.
@@ -155,10 +153,10 @@ if (!class_exists('DOTModelGoogle')){
                         $this->saveToken($client->getAccessToken(),
                                          $client->getRefreshToken());
                     }
-                    elseif (isset($_GET['code'])){
+                    elseif ($DOT->get('code')){
                         // Request authorization from the user.
 
-                        $authCode = $_GET['code'];
+                        $authCode = $DOT->get('code');
 
                         // Exchange authorization code for an access token.
                         $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
@@ -167,8 +165,8 @@ if (!class_exists('DOTModelGoogle')){
                         // Check to see if there was an error.
                         if (array_key_exists('error',
                                              $accessToken)){
-                            throw new Exception(join(', ',
-                                                     $accessToken));
+                            throw new Exception(esc_html(join(', ',
+                                                              $accessToken)));
                         }
 
                         //update token
@@ -187,11 +185,10 @@ if (!class_exists('DOTModelGoogle')){
         function getToken(){
             global $DOT;
 
-            $token = $DOT->db->row($DOT->db->safe('SELECT VALUE FROM '.$DOT->tables->settings_calendar.' WHERE name=%s',
-                                                  array('google_token')));
-            return isset($token->VALUE)
-                    ? $token->VALUE
-                    : null;
+            $token = $DOT->db->row($DOT->db->safe('SELECT VALUE FROM %i WHERE name=%s',
+                                                  array($DOT->tables->settings_calendar,
+                                                        'google_token')));
+            return $token->VALUE ?? null;
         }
 
         /*
@@ -231,8 +228,9 @@ if (!class_exists('DOTModelGoogle')){
         function credentialsDb($calendar_id){
             global $DOT;
 
-            $cred = $DOT->db->results($DOT->db->safe('SELECT * FROM '.$DOT->tables->settings_calendar.' WHERE (name=%s AND CALENDAR_ID='.$calendar_id.') OR (name=%s AND CALENDAR_ID='.$calendar_id.') OR (name=%s AND CALENDAR_ID='.$calendar_id.') OR (name=%s AND CALENDAR_ID='.$calendar_id.')',
-                                                     array('google_client_id',
+            $cred = $DOT->db->results($DOT->db->safe('SELECT * FROM %i WHERE (name=%s AND CALENDAR_ID='.$calendar_id.') OR (name=%s AND CALENDAR_ID='.$calendar_id.') OR (name=%s AND CALENDAR_ID='.$calendar_id.') OR (name=%s AND CALENDAR_ID='.$calendar_id.')',
+                                                     array($DOT->tables->settings_calendar,
+                                                           'google_client_id',
                                                            'google_client_secret',
                                                            'google_project_id',
                                                            'google_token_uri')));

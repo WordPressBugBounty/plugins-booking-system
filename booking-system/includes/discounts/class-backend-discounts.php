@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndDiscounts')){
-    class DOPBSPBackEndDiscounts extends DOPBSPBackEnd{
+    class DOPBSPBackEndDiscounts{
         /*
          * Constructor
          */
@@ -58,36 +58,38 @@ if (!class_exists('DOPBSPBackEndDiscounts')){
             $user_roles = array_values(wp_get_current_user()->roles);
 
             if ($user_roles[0] == 'administrator'){
-                $discounts = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->discounts.' ORDER BY id DESC');
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $discounts = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                                               $DOPBSP->tables->discounts));
             }
             else{
-                $discounts = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->discounts.' WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $discounts = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE user_id=%d OR user_id=0 ORDER BY id DESC',
+                                                               $DOPBSP->tables->discounts,
                                                                wp_get_current_user()->ID));
             }
 
             /*
              * Create discounts list HTML.
              */
-            array_push($html,
-                       '<ul>');
+            $html[] = '<ul>';
 
             if ($wpdb->num_rows != 0){
                 if ($discounts){
                     foreach ($discounts as $discount){
-                        array_push($html,
-                                   $this->listItem($discount));
+                        $html[] = $this->listItem($discount);
                     }
                 }
             }
             else{
-                array_push($html,
-                           '<li class="dopbsp-no-data">'.$DOPBSP->text('DISCOUNTS_NO_DISCOUNTS').'</li>');
+                $html[] = '<li class="dopbsp-no-data">'.$DOT->escape($DOPBSP->text('DISCOUNTS_NO_DISCOUNTS')).'</li>';
             }
-            array_push($html,
-                       '</ul>');
+            $html[] = '</ul>';
 
-            echo implode('',
-                         $html);
+            $DOT->echo(implode('',
+                               $html),
+                       'content',
+                       $DOT->models->allowed_html->items());
 
             die();
         }
@@ -101,45 +103,37 @@ if (!class_exists('DOPBSPBackEndDiscounts')){
          */
         function listItem($discount){
             global $DOPBSP;
+            global $DOT;
 
             $html = array();
             $user = get_userdata($discount->user_id); // Get data about the user who created the discounts.
 
-            array_push($html,
-                       '<li class="dopbsp-item" id="DOPBSP-discount-ID-'.$discount->id.'" onclick="DOPBSPBackEndDiscount.display('.$discount->id.')">');
-            array_push($html,
-                       ' <div class="dopbsp-header">');
+            $html[] = '<li class="dopbsp-item" id="'.$DOT->escape('DOPBSP-discount-ID-'.$discount->id,
+                                                                  'attr').'" onclick="DOPBSPBackEndDiscount.display('.$DOT->escape($discount->id,
+                                                                                                                                   'attr').')">';
+            $html[] = ' <div class="dopbsp-header">';
 
             /*
              * Display discount ID.
              */
-            array_push($html,
-                       '     <span class="dopbsp-id">ID: '.$discount->id.'</span>');
+            $html[] = '     <span class="dopbsp-id">ID: '.$DOT->escape($discount->id).'</span>';
 
             /*
              * Display data about the user who created the discount.
              */
             if ($discount->user_id>0){
-                array_push($html,
-                           '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($discount->user_id,
-                                                                                             17));
-                array_push($html,
-                           '         <span class="dopbsp-info">'.$DOPBSP->text('DISCOUNTS_CREATED_BY').': '.$user->data->display_name.'</span>');
-                array_push($html,
-                           '         <br class="dopbsp-clear" />');
-                array_push($html,
-                           '     </span>');
+                $html[] = '     <span class="dopbsp-header-item dopbsp-avatar">'.get_avatar($discount->user_id,
+                                                                                            17);
+                $html[] = '         <span class="dopbsp-info">'.$DOT->escape($DOPBSP->text('DISCOUNTS_CREATED_BY').': '.$user->data->display_name).'</span>';
+                $html[] = '         <br class="dopbsp-clear" />';
+                $html[] = '     </span>';
             }
-            array_push($html,
-                       '     <br class="dopbsp-clear" />');
-            array_push($html,
-                       ' </div>');
-            array_push($html,
-                       ' <div class="dopbsp-name">'.($discount->name == ''
-                               ? '&nbsp;'
-                               : $discount->name).'</div>');
-            array_push($html,
-                       '</li>');
+            $html[] = '     <br class="dopbsp-clear" />';
+            $html[] = ' </div>';
+            $html[] = ' <div class="dopbsp-name">'.$DOT->escape($discount->name == ''
+                                                                        ? '&nbsp;'
+                                                                        : $discount->name).'</div>';
+            $html[] = '</li>';
 
             return implode('',
                            $html);

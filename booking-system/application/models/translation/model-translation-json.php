@@ -120,11 +120,15 @@ if (!class_exists('DOTModelTranslationJson')){
 
             $json = array();
 
-            $languages = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->languages.' WHERE enabled="true"');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $languages = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE enabled="true"',
+                                                           $DOPBSP->tables->languages));
 
             foreach ($languages as $language){
                 if ($key != ''){
-                    $translation = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->translation.'_'.$language->code.' WHERE key_data="%s"',
+                    //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                    $translation = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE key_data=%s',
+                                                                 $DOPBSP->tables->translation.'_'.$language->code,
                                                                  $key));
                     $json[] = '"'
                             .$language->code

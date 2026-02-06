@@ -269,16 +269,11 @@ if (!class_exists('DOTModelIcal')){
             /*
              * Start iCal.
              */
-            array_push($ical,
-                       'BEGIN:VCALENDAR');
-            array_push($ical,
-                       'PRODID:PINPOINT.WORLD');
-            array_push($ical,
-                       'VERSION:2.0');
-            array_push($ical,
-                       'CALSCALE:GREGORIAN');
-            array_push($ical,
-                       'METHOD:PUBLISH');
+            $ical[] = 'BEGIN:VCALENDAR';
+            $ical[] = 'PRODID:PINPOINT.WORLD';
+            $ical[] = 'VERSION:2.0';
+            $ical[] = 'CALSCALE:GREGORIAN';
+            $ical[] = 'METHOD:PUBLISH';
 
             /*
              * Set timezones.
@@ -296,8 +291,7 @@ if (!class_exists('DOTModelIcal')){
             /*
              * End iCal.
              */
-            array_push($ical,
-                       'END:VCALENDAR');
+            $ical[] = 'END:VCALENDAR';
 
             return implode("\r\n",
                            $ical);

@@ -1,10 +1,10 @@
 @charset "utf-8";
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.8
 * File                    : assets/gui/css/backend-settings.css
-* File Version            : 1.1.1
+* File Version            : 1.1.2
 * Created / Last Modified : 17 March 2016
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
@@ -285,8 +285,6 @@
     -o-transition: background-color 300ms linear;
     transition: background-color 300ms linear;
 }
-
-
 /*
  * ***************************************************************************** Begin retina.
  */

@@ -134,18 +134,14 @@ if (!class_exists('DOTModelXls')){
 
             foreach ($labels as $label){
                 if ($label->usage != 0){
-                    array_push($row,
-                               $label->label);
-                    array_push($row_empty,
-                               ' ');
+                    $row[] = $label->label;
+                    $row_empty[] = ' ';
                 }
             }
-            array_push($content,
-                       implode("\t",
-                               $row));
-            array_push($content,
-                       implode("\t",
-                               $row_empty));
+            $content[] = implode("\t",
+                                 $row);
+            $content[] = implode("\t",
+                                 $row_empty);
 
             /*
              * Set data.
@@ -159,9 +155,8 @@ if (!class_exists('DOTModelXls')){
                                          $item[$key] ?? '-')
                             : null;
                 }
-                array_push($content,
-                           implode("\t",
-                                   $row));
+                $content[] = implode("\t",
+                                     $row);
             }
 
             return implode("\t\n",

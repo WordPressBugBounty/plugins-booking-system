@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndToolsRepairDatabaseText')){
-    class DOPBSPBackEndToolsRepairDatabaseText extends DOPBSPBackEndTools{
+    class DOPBSPBackEndToolsRepairDatabaseText{
         /*
          * Constructor
          */
@@ -41,7 +41,8 @@ if (!class_exists('DOPBSPBackEndToolsRepairDatabaseText')){
              * End verify nonce.
              */
 
-            echo admin_url('admin.php?page=dopbsp-tools');
+            $DOT->echo(admin_url('admin.php?page=dopbsp-tools'),
+                       'url');
 
             die();
         }

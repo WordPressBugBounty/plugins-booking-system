@@ -1,11 +1,11 @@
 <?php
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.1
 * File                    : includes/extras/class-frontend-rules.php
 * File Version            : 1.0.2
-* Created / Last Modified : 26 August 2015
+* Created / Last Modified : 25 August 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
@@ -13,7 +13,7 @@
 */
 
     if (!class_exists('DOPBSPFrontEndRules')){
-        class DOPBSPFrontEndRules extends DOPBSPFrontEnd{
+        class DOPBSPFrontEndRules{
             /*
              * Constructor.
              */
@@ -30,8 +30,10 @@
             function get($id){
                 global $wpdb;
                 global $DOPBSP;
-                
-                $rule = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->rules.' WHERE id=%d ORDER BY id',
+
+                //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                $rule = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d ORDER BY id',
+                                                      $DOPBSP->tables->rules,
                                                       $id));
                 
                 return array('data' => array('rule' => $rule,

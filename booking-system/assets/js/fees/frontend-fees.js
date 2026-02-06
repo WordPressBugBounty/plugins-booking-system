@@ -1,14 +1,14 @@
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.2
 * File                    : assets/js/fees/frontend-fees.js
 * File Version            : 1.0
-* Created / Last Modified : 04 December 2015
+* Created / Last Modified : 08 November 2015
 * Author                  : Dot on Paper
 * Copyright               : © 2012 Dot on Paper
 * Website                 : http://www.dotonpaper.net
-* Description             : Front end fees JavaScript class.
+* Description             : Frontend end fees JavaScript class.
 */
 
 var DOPBSPFrontEndFees = new function(){

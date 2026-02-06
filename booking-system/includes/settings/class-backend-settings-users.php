@@ -13,7 +13,7 @@
 */
 
 if (!class_exists('DOPBSPBackEndSettingsUsers')){
-    class DOPBSPBackEndSettingsUsers extends DOPBSPBackEndSettings{
+    class DOPBSPBackEndSettingsUsers{
         /*
          * Constructor
          */
@@ -65,7 +65,7 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
 
             $roles = $wp_roles->get_names();
 
-            while ($data = current($roles)){
+            while (current($roles)){
                 switch (key($roles)){
                     case 'administrator':
                         get_option('DOPBSP_users_permissions_administrator') == ''
@@ -166,12 +166,12 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
             $calendar_id = $DOT->post('calendar_id',
                                       'int');
 
-            $users = get_users(array('number' => '',
-                                     'offset' => '',
-                                     'order' => $DOT->post('order'),
+            $users = get_users(array('number'  => '',
+                                     'offset'  => '',
+                                     'order'   => $DOT->post('order'),
                                      'orderby' => $DOT->post('orderby'),
-                                     'role' => $DOT->post('role'),
-                                     'search' => $DOT->post('search')));
+                                     'role'    => $DOT->post('role'),
+                                     'search'  => $DOT->post('search')));
 
             foreach ($users as $user){
                 $roles = array();
@@ -181,112 +181,93 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
                 $checkbox_use_custom_posts = array();
 
                 foreach ($user->roles as $role){
-                    array_push($roles,
-                               $wp_roles->roles[$role]['name']);
+                    $roles[] = $wp_roles->roles[$role]['name'];
                 }
 
                 if ($calendar_id == 0){
                     /*
                      * View all calendars setting.
                      */
-                    array_push($checkbox_view,
-                               '<div class="dopbsp-input-wrapper">');
-                    array_push($checkbox_view,
-                               '    <input type="checkbox" name="DOPBSP-settings-users-permissions-view-'.$user->ID.'" id="DOPBSP-settings-users-permissions-view-'.$user->ID.'" onclick="DOPBSPBackEndSettingsUsers.set('.$user->ID.', \'view\')" '.($this->permission($user->ID,
-                                                                                                                                                                                                                                                                        'view-all-calendars',
-                                                                                                                                                                                                                                                                        0)
-                                       ? 'checked="checked"'
-                                       : '').($user->roles[0] == 'administrator'
-                                       ? ''
-                                       : ' disabled="disabled"').' />');
-                    array_push($checkbox_view,
-                               '</div>');
+                    $checkbox_view[] = '<div class="dopbsp-input-wrapper">';
+                    $checkbox_view[] = '    <input type="checkbox" name="DOPBSP-settings-users-permissions-view-'.$user->ID.'" id="DOPBSP-settings-users-permissions-view-'.$user->ID.'" onclick="DOPBSPBackEndSettingsUsers.set('.$user->ID.', \'view\')" '.($this->permission($user->ID,
+                                                                                                                                                                                                                                                                                'view-all-calendars')
+                                    ? 'checked="checked"'
+                                    : '').($user->roles[0] == 'administrator'
+                                    ? ''
+                                    : ' disabled="disabled"').' />';
+                    $checkbox_view[] = '</div>';
 
                     /*
                      * Use booking system setting.
                      */
-                    array_push($checkbox_use,
-                               '<div class="dopbsp-input-wrapper">');
-                    array_push($checkbox_use,
-                               '     <input type="checkbox" name="DOPBSP-settings-users-permissions-use-'.$user->ID.'" id="DOPBSP-settings-users-permissions-use-'.$user->ID.'" onclick="DOPBSPBackEndSettingsUsers.set('.$user->ID.', \'use\')" '.($this->permission($user->ID,
-                                                                                                                                                                                                                                                                      'use-booking-system',
-                                                                                                                                                                                                                                                                      0)
-                                       ? 'checked="checked"'
-                                       : '').($user->roles[0] == 'administrator'
-                                       ? ' disabled="disabled"'
-                                       : '').' />');
-                    array_push($checkbox_use,
-                               '</div>');
+                    $checkbox_use[] = '<div class="dopbsp-input-wrapper">';
+                    $checkbox_use[] = '     <input type="checkbox" name="DOPBSP-settings-users-permissions-use-'.$user->ID.'" id="DOPBSP-settings-users-permissions-use-'.$user->ID.'" onclick="DOPBSPBackEndSettingsUsers.set('.$user->ID.', \'use\')" '.($this->permission($user->ID,
+                                                                                                                                                                                                                                                                             'use-booking-system')
+                                    ? 'checked="checked"'
+                                    : '').($user->roles[0] == 'administrator'
+                                    ? ' disabled="disabled"'
+                                    : '').' />';
+                    $checkbox_use[] = '</div>';
 
                     /*
                      * Use custom posts setting.
                      */
-                    array_push($checkbox_use_custom_posts,
-                               '<div class="dopbsp-input-wrapper">');
-                    array_push($checkbox_use_custom_posts,
-                               '    <input type="checkbox" name="DOPBSP-settings-users-permissions-custom_posts-'.$user->ID.'" id="DOPBSP-settings-users-permissions-custom_posts-'.$user->ID.'" onclick="DOPBSPBackEndSettingsUsers.set('.$user->ID.', \'custom_posts\')" '.($this->permission($user->ID,
-                                                                                                                                                                                                                                                                                                'use-custom-posts',
-                                                                                                                                                                                                                                                                                                0)
-                                       ? 'checked="checked"'
-                                       : '').' />');
-                    array_push($checkbox_use_custom_posts,
-                               '</div>');
+                    $checkbox_use_custom_posts[] = '<div class="dopbsp-input-wrapper">';
+                    $checkbox_use_custom_posts[] = '    <input type="checkbox" name="DOPBSP-settings-users-permissions-custom_posts-'.$user->ID.'" id="DOPBSP-settings-users-permissions-custom_posts-'.$user->ID.'" onclick="DOPBSPBackEndSettingsUsers.set('.$user->ID.', \'custom_posts\')" '.($this->permission($user->ID,
+                                                                                                                                                                                                                                                                                                                    'use-custom-posts')
+                                    ? 'checked="checked"'
+                                    : '').' />';
+                    $checkbox_use_custom_posts[] = '</div>';
                 }
                 else{
                     if ($user->roles[0] != 'administrator'){
-                        array_push($checkbox_use_calendar,
-                                   '<div class="dopbsp-input-wrapper">');
-                        array_push($checkbox_use_calendar,
-                                   '     <input type="checkbox" name="DOPBSP-settings-users-permissions-use-calendar-'.$user->ID.'" id="DOPBSP-settings-users-permissions-use-calendar-'.$user->ID.'" onclick="DOPBSPBackEndSettingsUsers.set('.$user->ID.', \'use-calendar\', '.$calendar_id.')" '.($this->permission($user->ID,
-                                                                                                                                                                                                                                                                                                                       'use-calendar',
-                                                                                                                                                                                                                                                                                                                       $calendar_id)
-                                           ? 'checked="checked"'
-                                           : '').' />');
-                        array_push($checkbox_use_calendar,
-                                   '</div>');
+                        $checkbox_use_calendar[] = '<div class="dopbsp-input-wrapper">';
+                        $checkbox_use_calendar[] = '     <input type="checkbox" name="DOPBSP-settings-users-permissions-use-calendar-'.$user->ID.'" id="DOPBSP-settings-users-permissions-use-calendar-'.$user->ID.'" onclick="DOPBSPBackEndSettingsUsers.set('.$user->ID.', \'use-calendar\', '.$calendar_id.')" '.($this->permission($user->ID,
+                                                                                                                                                                                                                                                                                                                                       'use-calendar',
+                                                                                                                                                                                                                                                                                                                                       $calendar_id)
+                                        ? 'checked="checked"'
+                                        : '').' />';
+                        $checkbox_use_calendar[] = '</div>';
                     }
                 }
 
                 if ($calendar_id == 0
                         || $user->roles[0] != 'administrator'){
-                    array_push($HTML,
-                               '<tr>');
-                    array_push($HTML,
-                               ' <td>'.$user->ID.'</td>');
-                    array_push($HTML,
-                               ' <td>'.get_avatar($user->ID,
-                                                  18,
-                                                  '',
-                                                  $user->first_name.' '.$user->last_name).$user->user_login.'<br />'.$user->first_name.' '.$user->last_name.'</td>');
-                    array_push($HTML,
-                               ' <td>'.$user->user_email.'</td>');
-                    array_push($HTML,
-                               ' <td>'.implode('<br />',
-                                               $roles).'</td>');
+                    $HTML[] = '<tr>';
+                    $HTML[] = ' <td>'.$user->ID.'</td>';
+                    $HTML[] = ' <td>'.get_avatar($user->ID,
+                                                 18,
+                                                 '',
+                                                 $user->first_name.' '.$user->last_name).$user->user_login.'<br />'.$user->first_name.' '.$user->last_name.'</td>';
+                    $HTML[] = ' <td>'.$user->user_email.'</td>';
+                    $HTML[] = ' <td>'.implode('<br />',
+                                              $roles).'</td>';
 
                     if ($calendar_id == 0){
-                        array_push($HTML,
-                                   ' <td>'.implode('',
-                                                   $checkbox_view).'</td>');
-                        array_push($HTML,
-                                   ' <td>'.implode('',
-                                                   $checkbox_use).'</td>');
-                        array_push($HTML,
-                                   ' <td>'.implode('',
-                                                   $checkbox_use_custom_posts).'</td>');
+                        $HTML[] = ' <td>'.implode('',
+                                                  $checkbox_view).'</td>';
+                        $HTML[] = ' <td>'.implode('',
+                                                  $checkbox_use).'</td>';
+                        $HTML[] = ' <td>'.implode('',
+                                                  $checkbox_use_custom_posts).'</td>';
                     }
                     else{
-                        array_push($HTML,
-                                   ' <td>'.implode('',
-                                                   $checkbox_use_calendar).'</td>');
+                        $HTML[] = ' <td>'.implode('',
+                                                  $checkbox_use_calendar).'</td>';
                     }
-                    array_push($HTML,
-                               '</tr>');
+                    $HTML[] = '</tr>';
                 }
             }
 
-            echo implode('',
-                         $HTML);
+            $DOT->echo(implode('',
+                               $HTML),
+                       'content',
+                       array_merge([
+                                           'div' => ['class' => []],
+                                           'td'  => [],
+                                           'tr'  => []
+                                   ],
+                                   $DOT->models->allowed_html->input()));
 
             die();
         }
@@ -395,8 +376,7 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
 
                             for ($i = 1; $i<count($calendars_list)-1; $i++){
                                 if ((int)$calendars_list[$i] != $calendar_id){
-                                    array_push($calendars_new,
-                                               $calendars_list[$i]);
+                                    $calendars_new[] = $calendars_list[$i];
                                 }
                             }
                             update_user_meta($id,
@@ -420,7 +400,7 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
          * @param do (string): user permission
          *                     "use-booking-system": user can use the plugin
          *                     "use-custom-posts": user can use custom posts
-         *                     "use-calendars": user can use calendars set by an administrtor
+         *                     "use-calendars": user can use calendars set by an administrator
          *                     "view-all-calendars": administrator can view all calendars
          * @param calendar_id (integer): calendar ID
          *
@@ -463,7 +443,6 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
                     else{
                         return false;
                     }
-                    break;
                 case 'use-booking-system':
                     if ($user_roles[0] == 'administrator'){
                         return true;
@@ -490,7 +469,6 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
                             return false;
                         }
                     }
-                    break;
                 case 'use-custom-posts':
                     if (get_user_meta($id,
                                       'DOPBSP_permissions_custom_posts',
@@ -512,7 +490,6 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
                         }
                         return false;
                     }
-                    break;
                 case 'use-calendars':
                     if (get_user_meta($id,
                                       'DOPBSP_permissions_calendars',
@@ -525,7 +502,6 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
                     else{
                         return false;
                     }
-                    break;
                 case 'use-calendar':
                     if (get_user_meta($id,
                                       'DOPBSP_permissions_calendars',
@@ -534,8 +510,8 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
                                                    'DOPBSP_permissions_calendars',
                                                    true);
 
-                        if (strpos($calendars,
-                                   ','.$calendar_id.',') === false){
+                        if (!str_contains($calendars,
+                                          ','.$calendar_id.',')){
                             return false;
                         }
                         else{
@@ -545,7 +521,6 @@ if (!class_exists('DOPBSPBackEndSettingsUsers')){
                     else{
                         return false;
                     }
-                    break;
             }
 
             return false;

@@ -1,0 +1,2328 @@
+/*
+ * Title                   : DOT Framework
+ * File                    : framework/assets/gui/css/icons.css
+ * Author                  : Dot on Paper
+ * Copyright               : © 2016 Dot on Paper
+ * Website                 : https://dotonpaper.net
+ * Description             : DOT icons stylesheet.
+ */
+
+@font-face{
+    font-family: 'DOT Icons';
+    src: url('dot-css-assets-url/framework/assets/gui/fonts/icons.eot?z4cimf');
+    src: url('dot-css-assets-url/framework/assets/gui/fonts/icons.eot?z4cimf#iefix') format('embedded-opentype'),
+    url('dot-css-assets-url/framework/assets/gui/fonts/icons.ttf?z4cimf') format('truetype'),
+    url('dot-css-assets-url/framework/assets/gui/fonts/icons.woff?z4cimf') format('woff'),
+    url('dot-css-assets-url/framework/assets/gui/fonts/icons.svg?z4cimf#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*
+ * Code from framework. Uncomment if icons are added in header section again.
+ */
+
+[class^="dot-icon-"],
+[class*=" dot-icon-"]{
+    direction: ltr;
+    display: inline-block;
+    font-family: 'DOT Icons', sans-serif !important;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1;
+    text-align: center;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+[class^="dot-icon-"]:before,
+[class*=" dot-icon-"]:before{
+    content: '\25cf';
+    animation: dot-icon-animation 1000ms linear;
+}
+
+@keyframes dot-icon-animation{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+.dot-icon-action-add:before{
+    content: '\e902';
+}
+
+.dot-icon-action-add-outline:before{
+    content: '\e901';
+}
+
+.dot-icon-action-add-fill:before{
+    content: '\e900';
+}
+
+.dot-icon-action-arrow-down:before{
+    content: '\e91c';
+}
+
+.dot-icon-action-arrow-up:before{
+    content: '\e92b';
+}
+
+.dot-icon-action-arrow-tail-down:before{
+    content: '\ea64';
+}
+
+.dot-icon-action-arrow-tail-down-outline:before{
+    content: '\ea70';
+}
+
+.dot-icon-action-arrow-tail-down-fill:before{
+    content: '\ea71';
+}
+
+.dot-icon-action-arrow-tail-next:before{
+    content: '\ea72';
+}
+
+.dot-icon-action-arrow-tail-next-outline:before{
+    content: '\ea73';
+}
+
+.dot-icon-action-arrow-tail-next-fill:before{
+    content: '\ea74';
+}
+
+.dot-icon-action-arrow-tail-previous:before{
+    content: '\ea75';
+}
+
+.icon-arrow-tail-previous-outline:before{
+    content: '\ea76';
+}
+
+.dot-icon-action-arrow-tail-previous-fill:before{
+    content: '\ea77';
+}
+
+.dot-icon-action-arrow-tail-up:before{
+    content: '\ea78';
+}
+
+.dot-icon-action-arrow-tail-up-outline:before{
+    content: '\ea79';
+}
+
+.dot-icon-action-arrow-tail-up-fill:before{
+    content: '\ea7a';
+}
+
+.dot-icon-action-cancel:before{
+    content: '\ea41';
+}
+
+.dot-icon-action-close:before{
+    content: '\e927';
+}
+
+.dot-icon-action-close-outline:before{
+    content: '\e926';
+}
+
+.dot-icon-action-close-fill:before{
+    content: '\e925';
+}
+
+.dot-icon-action-configure:before{
+    content: '\e928';
+}
+
+.dot-icon-action-collapse:before{
+    content: '\e91e';
+}
+
+.dot-icon-action-cut:before{
+    content: '\eb28';
+}
+
+.dot-icon-action-delete:before{
+    content: '\e920';
+}
+
+.dot-icon-action-down:before{
+    content: '\e908';
+}
+
+.dot-icon-action-down-outline:before{
+    content: '\e907';
+}
+
+.dot-icon-action-down-fill:before{
+    content: '\e906';
+}
+
+.dot-icon-action-download:before{
+    content: '\e9ee';
+}
+
+.dot-icon-action-duplicate:before{
+    content: '\e929';
+}
+
+.dot-icon-action-edit:before{
+    content: '\e9d6';
+}
+
+.dot-icon-action-expand:before{
+    content: '\e91f';
+}
+
+.dot-icon-action-export:before{
+    content: '\e9ef';
+}
+
+.dot-icon-action-fullscreen:before{
+    content: '\ea62';
+}
+
+.dot-icon-action-fullscreen-close:before{
+    content: '\ea63';
+}
+
+.dot-icon-action-generate-code:before{
+    content: '\e92a';
+}
+
+.dot-icon-action-go-to-calendar:before{
+    content: '\eb2d';
+}
+
+.dot-icon-action-import:before{
+    content: '\ea54';
+}
+
+.dot-icon-action-install:before{
+    content: '\e9f0';
+}
+
+.dot-icon-action-left:before{
+    content: '\e911';
+}
+
+.dot-icon-action-left-outline:before{
+    content: '\e910';
+}
+
+.dot-icon-action-left-fill:before{
+    content: '\e90f';
+}
+
+.dot-icon-action-logout:before{
+    content: '\e92c';
+}
+
+.dot-icon-action-menu:before{
+    content: '\e9cd';
+}
+
+.dot-icon-action-next:before{
+    content: '\e91d';
+}
+
+.dot-icon-action-pay:before{
+    content: '\ea42';
+}
+
+.dot-icon-action-previous:before{
+    content: '\e92e';
+}
+
+.dot-icon-action-print:before{
+    content: '\e92d';
+}
+
+.dot-icon-action-redirect:before{
+    content: '\ea7b';
+}
+
+.dot-icon-action-remove:before{
+    content: '\e9e2';
+}
+
+.dot-icon-action-remove-outline:before{
+    content: '\e9e3';
+}
+
+.dot-icon-action-remove-fill:before{
+    content: '\e9e4';
+}
+
+.dot-icon-action-refresh:before{
+    content: '\e948';
+}
+
+.dot-icon-action-renew:before{
+    content: '\ea43';
+}
+
+.dot-icon-action-right:before{
+    content: '\e90e';
+}
+
+.dot-icon-action-right-outline:before{
+    content: '\e90d';
+}
+
+.dot-icon-action-right-fill:before{
+    content: '\e90c';
+}
+
+.dot-icon-action-search:before{
+    content: '\e92f';
+}
+
+.dot-icon-action-share:before{
+    content: '\e930';
+}
+
+.dot-icon-action-skip:before{
+    content: '\eb29';
+}
+
+.dot-icon-action-sort:before{
+    content: '\e921';
+}
+
+.dot-icon-action-submit:before{
+    content: '\ea4f';
+}
+
+.dot-icon-action-up:before{
+    content: '\e90b';
+}
+
+.dot-icon-action-upgrade:before{
+    content: '\ea44';
+}
+
+.dot-icon-action-upload:before{
+    content: '\ea49';
+}
+
+.dot-icon-action-up-outline:before{
+    content: '\e90a';
+}
+
+.dot-icon-action-up-fill:before{
+    content: '\e909';
+}
+
+.dot-icon-action-view:before{
+    content: '\e931';
+}
+
+.dot-icon-action-withdraw:before{
+    content: '\ea4d';
+}
+
+.dot-icon-notification-error:before{
+    content: '\e91a';
+}
+
+.dot-icon-notification-error-outline:before{
+    content: '\e919';
+}
+
+.dot-icon-notification-error-fill:before{
+    content: '\e918';
+}
+
+.dot-icon-notification-info:before{
+    content: '\e924';
+}
+
+.dot-icon-notification-info-outline:before{
+    content: '\e923';
+}
+
+.dot-icon-notification-info-fill:before{
+    content: '\e922';
+}
+
+.dot-icon-notification-none:before{
+    content: '\e91b';
+}
+
+.dot-icon-notification-question:before{
+    content: '\e917';
+}
+
+.dot-icon-notification-question-outline:before{
+    content: '\e916';
+}
+
+.dot-icon-notification-question-fill:before{
+    content: '\e915';
+}
+
+.dot-icon-notification-success:before{
+    content: '\e905';
+}
+
+.dot-icon-notification-success-outline:before{
+    content: '\e904';
+}
+
+.dot-icon-notification-success-fill:before{
+    content: '\e903';
+}
+
+.dot-icon-notification-warning:before{
+    content: '\e914';
+}
+
+.dot-icon-notification-warning-outline:before{
+    content: '\e913';
+}
+
+.dot-icon-notification-warning-fill:before{
+    content: '\e912';
+}
+
+.dot-icon-interface-actions:before{
+    content: '\ea9b';
+}
+
+.dot-icon-interface-add-ons:before{
+    content: '\e932';
+}
+
+.dot-icon-interface-address-billing:before{
+    content: '\ea59';
+}
+
+.dot-icon-interface-address-shipping:before{
+    content: '\ea5a';
+}
+
+.dot-icon-interface-admin:before{
+    content: '\e9f1';
+}
+
+.dot-icon-interface-affiliate:before{
+    content: '\ea0f';
+}
+
+.dot-icon-interface-ajax-admin:before{
+    content: '\e933';
+}
+
+.dot-icon-interface-amenities:before{
+    content: '\e9f2';
+}
+
+.dot-icon-interface-api:before{
+    content: '\e9e8';
+}
+
+.dot-icon-interface-availability:before{
+    content: '\ea4e';
+}
+
+.dot-icon-interface-availabilities:before{
+    content: '\e9d8';
+}
+
+.dot-icon-interface-availability-custom:before{
+    content: '\ea5d';
+}
+
+.dot-icon-interface-availability-custom-item:before{
+    content: '\ea91';
+}
+
+.dot-icon-interface-availability-default:before{
+    content: '\ea5e';
+}
+
+.dot-icon-interface-availability-extensions:before{
+    content: '\e9f6';
+}
+
+.dot-icon-interface-availability-extension-item:before{
+    content: '\ea9c';
+}
+
+.dot-icon-interface-availability-extension-items:before{
+    content: '\eb2e';
+}
+
+.dot-icon-interface-badge:before{
+    content: '\e943';
+}
+
+.dot-icon-interface-balance:before{
+    content: '\ea4a';
+}
+
+.dot-icon-interface-blockquote:before{
+    content: '\e934';
+}
+
+.dot-icon-interface-book:before{
+    content: '\e9fa';
+}
+
+.dot-icon-interface-breadcrumbs:before{
+    content: '\e9fb';
+}
+
+.dot-icon-interface-businesses:before{
+    content: '\e94d';
+}
+
+.dot-icon-interface-business-models:before{
+    content: '\e9fc';
+}
+
+.dot-icon-interface-calendar:before{
+    content: '\e935';
+}
+
+.dot-icon-interface-calendars:before{
+    content: '\e9d2';
+}
+
+.dot-icon-interface-calendar-extensions:before{
+    content: '\e9d3';
+}
+
+.dot-icon-interface-calendar-notifications:before{
+    content: '\e936';
+}
+
+.dot-icon-interface-calendar-steps:before{
+    content: '\e93f';
+}
+
+.dot-icon-interface-calendar-templates:before{
+    content: '\e9fd';
+}
+
+.dot-icon-interface-cart:before{
+    content: '\e937';
+}
+
+.dot-icon-interface-chart:before{
+    content: '\ea4c';
+}
+
+.dot-icon-interface-condition:before{
+    content: '\e955';
+}
+
+.dot-icon-interface-conditions:before{
+    content: '\e953';
+}
+
+.dot-icon-interface-configure:before{
+    content: '\ea6f';
+}
+
+.dot-icon-interface-clipboard:before{
+    content: '\eb2a';
+}
+
+.dot-icon-interface-colors:before{
+    content: '\ea6b';
+}
+
+.dot-icon-interface-coupons:before{
+    content: '\e939';
+}
+
+.dot-icon-interface-coupon-codes:before{
+    content: '\e9d7';
+}
+
+.dot-icon-interface-css-templates:before{
+    content: '\e93a';
+}
+
+.dot-icon-interface-currency:before{
+    content: '\e93b';
+}
+
+.dot-icon-interface-dashboard:before{
+    content: '\ea01';
+}
+
+.dot-icon-interface-data:before{
+    content: '\e9db';
+}
+
+.dot-icon-interface-data-availability-custom-item:before{
+    content: '\e9df';
+}
+
+.dot-icon-interface-data-availability-extension-item:before{
+    content: '\eb2f';
+}
+
+.dot-icon-interface-data-condition:before{
+    content: '\e954';
+}
+
+.dot-icon-interface-data-extra-item:before{
+    content: '\eb37';
+}
+
+.dot-icon-interface-data-info:before{
+    content: '\ea60';
+}
+
+.dot-icon-interface-data-hours-definition:before{
+    content: '\ea61';
+}
+
+.dot-icon-interface-data-location:before{
+    content: '\eb2c';
+}
+
+.dot-icon-interface-data-price:before{
+    content: '\e9dd';
+}
+
+.dot-icon-interface-days:before{
+    content: '\ea85';
+}
+
+.dot-icon-interface-deposits:before{
+    content: '\ea02';
+}
+
+.dot-icon-interface-device-desktop:before{
+    content: '\ea65';
+}
+
+.dot-icon-interface-device-laptop:before{
+    content: '\ea66';
+}
+
+.dot-icon-interface-device-phone:before{
+    content: '\ea67';
+}
+
+.dot-icon-interface-device-tablet:before{
+    content: '\ea68';
+}
+
+.dot-icon-interface-discounts:before{
+    content: '\e93c';
+}
+
+.dot-icon-interface-documentation:before{
+    content: '\ea6e';
+}
+
+.dot-icon-interface-down-payments:before{
+    content: '\ea03';
+}
+
+.dot-icon-interface-dot:before{
+    content: '\e9ec';
+}
+
+.dot-icon-interface-dots:before{
+    content: '\ea04';
+}
+
+.dot-icon-interface-email-templates:before{
+    content: '\e93e';
+}
+
+.dot-icon-interface-extensions:before{
+    content: '\ea51';
+}
+
+.dot-icon-interface-extras:before{
+    content: '\eb35';
+}
+
+.dot-icon-interface-extras-items:before{
+    content: '\eb36';
+}
+
+.dot-icon-interface-feature-available:before{
+    content: '\ea05';
+}
+
+.dot-icon-interface-feature-limited:before{
+    content: '\ea06';
+}
+
+.dot-icon-interface-feature-unavailable:before{
+    content: '\ea08';
+}
+
+.dot-icon-interface-fees:before{
+    content: '\e959';
+}
+
+.dot-icon-interface-files:before{
+    content: '\ea50';
+}
+
+.dot-icon-interface-form-fields:before{
+    content: '\e940';
+}
+
+.dot-icon-interface-form-field-option:before{
+    content: '\ea9d';
+}
+
+.dot-icon-interface-general-settings:before{
+    content: '\e941';
+}
+
+.dot-icon-interface-groups:before{
+    content: '\ea82';
+}
+
+.dot-icon-interface-home:before{
+    content: '\ea8d';
+}
+
+.dot-icon-interface-hour:before{
+    content: '\ea92';
+}
+
+.dot-icon-interface-hours:before{
+    content: '\e9de';
+}
+
+.dot-icon-interface-hours-intervals:before{
+    content: '\ea86';
+}
+
+.dot-icon-interface-image:before{
+    content: '\ea93';
+}
+
+.dot-icon-interface-images:before{
+    content: '\ea94';
+}
+
+.dot-icon-interface-information:before{
+    content: '\e9e9';
+}
+
+.dot-icon-interface-information-outline:before{
+    content: '\e9ea';
+}
+
+.dot-icon-interface-information-fill:before{
+    content: '\e9f3';
+}
+
+.dot-icon-interface-info:before{
+    content: '\ea95';
+}
+
+.dot-icon-interface-infos:before{
+    content: '\ea5f';
+}
+
+.dot-icon-interface-invoice:before{
+    content: '\ea47';
+}
+
+.dot-icon-interface-language:before{
+    content: '\ea0d';
+}
+
+.dot-icon-interface-licence:before{
+    content: '\ea45';
+}
+
+.dot-icon-interface-link:before{
+    content: '\ea4b';
+}
+
+.dot-icon-interface-locate:before{
+    content: '\e968';
+}
+
+.dot-icon-interface-location:before{
+    content: '\e944';
+}
+
+.dot-icon-interface-locations:before{
+    content: '\e9d4';
+}
+
+.dot-icon-interface-multi-language:before{
+    content: '\e945';
+}
+
+.dot-icon-interface-multisite:before{
+    content: '\e946';
+}
+
+.dot-icon-interface-nights:before{
+    content: '\ea87';
+}
+
+.dot-icon-interface-packages:before{
+    content: '\ea98';
+}
+
+.dot-icon-interface-payment:before{
+    content: '\e947';
+}
+
+.dot-icon-interface-payment-gateways:before{
+    content: '\e9cc';
+}
+
+.dot-icon-interface-periods:before{
+    content: '\ea1b';
+}
+
+.dot-icon-interface-platforms:before{
+    content: '\ea9e';
+}
+
+.dot-icon-interface-price:before{
+    content: '\ea8e';
+}
+
+.dot-icon-interface-prices:before{
+    content: '\e9d9';
+}
+
+.dot-icon-interface-product:before{
+    content: '\ea46';
+}
+
+.dot-icon-interface-products:before{
+    content: '\ea1c';
+}
+
+.dot-icon-interface-product-variations:before{
+    content: '\e9dc';
+}
+
+.dot-icon-interface-product-group-variations:before{
+    content: '\e9e0';
+}
+
+.dot-icon-interface-profile:before{
+    content: '\e949';
+}
+
+.dot-icon-interface-receipt:before{
+    content: '\ea48';
+}
+
+.dot-icon-interface-repair-calendar:before{
+    content: '\e94a';
+}
+
+.dot-icon-interface-repair-database:before{
+    content: '\e94b';
+}
+
+.dot-icon-interface-repair-search:before{
+    content: '\e94c';
+}
+
+.dot-icon-interface-reservation:before{
+    content: '\e9d5';
+}
+
+.dot-icon-interface-reservations:before{
+    content: '\e9e1';
+}
+
+.dot-icon-interface-resize:before{
+    content: '\ea69';
+}
+
+.dot-icon-interface-responsive:before{
+    content: '\e94e';
+}
+
+.dot-icon-interface-reviews:before{
+    content: '\ea28';
+}
+
+.dot-icon-interface-rules:before{
+    content: '\e94f';
+}
+
+.dot-icon-interface-schedule:before{
+    content: '\ea5c';
+}
+
+.dot-icon-interface-schedules:before{
+    content: '\e9eb';
+}
+
+.dot-icon-interface-settings:before{
+    content: '\e950';
+}
+
+.dot-icon-interface-seo:before{
+    content: '\eb31';
+}
+
+.dot-icon-interface-services:before{
+    content: '\ea99';
+}
+
+.dot-icon-interface-settings-advanced:before{
+    content: '\ea53';
+}
+
+.dot-icon-interface-settings-availability:before{
+    content: '\e951';
+}
+
+.dot-icon-interface-settings-calendar:before{
+    content: '\ea55';
+}
+
+.dot-icon-interface-settings-checkout:before{
+    content: '\e952';
+}
+
+.dot-icon-interface-settings-notifications:before{
+    content: '\ea56';
+}
+
+.dot-icon-interface-settings-payment:before{
+    content: '\ea90';
+}
+
+.dot-icon-interface-settings-reservations:before{
+    content: '\ea57';
+}
+
+.dot-icon-interface-settings-style:before{
+    content: '\ea58';
+}
+
+.dot-icon-interface-shop:before{
+    content: '\eb2b';
+}
+
+.dot-icon-interface-similar:before{
+    content: '\ea9a';
+}
+
+.dot-icon-interface-sms:before{
+    content: '\e956';
+}
+
+.dot-icon-interface-star:before{
+    content: '\e957';
+}
+
+.dot-icon-interface-stock:before{
+    content: '\e9da';
+}
+
+.dot-icon-interface-style:before{
+    content: '\ea22';
+}
+
+.dot-icon-interface-subscription:before{
+    content: '\eb34';
+}
+
+.dot-icon-interface-summary:before{
+    content: '\e9e5';
+}
+
+.dot-icon-interface-support:before{
+    content: '\ea6d';
+}
+
+.dot-icon-interface-sync:before{
+    content: '\e958';
+}
+
+.dot-icon-interface-tag:before{
+    content: '\ea35';
+}
+
+.dot-icon-interface-tag-outline:before{
+    content: '\ea36';
+}
+
+.dot-icon-interface-taxes:before{
+    content: '\ea96';
+}
+
+.dot-icon-interface-text:before{
+    content: '\ea6c';
+}
+
+.dot-icon-interface-theme:before{
+    content: '\e95c';
+}
+
+.dot-icon-interface-thumbnails:before{
+    content: '\e9cf';
+}
+
+.dot-icon-interface-time:before{
+    content: '\e942';
+}
+
+.dot-icon-interface-time-lapse:before{
+    content: '\e9d1';
+}
+
+.dot-icon-interface-time-machine:before{
+    content: '\e9f7';
+}
+
+.dot-icon-interface-timezone:before{
+    content: '\e95d';
+}
+
+.dot-icon-interface-translation:before{
+    content: '\ea24';
+}
+
+.dot-icon-interface-unfollow:before{
+    content: '\ea52';
+}
+
+.dot-icon-interface-usage:before{
+    content: '\ea5b';
+}
+
+.dot-icon-interface-user:before{
+    content: '\ea25';
+}
+
+.dot-icon-interface-user-outline:before{
+    content: '\ea37';
+}
+
+.dot-icon-interface-users:before{
+    content: '\ea26';
+}
+
+.dot-icon-interface-user-permissions:before{
+    content: '\e95e';
+}
+
+.dot-icon-interface-vat:before{
+    content: '\ea97';
+}
+
+.dot-icon-interface-view-calendar:before{
+    content: '\e95f';
+}
+
+.dot-icon-interface-view-list:before{
+    content: '\e960';
+}
+
+.dot-icon-interface-widgets:before{
+    content: '\e961';
+}
+
+.dot-icon-editor-bold:before{
+    content: '\e9f8';
+}
+
+.dot-icon-editor-bold-close:before{
+    content: '\e9f9';
+}
+
+.dot-icon-editor-code:before{
+    content: '\e9fe';
+}
+
+.dot-icon-editor-code-close:before{
+    content: '\e9ff';
+}
+
+.dot-icon-editor-image:before{
+    content: '\ea09';
+}
+
+.dot-icon-editor-italic:before{
+    content: '\ea0b';
+}
+
+.dot-icon-editor-italic-close:before{
+    content: '\ea0c';
+}
+
+.dot-icon-editor-link:before{
+    content: '\ea0e';
+}
+
+.dot-icon-editor-list-bulleted:before{
+    content: '\e9f4';
+}
+
+.dot-icon-editor-list-bulleted-close:before{
+    content: '\e9ce';
+}
+
+.dot-icon-editor-list-numbered:before{
+    content: '\ea19';
+}
+
+.dot-icon-editor-list-numbered-close:before{
+    content: '\ea1a';
+}
+
+.dot-icon-editor-quote:before{
+    content: '\ea1d';
+}
+
+.dot-icon-editor-quote-close:before{
+    content: '\ea1e';
+}
+
+.dot-icon-forum-feature-requests:before{
+    content: '\ea07';
+}
+
+.dot-icon-forum-replies:before{
+    content: '\ea38';
+}
+
+.dot-icon-forum-replies-outline:before{
+    content: '\ea1f';
+}
+
+.dot-icon-forum-reply:before{
+    content: '\e967';
+}
+
+.dot-icon-forum-reply-last:before{
+    content: '\e966';
+}
+
+.dot-icon-forum-status-approved:before{
+    content: '\e962';
+}
+
+.dot-icon-forum-status-canceled:before{
+    content: '\e963';
+}
+
+.dot-icon-foum-status-pending:before{
+    content: '\e964';
+}
+
+.dot-icon-forum-status-rejected:before{
+    content: '\e965';
+}
+
+.dot-icon-forum-topics:before{
+    content: '\e969';
+}
+
+.dot-icon-forum-topic-closed:before{
+    content: '\e9e7';
+}
+
+.dot-icon-forum-topic-no-feature:before{
+    content: '\e96a';
+}
+
+.dot-icon-forum-topic-reply-needed:before{
+    content: '\e96b';
+}
+
+.dot-icon-forum-topic-solved:before{
+    content: '\e96c';
+}
+
+.dot-icon-forum-topic-unsolved:before{
+    content: '\e96d';
+}
+
+.dot-icon-form-captcha:before{
+    content: '\ea20';
+}
+
+.dot-icon-form-checkbox:before{
+    content: '\e938';
+}
+
+.dot-icon-form-country:before{
+    content: '\eb30';
+}
+
+.dot-icon-form-dropdown:before{
+    content: '\e93d';
+}
+
+.dot-icon-form-email:before{
+    content: '\ea84';
+}
+
+.dot-icon-form-phone:before{
+    content: '\ea27';
+}
+
+.dot-icon-form-text:before{
+    content: '\e95a';
+}
+
+.dot-icon-form-textarea:before{
+    content: '\e95b';
+}
+
+.dot-icon-payment-2checkout:before{
+    content: '\e96e';
+}
+
+.dot-icon-payment-3d-secure:before{
+    content: '\e9f5';
+}
+
+.dot-icon-payment-ach-direct-debit:before{
+    content: '\ea00';
+}
+
+.dot-icon-payment-alipay:before{
+    content: '\ea0a';
+}
+
+.dot-icon-payment-amazon:before{
+    content: '\e96f';
+}
+
+.dot-icon-payment-american-express:before{
+    content: '\e970';
+}
+
+.dot-icon-payment-android-pay:before{
+    content: '\ea10';
+}
+
+.dot-icon-payment-apple-pay:before{
+    content: '\ea11';
+}
+
+.dot-icon-payment-authorizenet:before{
+    content: '\ea88';
+}
+
+.dot-icon-payment-bancontact:before{
+    content: '\ea12';
+}
+
+.dot-icon-payment-braintree:before{
+    content: '\ea89';
+}
+
+.dot-icon-payment-cards:before{
+    content: '\ea7c';
+}
+
+.dot-icon-payment-cartasi:before{
+    content: '\ea13';
+}
+
+.dot-icon-payment-carte-bancaire:before{
+    content: '\ea14';
+}
+
+.dot-icon-payment-carte-bleue:before{
+    content: '\ea15';
+}
+
+.dot-icon-payment-dankort:before{
+    content: '\ea16';
+}
+
+.dot-icon-payment-debit-card:before{
+    content: '\e971';
+}
+
+.dot-icon-payment-diners-club:before{
+    content: '\e972';
+}
+
+.dot-icon-payment-discover:before{
+    content: '\e973';
+}
+
+.dot-icon-payment-enroute:before{
+    content: '\ea3f';
+}
+
+.dot-icon-payment-eps:before{
+    content: '\ea17';
+}
+
+.dot-icon-payment-giropay:before{
+    content: '\ea18';
+}
+
+.dot-icon-payment-google-pay:before{
+    content: '\ea21';
+}
+
+.dot-icon-payment-icepay:before{
+    content: '\ea8a';
+}
+
+.dot-icon-payment-ideal:before{
+    content: '\ea23';
+}
+
+.dot-icon-payment-jcb:before{
+    content: '\e974';
+}
+
+.dot-icon-payment-klarna:before{
+    content: '\ea7d';
+}
+
+.dot-icon-payment-maestro:before{
+    content: '\ea29';
+}
+
+.dot-icon-payment-mastercard:before{
+    content: '\e975';
+}
+
+.dot-icon-payment-masterpass:before{
+    content: '\ea2a';
+}
+
+.dot-icon-payment-microsoft-pay:before{
+    content: '\ea7e';
+}
+
+.dot-icon-payment-mollie:before{
+    content: '\ea8b';
+}
+
+.dot-icon-payment-multibanco:before{
+    content: '\ea2b';
+}
+
+.dot-icon-payment-mybank:before{
+    content: '\ea7f';
+}
+
+.dot-icon-payment-nordea:before{
+    content: '\ea2c';
+}
+
+.dot-icon-payment-p24:before{
+    content: '\ea2d';
+}
+
+.dot-icon-payment-paypal:before{
+    content: '\e976';
+}
+
+.dot-icon-payment-paysafe:before{
+    content: '\ea2e';
+}
+
+.dot-icon-payment-redsys:before{
+    content: '\ea8f';
+}
+
+.dot-icon-payment-samsung-pay:before{
+    content: '\ea80';
+}
+
+.dot-icon-payment-sepa:before{
+    content: '\ea2f';
+}
+
+.dot-icon-payment-sofort:before{
+    content: '\ea30';
+}
+
+.dot-icon-payment-stripe:before{
+    content: '\ea83';
+}
+
+.dot-icon-payment-union-pay:before{
+    content: '\ea31';
+}
+
+.dot-icon-payment-venmo:before{
+    content: '\ea32';
+}
+
+.dot-icon-payment-visa:before{
+    content: '\e977';
+}
+
+.dot-icon-payment-visa-checkout:before{
+    content: '\ea81';
+}
+
+.dot-icon-payment-visa-debit:before{
+    content: '\ea33';
+}
+
+.dot-icon-payment-visa-electron:before{
+    content: '\ea34';
+}
+
+.dot-icon-payment-wechat:before{
+    content: '\ea6a';
+}
+
+.dot-icon-payment-wepay:before{
+    content: '\ea8c';
+}
+
+.dot-icon-social-android:before{
+    content: '\e978';
+}
+
+.dot-icon-social-behance:before{
+    content: '\ea39';
+}
+
+.dot-icon-social-drupal:before{
+    content: '\e979';
+}
+
+.dot-icon-social-facebook:before{
+    content: '\e97a';
+}
+
+.dot-icon-social-google:before{
+    content: '\e97b';
+}
+
+.dot-icon-social-instagram:before{
+    content: '\eb32';
+}
+
+.dot-icon-social-ios:before{
+    content: '\e97c';
+}
+
+.dot-icon-social-joomla:before{
+    content: '\e97d';
+}
+
+.dot-icon-social-linkedin:before{
+    content: '\e9d0';
+}
+
+.dot-icon-social-magento:before{
+    content: '\e97e';
+}
+
+.dot-icon-social-medium:before{
+    content: '\ea3a';
+}
+
+.dot-icon-social-online:before{
+    content: '\ea40';
+}
+
+.dot-icon-social-pinterest:before{
+    content: '\e9e6';
+}
+
+.dot-icon-social-quora:before{
+    content: '\ea3b';
+}
+
+.dot-icon-social-reddit:before{
+    content: '\ea3c';
+}
+
+.dot-icon-social-shopify:before{
+    content: '\e97f';
+}
+
+.dot-icon-social-slideshare:before{
+    content: '\ea3d';
+}
+
+.dot-icon-social-twitter:before{
+    content: '\e9ed';
+}
+
+.dot-icon-social-woocommerce:before{
+    content: '\e980';
+}
+
+.dot-icon-social-wordpress:before{
+    content: '\e981';
+}
+
+.dot-icon-social-x:before{
+    content: '\eb33';
+}
+
+.dot-icon-social-youtube:before{
+    content: '\ea3e';
+}
+
+.dot-icon-business-acupuncture:before{
+    content: '\e982';
+}
+
+.dot-icon-business-aero-club:before{
+    content: '\e983';
+}
+
+.dot-icon-business-anesthesiologist:before{
+    content: '\e984';
+}
+
+.dot-icon-business-apartment:before{
+    content: '\e985';
+}
+
+.dot-icon-business-aquarium:before{
+    content: '\e986';
+}
+
+.dot-icon-business-archery-range:before{
+    content: '\e987';
+}
+
+.dot-icon-business-babysitter:before{
+    content: '\e988';
+}
+
+.dot-icon-business-badminton-courts:before{
+    content: '\e989';
+}
+
+.dot-icon-business-ballroom:before{
+    content: '\e98a';
+}
+
+.dot-icon-business-bar:before{
+    content: '\e98b';
+}
+
+.dot-icon-business-barn:before{
+    content: '\e98c';
+}
+
+.dot-icon-business-baseball-field:before{
+    content: '\e98d';
+}
+
+.dot-icon-business-basketball-courts:before{
+    content: '\e98e';
+}
+
+.dot-icon-business-beach:before{
+    content: '\e98f';
+}
+
+.dot-icon-business-beauty-salon:before{
+    content: '\e990';
+}
+
+.dot-icon-business-bed-breakfast:before{
+    content: '\e991';
+}
+
+.dot-icon-business-bikes-rental:before{
+    content: '\e992';
+}
+
+.dot-icon-business-boat-rental:before{
+    content: '\e993';
+}
+
+.dot-icon-business-book-club:before{
+    content: '\e994';
+}
+
+.dot-icon-business-boutique-hotel:before{
+    content: '\e995';
+}
+
+.dot-icon-business-bowling:before{
+    content: '\e996';
+}
+
+.dot-icon-business-boxing-gym:before{
+    content: '\e997';
+}
+
+.dot-icon-business-brewery:before{
+    content: '\e998';
+}
+
+.dot-icon-business-bungalow:before{
+    content: '\e999';
+}
+
+.dot-icon-business-bus-rental:before{
+    content: '\e99a';
+}
+
+.dot-icon-business-bus-tickets:before{
+    content: '\e99b';
+}
+
+.dot-icon-business-cabin:before{
+    content: '\e99c';
+}
+
+.dot-icon-business-camping-gear:before{
+    content: '\e99d';
+}
+
+.dot-icon-business-camping-site:before{
+    content: '\e99e';
+}
+
+.dot-icon-business-car-detailing:before{
+    content: '\e99f';
+}
+
+.dot-icon-business-cardiologist:before{
+    content: '\e9a0';
+}
+
+.dot-icon-business-caravan-rental:before{
+    content: '\e9a1';
+}
+
+.dot-icon-business-cars-rental:before{
+    content: '\e9a2';
+}
+
+.dot-icon-business-carting:before{
+    content: '\e9a3';
+}
+
+.dot-icon-business-castle:before{
+    content: '\e9a4';
+}
+
+.dot-icon-business-cat-cafe:before{
+    content: '\e9a5';
+}
+
+.dot-icon-business-catering:before{
+    content: '\e9a6';
+}
+
+.dot-icon-business-chauffeur-services:before{
+    content: '\e9a7';
+}
+
+.dot-icon-business-chef:before{
+    content: '\e9a8';
+}
+
+.dot-icon-business-children-care:before{
+    content: '\e9a9';
+}
+
+.dot-icon-business-cinema:before{
+    content: '\e9aa';
+}
+
+.dot-icon-business-cleaning:before{
+    content: '\e9ab';
+}
+
+.dot-icon-business-clinic:before{
+    content: '\e9ac';
+}
+
+.dot-icon-business-clothes:before{
+    content: '\e9ad';
+}
+
+.dot-icon-business-costumes:before{
+    content: '\e9ae';
+}
+
+.dot-icon-business-cottage:before{
+    content: '\e9af';
+}
+
+.dot-icon-business-counseling:before{
+    content: '\e9b0';
+}
+
+.dot-icon-business-country-club:before{
+    content: '\e9b1';
+}
+
+.dot-icon-business-course:before{
+    content: '\e9b2';
+}
+
+.dot-icon-business-coworking-space:before{
+    content: '\e9b3';
+}
+
+.dot-icon-business-cricket-field:before{
+    content: '\e9b4';
+}
+
+.dot-icon-business-cruise:before{
+    content: '\e9b5';
+}
+
+.dot-icon-business-curling-rink:before{
+    content: '\e9b6';
+}
+
+.dot-icon-business-dance-instructor:before{
+    content: '\e9b7';
+}
+
+.dot-icon-business-dancing-school:before{
+    content: '\e9b8';
+}
+
+.dot-icon-business-dental-clinic:before{
+    content: '\e9b9';
+}
+
+.dot-icon-business-dentist:before{
+    content: '\e9ba';
+}
+
+.dot-icon-business-dermatologist:before{
+    content: '\e9bb';
+}
+
+.dot-icon-business-design:before{
+    content: '\e9bc';
+}
+
+.dot-icon-business-designer-handbags:before{
+    content: '\e9bd';
+}
+
+.dot-icon-business-diving:before{
+    content: '\e9be';
+}
+
+.dot-icon-business-dj:before{
+    content: '\e9bf';
+}
+
+.dot-icon-business-dog-training:before{
+    content: '\e9c0';
+}
+
+.dot-icon-business-driving-instructor:before{
+    content: '\e9c1';
+}
+
+.dot-icon-business-driving-school:before{
+    content: '\e9c2';
+}
+
+.dot-icon-business-electrician:before{
+    content: '\e9c3';
+}
+
+.dot-icon-business-endocrinologist:before{
+    content: '\e9c4';
+}
+
+.dot-icon-business-engineer:before{
+    content: '\e9c5';
+}
+
+.dot-icon-business-escape-room:before{
+    content: '\e9c6';
+}
+
+.dot-icon-business-esthetician:before{
+    content: '\e9c7';
+}
+
+.dot-icon-business-family-phisician:before{
+    content: '\e9c8';
+}
+
+.dot-icon-business-farm:before{
+    content: '\e9c9';
+}
+
+.dot-icon-business-ferry:before{
+    content: '\e9ca';
+}
+
+.dot-icon-business-financial-services:before{
+    content: '\e9cb';
+}
+
+.dot-icon-business-football-pitches:before{
+    content: '\ea9f';
+}
+
+.dot-icon-business-futsal-courts:before{
+    content: '\eaa0';
+}
+
+.dot-icon-business-gadgets:before{
+    content: '\eaa1';
+}
+
+.dot-icon-business-gallery:before{
+    content: '\eaa2';
+}
+
+.dot-icon-business-garage-rental:before{
+    content: '\eaa3';
+}
+
+.dot-icon-business-gastroenterologist:before{
+    content: '\eaa4';
+}
+
+.dot-icon-business-golf-court:before{
+    content: '\eaa5';
+}
+
+.dot-icon-business-guest-suite:before{
+    content: '\eaa6';
+}
+
+.dot-icon-business-guesthouse:before{
+    content: '\eaa7';
+}
+
+.dot-icon-business-gym:before{
+    content: '\eaa8';
+}
+
+.dot-icon-business-hair-salon:before{
+    content: '\eaa9';
+}
+
+.dot-icon-business-hairdresser:before{
+    content: '\eaaa';
+}
+
+.dot-icon-business-harbor:before{
+    content: '\eaab';
+}
+
+.dot-icon-business-health-club:before{
+    content: '\eaac';
+}
+
+.dot-icon-business-heavy-equipment:before{
+    content: '\eaad';
+}
+
+.dot-icon-business-hiking:before{
+    content: '\eaae';
+}
+
+.dot-icon-business-hockey-rink:before{
+    content: '\eaaf';
+}
+
+.dot-icon-business-home-care:before{
+    content: '\eab0';
+}
+
+.dot-icon-business-hospital:before{
+    content: '\eab1';
+}
+
+.dot-icon-business-hostel:before{
+    content: '\eab2';
+}
+
+.dot-icon-business-hotel:before{
+    content: '\eab3';
+}
+
+.dot-icon-business-house:before{
+    content: '\eab4';
+}
+
+.dot-icon-business-houseboat:before{
+    content: '\eab5';
+}
+
+.dot-icon-business-hunting:before{
+    content: '\eab6';
+}
+
+.dot-icon-business-hut:before{
+    content: '\eab7';
+}
+
+.dot-icon-business-infectious-disease:before{
+    content: '\eab8';
+}
+
+.dot-icon-business-insurance-agent:before{
+    content: '\eab9';
+}
+
+.dot-icon-business-internal-medicine:before{
+    content: '\eaba';
+}
+
+.dot-icon-business-island:before{
+    content: '\eabb';
+}
+
+.dot-icon-business-it-services:before{
+    content: '\eabc';
+}
+
+.dot-icon-business-jet-skis:before{
+    content: '\eabd';
+}
+
+.dot-icon-business-kayak-safari:before{
+    content: '\eabe';
+}
+
+.dot-icon-business-kitchen:before{
+    content: '\eabf';
+}
+
+.dot-icon-business-laboratory:before{
+    content: '\eac0';
+}
+
+.dot-icon-business-laser-tag:before{
+    content: '\eac1';
+}
+
+.dot-icon-business-law-firm:before{
+    content: '\eac2';
+}
+
+.dot-icon-business-lawyer:before{
+    content: '\eac3';
+}
+
+.dot-icon-business-library:before{
+    content: '\eac4';
+}
+
+.dot-icon-business-lighthouse:before{
+    content: '\eac5';
+}
+
+.dot-icon-business-locksmith:before{
+    content: '\eac6';
+}
+
+.dot-icon-business-lodge:before{
+    content: '\eac7';
+}
+
+.dot-icon-business-loft:before{
+    content: '\eac8';
+}
+
+.dot-icon-business-maintenance-repair-worker:before{
+    content: '\eac9';
+}
+
+.dot-icon-business-massage-therapist:before{
+    content: '\eaca';
+}
+
+.dot-icon-business-mediator:before{
+    content: '\eacb';
+}
+
+.dot-icon-business-meeting-room:before{
+    content: '\eacc';
+}
+
+.dot-icon-business-microblading:before{
+    content: '\eacd';
+}
+
+.dot-icon-business-moto-rental:before{
+    content: '\eace';
+}
+
+.dot-icon-business-museum:before{
+    content: '\eacf';
+}
+
+.dot-icon-business-music-band:before{
+    content: '\ead0';
+}
+
+.dot-icon-business-nails-salon:before{
+    content: '\ead1';
+}
+
+.dot-icon-business-natural-park:before{
+    content: '\ead2';
+}
+
+.dot-icon-business-nephrologist:before{
+    content: '\ead3';
+}
+
+.dot-icon-business-neurologist:before{
+    content: '\ead4';
+}
+
+.dot-icon-business-night-club:before{
+    content: '\ead5';
+}
+
+.dot-icon-business-non-profit:before{
+    content: '\ead6';
+}
+
+.dot-icon-business-notary:before{
+    content: '\ead7';
+}
+
+.dot-icon-business-obstetrician:before{
+    content: '\ead8';
+}
+
+.dot-icon-business-oncologist:before{
+    content: '\ead9';
+}
+
+.dot-icon-business-ophtalmologist:before{
+    content: '\eada';
+}
+
+.dot-icon-business-otolaryngologist:before{
+    content: '\eadb';
+}
+
+.dot-icon-business-paintball:before{
+    content: '\eadc';
+}
+
+.dot-icon-business-parking:before{
+    content: '\eadd';
+}
+
+.dot-icon-business-party-supplies:before{
+    content: '\eade';
+}
+
+.dot-icon-business-pediatrician:before{
+    content: '\eadf';
+}
+
+.dot-icon-business-personal-trainer:before{
+    content: '\eae0';
+}
+
+.dot-icon-business-pet-care:before{
+    content: '\eae1';
+}
+
+.dot-icon-business-pet-clinic:before{
+    content: '\eae2';
+}
+
+.dot-icon-business-pet-hotel:before{
+    content: '\eae3';
+}
+
+.dot-icon-business-pharmacy:before{
+    content: '\eae4';
+}
+
+.dot-icon-business-phone-repair-services:before{
+    content: '\eae5';
+}
+
+.dot-icon-business-photo-equipment:before{
+    content: '\eae6';
+}
+
+.dot-icon-business-photographer:before{
+    content: '\eae7';
+}
+
+.dot-icon-business-physician:before{
+    content: '\eae8';
+}
+
+.dot-icon-business-physician-executive:before{
+    content: '\eae9';
+}
+
+.dot-icon-business-pilates-instructor:before{
+    content: '\eaea';
+}
+
+.dot-icon-business-plumber:before{
+    content: '\eaeb';
+}
+
+.dot-icon-business-pool:before{
+    content: '\eaec';
+}
+
+.dot-icon-business-private-planes:before{
+    content: '\eaed';
+}
+
+.dot-icon-business-pulmonologist:before{
+    content: '\eaee';
+}
+
+.dot-icon-business-psychiatrist:before{
+    content: '\eaef';
+}
+
+.dot-icon-business-radiologist:before{
+    content: '\eaf0';
+}
+
+.dot-icon-business-real-estate-agent:before{
+    content: '\eaf1';
+}
+
+.dot-icon-business-resort:before{
+    content: '\eaf2';
+}
+
+.dot-icon-business-restaurant:before{
+    content: '\eaf3';
+}
+
+.dot-icon-business-room:before{
+    content: '\eaf4';
+}
+
+.dot-icon-business-rugby-field:before{
+    content: '\eaf5';
+}
+
+.dot-icon-business-running-track:before{
+    content: '\eaf6';
+}
+
+.dot-icon-business-safari:before{
+    content: '\eaf7';
+}
+
+.dot-icon-business-school:before{
+    content: '\eaf8';
+}
+
+.dot-icon-business-shoes:before{
+    content: '\eaf9';
+}
+
+.dot-icon-business-shooting-range:before{
+    content: '\eafa';
+}
+
+.dot-icon-business-shuttle:before{
+    content: '\eafb';
+}
+
+.dot-icon-business-ski-slope:before{
+    content: '\eafc';
+}
+
+.dot-icon-business-skills-trainer:before{
+    content: '\eafd';
+}
+
+.dot-icon-business-skydiving:before{
+    content: '\eafe';
+}
+
+.dot-icon-business-snooker-club:before{
+    content: '\eaff';
+}
+
+.dot-icon-business-spa:before{
+    content: '\eb00';
+}
+
+.dot-icon-business-sport-fishing:before{
+    content: '\eb01';
+}
+
+.dot-icon-business-sports-center:before{
+    content: '\eb02';
+}
+
+.dot-icon-business-sports-coach:before{
+    content: '\eb03';
+}
+
+.dot-icon-business-sports-equipment:before{
+    content: '\eb04';
+}
+
+.dot-icon-business-squash-courts:before{
+    content: '\eb05';
+}
+
+.dot-icon-business-storage-box:before{
+    content: '\eb06';
+}
+
+.dot-icon-business-storage-facility:before{
+    content: '\eb07';
+}
+
+.dot-icon-business-studio:before{
+    content: '\eb08';
+}
+
+.dot-icon-business-studio-apartment:before{
+    content: '\eb09';
+}
+
+.dot-icon-business-surfing:before{
+    content: '\eb0a';
+}
+
+.dot-icon-business-surgeon:before{
+    content: '\eb0b';
+}
+
+.dot-icon-business-swimming-pool:before{
+    content: '\eb0c';
+}
+
+.dot-icon-business-tanning-salon:before{
+    content: '\eb0d';
+}
+
+.dot-icon-business-tattoo-artist:before{
+    content: '\eb0e';
+}
+
+.dot-icon-business-tattoo-studio:before{
+    content: '\eb0f';
+}
+
+.dot-icon-business-tennis-courts:before{
+    content: '\eb10';
+}
+
+.dot-icon-business-tent:before{
+    content: '\eb11';
+}
+
+.dot-icon-business-theater:before{
+    content: '\eb12';
+}
+
+.dot-icon-business-tour:before{
+    content: '\eb13';
+}
+
+.dot-icon-business-treehouse:before{
+    content: '\eb14';
+}
+
+.dot-icon-business-tutor:before{
+    content: '\eb15';
+}
+
+.dot-icon-business-tyres-hotel:before{
+    content: '\eb16';
+}
+
+.dot-icon-business-utilities:before{
+    content: '\eb17';
+}
+
+.dot-icon-business-veterinarian:before{
+    content: '\eb18';
+}
+
+.dot-icon-business-villa:before{
+    content: '\eb19';
+}
+
+.dot-icon-business-water-park:before{
+    content: '\eb1a';
+}
+
+.dot-icon-business-weapons:before{
+    content: '\eb1b';
+}
+
+.dot-icon-business-wedding-planner:before{
+    content: '\eb1c';
+}
+
+.dot-icon-business-wheelchairs:before{
+    content: '\eb1d';
+}
+
+.dot-icon-business-winery:before{
+    content: '\eb1e';
+}
+
+.dot-icon-business-windmill:before{
+    content: '\eb1f';
+}
+
+.dot-icon-business-winter-equipment:before{
+    content: '\eb20';
+}
+
+.dot-icon-business-work-tools:before{
+    content: '\eb21';
+}
+
+.dot-icon-business-workshop:before{
+    content: '\eb22';
+}
+
+.dot-icon-business-writing:before{
+    content: '\eb23';
+}
+
+.dot-icon-business-yacht-rental:before{
+    content: '\eb24';
+}
+
+.dot-icon-business-yoga:before{
+    content: '\eb25';
+}
+
+.dot-icon-business-yurt:before{
+    content: '\eb26';
+}
+
+.dot-icon-business-zoo:before{
+    content: '\eb27';
+}

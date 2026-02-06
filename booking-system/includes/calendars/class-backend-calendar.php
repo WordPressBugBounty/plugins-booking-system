@@ -15,12 +15,6 @@
 if (!class_exists('DOPBSPBackEndCalendar')){
     class DOPBSPBackEndCalendar extends DOPBSPBackEndCalendars{
         /*
-         * Constructor
-         */
-        function __construct(){
-        }
-
-        /*
          * Returns a JSON with calendar's data & options.
          *
          * @post id (integer): calendar ID
@@ -28,9 +22,9 @@ if (!class_exists('DOPBSPBackEndCalendar')){
          * @return options JSON
          */
         function getOptions(){
+            global $DOT;
             global $wpdb;
             global $DOPBSP;
-            global $DOT;
 
             /*
              * Verify nonce.
@@ -54,11 +48,12 @@ if (!class_exists('DOPBSPBackEndCalendar')){
             $settings_calendar = $DOPBSP->classes->backend_settings->values($id,
                                                                             'calendar');
 
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $id));
 
             $data = array('AddLastHourToTotalPrice'       => $settings_calendar->hours_add_last_hour_to_total_price,
-                          'AddtMonthViewText'             => $DOPBSP->text('CALENDARS_CALENDAR_ADD_MONTH_VIEW'),
                           'AvailableDays'                 => explode(',',
                                                                      $settings_calendar->days_available),
                           'AvailableLabel'                => $DOPBSP->text('CALENDARS_CALENDAR_FORM_AVAILABLE_LABEL'),
@@ -126,7 +121,8 @@ if (!class_exists('DOPBSPBackEndCalendar')){
                           'StatusUnavailableText'         => $DOPBSP->text('CALENDARS_CALENDAR_FORM_STATUS_UNAVAILABLE_TEXT'),
                           'UnavailableText'               => $DOPBSP->text('CALENDARS_CALENDAR_UNAVAILABLE_TEXT'));
 
-            echo json_encode($data);
+            $DOT->echo($data,
+                       'json');
 
             die();
         }
@@ -164,6 +160,7 @@ if (!class_exists('DOPBSPBackEndCalendar')){
             /*
              * Update calendar field.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->calendars,
                           array($field => $value),
                           array('id' => $id));
@@ -202,28 +199,34 @@ if (!class_exists('DOPBSPBackEndCalendar')){
             /*
              * Delete calendar.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->calendars,
                           array('id' => $id));
 
             /*
              * Delete calendar schedule.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->days,
                           array('calendar_id' => $id));
 
             /*
              * Delete calendar reservations.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->reservations,
                           array('calendar_id' => $id));
 
             /*
              * Delete calendar settings.
              */
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->settings_calendar,
                           array('calendar_id' => $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->settings_notifications,
                           array('calendar_id' => $id));
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->delete($DOPBSP->tables->settings_payment,
                           array('calendar_id' => $id));
 
@@ -246,9 +249,12 @@ if (!class_exists('DOPBSPBackEndCalendar')){
             /*
              * Count the number of remaining calendars.
              */
-            $calendars = $wpdb->get_results('SELECT * FROM '.$DOPBSP->tables->calendars.' ORDER BY id DESC');
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $wpdb->get_results($wpdb->prepare('SELECT * FROM %i ORDER BY id DESC',
+                                              $DOPBSP->tables->calendars));
 
-            echo $wpdb->num_rows;
+            $DOT->echo($wpdb->num_rows,
+                       'int');
 
             die();
         }
@@ -264,7 +270,9 @@ if (!class_exists('DOPBSPBackEndCalendar')){
             global $wpdb;
             global $DOPBSP;
 
-            $calendar = $wpdb->get_row($wpdb->prepare('SELECT max_year FROM '.$DOPBSP->tables->calendars.' WHERE id=%d',
+            //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+            $calendar = $wpdb->get_row($wpdb->prepare('SELECT max_year FROM %i WHERE id=%d',
+                                                      $DOPBSP->tables->calendars,
                                                       $id));
 
             return (int)($calendar->max_year == 0

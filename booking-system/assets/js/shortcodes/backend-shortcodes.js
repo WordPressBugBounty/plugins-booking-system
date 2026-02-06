@@ -1,6 +1,6 @@
 
 /*
-* Title                   : Pinpoint Booking System WordPress Plugin
+* Title                   : Pinpoint Booking System WordPress Plugin (PRO)
 * Version                 : 2.1.1
 * File                    : assets/js/backend-shortcodes.php
 * File Version            : 1.0.3
@@ -36,6 +36,8 @@
                 selectLanguage = DOPBSP_tinyMCE_data.split(';;;;;')[5],
                 languagesData = DOPBSP_tinyMCE_data.split(';;;;;')[6],
                 languages = languagesData.split(';;;'),
+                searchesData = DOPBSP_tinyMCE_data.split(';;;;;')[7], 
+                searches = searchesData.split(';;;'), 
                 selectedLanguage = DOPBSP_language;
             
             if (parseFloat(WP_version) > 3.8){ 
@@ -47,6 +49,14 @@
                         valueALL.push('<option value="'+calendars[i].split(';;')[0]+'">ID: '+calendars[i].split(';;')[0]+": "+calendars[i].split(';;')[1]+'</option>');
                     }
                 }
+                var searchValueNew = '',
+                    searchValueALL = [];
+                // GET Searches
+                for (i=0; i<searches.length; i++){
+                    if (searches[i] !== ''){
+                        searchValueALL.push('<option value="'+searches[i].split(';;')[0]+'">ID: '+searches[i].split(';;')[0]+": "+searches[i].split(';;')[1]+'</option>');
+                    }
+                } 
                 // GET Languages
                 var langValueNew = '',
                 langValueALL = [];
@@ -66,12 +76,23 @@
                         formHTML.push('   <select id="DOPBSP-select-element" onchange="dopbspChangeElement(this);">');
                         formHTML.push('       <option value="none">Select element</option>');
                         formHTML.push('       <option value="calendar">Calendar</option>');
-                        formHTML.push('       <option value="search" disabled="disabled">Search - Only in PRO</option>');
+                        formHTML.push('       <option value="search">Search</option>');
+                        formHTML.push('       <option value="search-widget">Search Widget</option>');
                         formHTML.push('   </select>');
                         formHTML.push('   <select id="DOPBSP-select-calendar" onchange="dopbspChangeElement(this);" class="dopbsp-hide">');
                         formHTML.push('       <option value="none">Select calendar</option>');
                         formHTML.push(        valueALL.join(''));
                         formHTML.push('   </select>');
+                        formHTML.push('   <select id="DOPBSP-select-search" onchange="dopbspChangeElement(this);" class="dopbsp-hide">');
+                        formHTML.push('       <option value="none">Select search</option>');
+                        formHTML.push(        searchValueALL.join(''));
+                        formHTML.push('   </select>'); 
+                        formHTML.push('   <select id="DOPBSP-select-search-redirect" onchange="dopbspChangeElementRedirect(this);" class="dopbsp-hide">');
+                        formHTML.push('       <option value="none">Redirect at</option>');
+                        formHTML.push('       <option value="search">Search results page</option>');
+                        formHTML.push('       <option value="first_result">First result page</option>');
+                        formHTML.push('   </select>');
+                        formHTML.push('   <input id="DOPBSP-select-search-redirect-id" class="dopbsp-hide" placeholder="Post/Page ID" />');
                         formHTML.push('   <select id="DOPBSP-select-language" onchange="dopbspChangeElement(this);" class="dopbsp-hide">');
                         formHTML.push('       <option value="none">Select language</option>');
                         formHTML.push(        langValueALL.join(''));
@@ -144,14 +165,20 @@
 })();
 
 function dopbspInsertShortcode(){
-    var element = 'calendar',
+    var element = jQuery('#DOPBSP-select-element').val(),
         calendar = jQuery('#DOPBSP-select-calendar').val(),
+        search = jQuery('#DOPBSP-select-search').val(),
+        redirect_id = jQuery('#DOPBSP-select-search-redirect-id').val(),
         language = jQuery('#DOPBSP-select-language').val(),
         viewMode = jQuery('#DOPBSP-view-mode').is(':checked') ? true:false,
         shortcodeHML = '';
-
+    
         if (element === 'calendar') {
             shortcodeHML = '[dopbsp id="'+calendar+'" '+(viewMode === true ? 'view="true"':'')+' lang="'+language+'"]';
+        } else if (element === 'search'){
+            shortcodeHML = '[dopbsp item="search" id="'+search+'" lang="'+language+'"]';
+        } else if (element === 'search-widget'){
+            shortcodeHML = '[dopbsp item="search-widget" id="'+search+'" '+(redirect_id !== '' ? 'redirect_id="'+redirect_id+'"':'')+' lang="'+language+'"]';
         }
         
         if (shortcodeHML !== '') {
@@ -169,6 +196,7 @@ function dopbspChangeElement(el){
     jQuery(el).val(el.value);
     var element = jQuery('#DOPBSP-select-element').val(),
         calendar = jQuery('#DOPBSP-select-calendar').val(),
+        search = jQuery('#DOPBSP-select-search').val(),
         language = jQuery('#DOPBSP-select-language').val();
     
     if (element !== 'none') {
@@ -176,6 +204,8 @@ function dopbspChangeElement(el){
         if (element === 'calendar') {
             // SHOW ELEMENTS
             jQuery('#DOPBSP-select-calendar').removeClass('dopbsp-hide');
+            jQuery('#DOPBSP-select-search-redirect').addClass('dopbsp-hide');
+            jQuery('#DOPBSP-select-search').addClass('dopbsp-hide');
             jQuery('#DOPBSP-select-language').removeClass('dopbsp-hide');
             jQuery('#DOPBSP-view-mode-container').removeClass('dopbsp-hide');
 
@@ -186,10 +216,40 @@ function dopbspChangeElement(el){
                 jQuery('#DOPBSP-add').addClass('dopbsp-hide');
             }
 
+        } else if (element === 'search'){
+            // SHOW ELEMENTS
+            jQuery('#DOPBSP-select-calendar').addClass('dopbsp-hide');
+            jQuery('#DOPBSP-select-search-redirect').addClass('dopbsp-hide');
+            jQuery('#DOPBSP-select-search').removeClass('dopbsp-hide');
+            jQuery('#DOPBSP-select-language').removeClass('dopbsp-hide');
+            jQuery('#DOPBSP-view-mode-container').addClass('dopbsp-hide'); 
+
+            if (search !== 'none' && language !== 'none' ){
+                jQuery('#DOPBSP-add').removeClass('dopbsp-hide');
+            } else {
+                // dopbsp-hide add
+                jQuery('#DOPBSP-add').addClass('dopbsp-hide');
+            }
+        } else if (element === 'search-widget'){
+            // SHOW ELEMENTS
+            jQuery('#DOPBSP-select-calendar').addClass('dopbsp-hide');
+            jQuery('#DOPBSP-select-search').removeClass('dopbsp-hide');
+            jQuery('#DOPBSP-select-search-redirect').removeClass('dopbsp-hide');
+            jQuery('#DOPBSP-select-language').removeClass('dopbsp-hide');
+            jQuery('#DOPBSP-view-mode-container').addClass('dopbsp-hide'); 
+
+            if (search !== 'none' && language !== 'none' ){
+                jQuery('#DOPBSP-add').removeClass('dopbsp-hide');
+            } else {
+                // dopbsp-hide add
+                jQuery('#DOPBSP-add').addClass('dopbsp-hide');
+            }
         }
     } else {
         // dopbsp-hide ELEMENTS
         jQuery('#DOPBSP-select-calendar').addClass('dopbsp-hide');
+        jQuery('#DOPBSP-select-search-redirect').addClass('dopbsp-hide');
+        jQuery('#DOPBSP-select-search').addClass('dopbsp-hide');
         jQuery('#DOPBSP-select-language').addClass('dopbsp-hide');
         jQuery('#DOPBSP-view-mode-container').addClass('dopbsp-hide');
         jQuery('#DOPBSP-add').addClass('dopbsp-hide');
@@ -202,4 +262,24 @@ function dopbspCancelShortcode(){
         jQuery('.DOPBSP-window').remove();
         jQuery('.DOPBSP-window-background').remove();
     });
+}
+
+function dopbspChangeElementRedirect(el){
+    jQuery(el).val(el.value);
+    var element = jQuery('#DOPBSP-select-search-redirect').val();
+    
+    if (element !== 'none') {
+
+        if (element === 'search') {
+            // SHOW ELEMENTS
+            jQuery('#DOPBSP-select-search-redirect-id').removeClass('dopbsp-hide');
+
+        } else if (element === 'first_result'){
+            // SHOW ELEMENTS
+            jQuery('#DOPBSP-select-search-redirect-id').addClass('dopbsp-hide');
+        }  else {
+        // dopbsp-hide ELEMENTS
+            jQuery('#DOPBSP-select-search-redirect-id').addClass('dopbsp-hide');
+        }
+    }
 }
