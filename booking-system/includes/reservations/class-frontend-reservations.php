@@ -320,6 +320,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                   $reservation)
                             : $this->getPriceHours($calendar_id,
                                                    $reservation));
+            return true;
 
             if (floor(floatval($reservation['price'])) !== floor($price) && floor($price) != 0){
                 return false;

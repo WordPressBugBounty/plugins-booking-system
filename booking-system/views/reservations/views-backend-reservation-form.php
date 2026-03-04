@@ -52,6 +52,9 @@ if (!class_exists('DOPBSPViewsBackEndReservationForm')){
                                                                   'attr'); ?>" value='<?php $DOT->echo($reservation->form); ?>' />
                         <?php
                         $form = json_decode($reservation->form);
+                        is_null($form)
+                                ? $form = array()
+                                : null;
 
                         for ($i = 0; $i<count($form); $i++){
                             $is_email = false;

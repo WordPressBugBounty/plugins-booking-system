@@ -4,7 +4,7 @@ Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_m
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
 Requires at least: 6.3
 Tested up to: 6.9
-Stable tag: 2.9.9.6.4
+Stable tag: 2.9.9.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,6 +163,12 @@ Click <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#
 View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Changelog ==
+= 2.9.9.6.5 =
+* A number of issues that can return 120 errors have been resolved.
+* Compatibility with different WordPress email plugins has been verified, and any issues and incompatibilities have been fixed.
+* Reservations without form data now display correctly in the admin.
+* The XLS export bug has been fixed.
+
 = 2.9.9.6.4 =
 * Add-on files now load correctly, bug fixed.
 * Total price is now displayed correctly in email notifications, bug fixed.
@@ -181,33 +187,14 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 = 2.9.9.6.0 =
 * Modifications have been made to ensure compliance with WordPress guidelines.
 * IMPORTANT! PHP 8 is required.
-
-= 2.9.9.5.9 =
-* iCal files for calendars are now generated correctly, bug repaired.
-
-= 2.9.9.5.8 =
-* Calendars with hours correctly verify the available time periods, bug repaired.
-* JS and CSS file versions are now set correctly to ensure the latest files are loaded.
-* Security bug repaired.
-* The deprecated woocommerce_add_order_item_meta hook has been replaced with woocommerce_new_order_item for compatibility with the latest WooCommerce versions.
-* The iCal format has been updated to ensure compatibility with the latest standards.
-* The SMTP email notifications bug has been fixed.
-
-= 2.9.9.5.7 =
-* Compatibility with certain WooCommerce plugins has been improved.
-* Security bug repaired.
-* The scroll/jump bug on mobile devices affecting some themes has been repaired.
-* The WooCommerce cart price is now displayed correctly, bug repaired.
-
-= 2.9.9.5.6 =
-* PHP 7.4 compatibility checks and support functions have been implemented.
-
-= 2.9.9.5.5 =
-* Compatibility with PHP 8.2 has been improved.
-
-View complete changelog <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
 
 == Upgrade Notice ==
+= 2.9.9.6.5 =
+* A number of issues that can return 120 errors have been resolved.
+* Compatibility with different WordPress email plugins has been verified, and any issues and incompatibilities have been fixed.
+* Reservations without form data now display correctly in the admin.
+* The XLS export bug has been fixed.
+
 = 2.9.9.6.4 =
 * Add-on files now load correctly, bug fixed.
 * Total price is now displayed correctly in email notifications, bug fixed.
@@ -226,26 +213,3 @@ View complete changelog <a href="https://pinpoint.world/documentation-booking/wo
 = 2.9.9.6.0 =
 * Modifications have been made to ensure compliance with WordPress guidelines.
 * IMPORTANT! PHP 8 is required.
-
-= 2.9.9.5.9 =
-* iCal files for calendars are now generated correctly, bug repaired.
-
-= 2.9.9.5.8 =
-* Calendars with hours correctly verify the available time periods, bug repaired.
-* JS and CSS file versions are now set correctly to ensure the latest files are loaded.
-* Security bug repaired.
-* The deprecated woocommerce_add_order_item_meta hook has been replaced with woocommerce_new_order_item for compatibility with the latest WooCommerce versions.
-* The iCal format has been updated to ensure compatibility with the latest standards.
-* The SMTP email notifications bug has been fixed.
-
-= 2.9.9.5.7 =
-* Compatibility with certain WooCommerce plugins has been improved.
-* Security bug repaired.
-* The scroll/jump bug on mobile devices affecting some themes has been repaired.
-* The WooCommerce cart price is now displayed correctly, bug repaired.
-
-= 2.9.9.5.6 =
-* PHP 7.4 compatibility checks and support functions have been implemented.
-
-= 2.9.9.5.5 =
-* Compatibility with PHP 8.2 has been improved.

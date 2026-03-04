@@ -96,6 +96,12 @@ if (!class_exists('DOPBSPNotifications')){
             $email_name = $email_name == ''
                     ? $email_reply
                     : $email_name;
+            $email_cc = $email_cc === null
+                    ? ''
+                    : $email_cc;
+            $email_bcc = $email_bcc === null
+                    ? ''
+                    : $email_bcc;
 
             switch ($method){
                 case 'mail':
@@ -213,8 +219,10 @@ if (!class_exists('DOPBSPNotifications')){
             /*
              * Add Cc addresses.
              */
-            $emails_cc = explode(',',
-                                 $email_cc);
+            $emails_cc = $email_cc == ''
+                    ? array()
+                    : explode(',',
+                              $email_cc);
             $emails_cc_name = explode(',',
                                       $email_cc_name);
 
@@ -227,8 +235,10 @@ if (!class_exists('DOPBSPNotifications')){
             /*
              * Add Bcc addresses.
              */
-            $emails_bcc = explode(',',
-                                  $email_bcc);
+            $emails_bcc = $email_bcc == ''
+                    ? array()
+                    : explode(',',
+                              $email_bcc);
             $emails_bcc_name = explode(',',
                                        $email_bcc_name);
 
@@ -307,8 +317,10 @@ if (!class_exists('DOPBSPNotifications')){
             /*
              * Add Cc addresses.
              */
-            $emails_cc = explode(',',
-                                 $email_cc);
+            $emails_cc = $email_cc == ''
+                    ? array()
+                    : explode(',',
+                              $email_cc);
             $emails_cc_name = explode(',',
                                       $email_cc_name);
 
@@ -320,8 +332,10 @@ if (!class_exists('DOPBSPNotifications')){
             /*
              * Add Bcc addresses.
              */
-            $emails_bcc = explode(',',
-                                  $email_bcc);
+            $emails_bcc = $email_bcc == ''
+                    ? array()
+                    : explode(',',
+                              $email_bcc);
             $emails_bcc_name = explode(',',
                                        $email_bcc_name);
 
@@ -350,16 +364,16 @@ if (!class_exists('DOPBSPNotifications')){
                     die();
                 }
                 else{
-                    $this->sendWPMail($email_to,
-                                      $email_from,
-                                      $email_reply,
-                                      $email_name,
-                                      $email_cc,
-                                      $email_cc_name,
-                                      $email_bcc,
-                                      $email_bcc_name,
-                                      $subject,
-                                      $message);
+                    $this->sendMail($email_to,
+                                    $email_from,
+                                    $email_reply,
+                                    $email_name,
+                                    $email_cc,
+                                    $email_cc_name,
+                                    $email_bcc,
+                                    $email_bcc_name,
+                                    $subject,
+                                    $message);
                 }
             }
             else{
@@ -440,8 +454,10 @@ if (!class_exists('DOPBSPNotifications')){
             /*
              * Add Cc addresses.
              */
-            $emails_cc = explode(',',
-                                 $email_cc);
+            $emails_cc = $email_cc == ''
+                    ? array()
+                    : explode(',',
+                              $email_cc);
             $emails_cc_name = explode(',',
                                       $email_cc_name);
 
@@ -453,8 +469,10 @@ if (!class_exists('DOPBSPNotifications')){
             /*
              * Add Bcc addresses.
              */
-            $emails_bcc = explode(',',
-                                  $email_bcc);
+            $emails_bcc = $email_bcc == ''
+                    ? array()
+                    : explode(',',
+                              $email_bcc);
             $emails_bcc_name = explode(',',
                                        $email_bcc_name);
 
@@ -541,8 +559,10 @@ if (!class_exists('DOPBSPNotifications')){
             /*
              * Add Cc addresses.
              */
-            $emails_cc = explode(',',
-                                 $email_cc);
+            $emails_cc = $email_cc == ''
+                    ? array()
+                    : explode(',',
+                              $email_cc);
             $emails_cc_name = explode(',',
                                       $email_cc_name);
 
@@ -555,8 +575,10 @@ if (!class_exists('DOPBSPNotifications')){
             /*
              * Add Bcc addresses.
              */
-            $emails_bcc = explode(',',
-                                  $email_bcc);
+            $emails_bcc = $email_bcc == ''
+                    ? array()
+                    : explode(',',
+                              $email_bcc);
             $emails_bcc_name = explode(',',
                                        $email_bcc_name);
 
@@ -585,16 +607,16 @@ if (!class_exists('DOPBSPNotifications')){
                     die();
                 }
                 else{
-                    $this->sendMail($email_to,
-                                    $email_from,
-                                    $email_reply,
-                                    $email_name,
-                                    $email_cc,
-                                    $email_cc_name,
-                                    $email_bcc,
-                                    $email_bcc_name,
-                                    $subject,
-                                    $message);
+                    $this->sendMailer($email_to,
+                                      $email_from,
+                                      $email_reply,
+                                      $email_name,
+                                      $email_cc,
+                                      $email_cc_name,
+                                      $email_bcc,
+                                      $email_bcc_name,
+                                      $subject,
+                                      $message);
                 }
             }
             else{

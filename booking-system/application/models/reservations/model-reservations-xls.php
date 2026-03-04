@@ -816,7 +816,7 @@ if (!class_exists('DOTModelReservationsXls')){
             /*
              * Get iCal.
              */
-            $dot->echo($DOT->models->xls->get($labels,
+            $DOT->echo($DOT->models->xls->get($labels,
                                               $data),
                        'textarea');
 
