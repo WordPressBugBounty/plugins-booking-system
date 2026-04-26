@@ -115,25 +115,25 @@ if (!class_exists('DOTModelDays')){
                      $day_end){
             $days = array();
 
-            $start_year = substr($day_start,
-                                 0,
-                                 4);
-            $start_month = substr($day_start,
-                                  5,
-                                  2);
-            $start_day = substr($day_start,
-                                8,
-                                2);
+            $start_year = (int)substr($day_start,
+                                      0,
+                                      4);
+            $start_month = (int)substr($day_start,
+                                       5,
+                                       2);
+            $start_day = (int)substr($day_start,
+                                     8,
+                                     2);
 
-            $end_year = substr($day_end,
-                               0,
-                               4);
-            $end_month = substr($day_end,
-                                5,
-                                2);
-            $end_day = substr($day_end,
-                              8,
-                              2);
+            $end_year = (int)substr($day_end,
+                                    0,
+                                    4);
+            $end_month = (int)substr($day_end,
+                                     5,
+                                     2);
+            $end_day = (int)substr($day_end,
+                                   8,
+                                   2);
 
             $start = mktime(1,
                             0,

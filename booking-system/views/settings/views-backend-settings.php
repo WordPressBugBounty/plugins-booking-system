@@ -69,10 +69,6 @@ if (!class_exists('DOPBSPViewsBackEndSettings')){
                                                 <div class="dopbsp-icon"></div>
                                                 <div class="dopbsp-title"><?php $DOT->echo($DOPBSP->text('SETTINGS_USERS_TITLE')); ?></div>
                                             </li>
-                                            <li class="dopbsp-settings-item dopbsp-licences" onclick="DOPBSPBackEndSettingsLicences.display(0)">
-                                                <div class="dopbsp-icon"></div>
-                                                <div class="dopbsp-title"><?php $DOT->echo($DOPBSP->text('SETTINGS_LICENCES_TITLE')); ?></div>
-                                            </li>
                                         </ul>
                                     </div>
                                 </td>

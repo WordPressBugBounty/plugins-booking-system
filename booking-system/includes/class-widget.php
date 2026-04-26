@@ -48,6 +48,7 @@ class DOPBSPWidget extends WP_Widget{
     function form($instance){
         global $wpdb;
         global $DOPBSP;
+        global $DOT;
 
         $instance = wp_parse_args((array)$instance,
                                   array('title'     => '',
@@ -203,6 +204,8 @@ class DOPBSPWidget extends WP_Widget{
 
     function widget($args,
                     $instance){
+        global $DOT;
+        
         extract($args,
                 EXTR_SKIP);
 

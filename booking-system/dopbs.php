@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Pinpoint Booking System - Version 2
-Version: 2.9.9.6.5
+Version: 2.9.9.6.6
 Plugin URI: https://wordpress.org/plugins/booking-system/
 Description: Transform your WordPress website into a booking/reservation system. If you like this plugin, feel free to rate it five stars at <a href="https://wordpress.org/support/view/plugin-reviews/booking-system" target="_blank">Wordpress</a> in Reviews section. If you encounter any problems please contact us at <a href="mailto:support@pinpoint.world">support@pinpoint.world</a> so we can help you.
 Author: PINPOINT.WORLD
@@ -12,6 +12,14 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 /*
 Change log:
+
+        2.9.9.6.6 (2026-04-26)
+
+                * iCal timezone transitions are now created correctly for specific timezones, bug fixed.
+                * License activation has been removed from the free version. The PRO version must be installed for this feature to work.
+                * Reservations are now added correctly, and new hooks have been implemented for the latest versions of WooCommerce.
+                * The mktime() function is now used correctly, bug fixed.
+                * The widgets is displayed correctly on the page, bug fixed.
 
         2.9.9.6.5 (2026-03-04)
 

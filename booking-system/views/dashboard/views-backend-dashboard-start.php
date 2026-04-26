@@ -39,13 +39,6 @@ if (!class_exists('DOPBSPViewsBackEndDashboardStart')){
                             </a>
                         </li>
                         <li>
-                            <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-locations'),
-                                                      'url'); ?>">
-                                <span class="dopbsp-icon dopbsp-locations"></span>
-                                <?php $DOT->echo($DOPBSP->text('DASHBOARD_GET_STARTED_LOCATIONS')); ?>
-                            </a>
-                        </li>
-                        <li>
                             <a href="<?php $DOT->echo(admin_url('admin.php?page=dopbsp-reservations'),
                                                       'url'); ?>">
                                 <span class="dopbsp-icon dopbsp-reservations"></span>

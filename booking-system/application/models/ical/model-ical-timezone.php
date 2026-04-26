@@ -622,18 +622,24 @@ if (!class_exists('DOTModelIcalTimezone')){
             /*
              * Set transitions.
              */
-            for ($i = 1; $i<count($transitions); $i = $i+2){
-                /*
-                 * Set daylight transition.
-                 */
-                $this->transition($ical,
-                                  $transitions[$i]);
+            if (count($transitions)>1){
+                for ($i = 1; $i<count($transitions); $i = $i+2){
+                    /*
+                     * Set daylight transition.
+                     */
+                    $this->transition($ical,
+                                      $transitions[$i]);
 
-                /*
-                 * Set standard transition.
-                 */
+                    /*
+                     * Set standard transition.
+                     */
+                    $this->transition($ical,
+                                      $transitions[$i+1]);
+                }
+            }
+            else{
                 $this->transition($ical,
-                                  $transitions[$i+1]);
+                                  $transitions[0]);
             }
         }
 

@@ -26,6 +26,12 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                              'add'),
                        10,
                        3);
+            add_action('woocommerce_store_api_checkout_update_order_meta',
+                       array(&$this,
+                             'add'),
+                       10,
+                       3);
+
             /*
              * Add order item meta & save order item ID.
              */
