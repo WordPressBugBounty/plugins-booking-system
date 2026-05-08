@@ -2497,9 +2497,9 @@
  * ***************************************************************************** Begin referral text.
  */
 .DOPBSPCalendar-referral{
-    color: #000000 !important;
+    color: #a6aab5 !important;
     font-family: 'Open Sans', sans-serif !important;
-    font-size: 15px !important;
+    font-size: 11px !important;
     font-weight: 300 !important;
     line-height: 38px !important;
     text-align: left !important;
@@ -2507,7 +2507,7 @@
 }
 
 .DOPBSPCalendar-referral a{
-    color: #1a1a1a;
+    color: #888691;
     text-decoration: none !important;
     -webkit-transition: color 300ms linear;
     -moz-transition: color 300ms linear;

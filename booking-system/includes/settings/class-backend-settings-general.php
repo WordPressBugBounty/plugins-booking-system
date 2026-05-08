@@ -67,7 +67,7 @@ if (!class_exists('DOPBSPBackEndSettingsGeneral')){
                          'dopbsp_licence_status'   => 'deactivated',
                          'google_map_api_key'      => '',
                          'referral_id'             => '',
-                         'referral_display'        => 'false');
+                         'referral_display'        => 'true');
         }
     }
 }

@@ -131,8 +131,15 @@ if (!class_exists('DOPBSPViewsBackEndReservation')){
                         <?php
                     }
                     else{
+                        $refund_enabled = $reservation->payment_method.'_refund_enabled';
                         ?>
                         <div class="dopbsp-buttons-wrapper">
+                            <a href="javascript:DOPBSPBackEnd.confirmation('RESERVATIONS_RESERVATION_CANCEL_CONFIRMATION<?php $DOT->echo(isset($settings_payment->$refund_enabled) && $settings_payment->$refund_enabled == 'true'
+                                                                                                                                                 ? '_REFUND'
+                                                                                                                                                 : ''); ?>', 'DOPBSPBackEndReservation.cancel(<?php $DOT->echo($reservation->id,
+                                                                                                                                                                                                               'js'); ?>)')" class="dopbsp-button-cancel" style="display: <?php $DOT->echo($display_cancel_button
+                                                                                                                                                                                                                                                                                                   ? 'block'
+                                                                                                                                                                                                                                                                                                   : 'none'); ?>"><?php $DOT->echo($DOPBSP->text('RESERVATIONS_RESERVATION_CANCEL')); ?></a>
                             <a href="javascript:DOPBSPBackEnd.confirmation('RESERVATIONS_RESERVATION_DELETE_CONFIRMATION', 'DOPBSPBackEndReservation.delete(<?php $DOT->echo($reservation->id,
                                                                                                                                                                              'js'); ?>)')" class="dopbsp-button-delete" style="display: <?php $DOT->echo($display_delete_button
                                                                                                                                                                                                                                                                  ? 'block'
