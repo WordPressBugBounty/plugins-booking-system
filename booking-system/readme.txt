@@ -4,7 +4,7 @@ Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_m
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
 Requires at least: 6.3
 Tested up to: 6.9
-Stable tag: 2.9.9.6.7
+Stable tag: 2.9.9.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,7 +24,7 @@ Being an administrator of this booking calendar is just as easy. Pinpoint Bookin
 
 <blockquote>
     <p>
-	    <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Plugin website</a> | <a href="https://pinpoint.world/shop?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">PRO version</a> | <a href="https://pinpoint.world/documentation-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Documentation</a> | <a href="https://wordpress.org/support/plugin/booking-system/">Support</a>
+	    <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Plugin website</a> | <a href="https://pinpoint.world/shop?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">PRO version</a> | <a href="https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Documentation</a> | <a href="https://pinpoint.world/contact">Support</a>
     </p>
 </blockquote>
 
@@ -33,12 +33,6 @@ Being an administrator of this booking calendar is just as easy. Pinpoint Bookin
 **FREE vs PRO**
 
 The FREE version is limited to 1 calendar. Some functionality is limited by this restriction, but almost all features are available.
-
-<blockquote>
-    <p>
-        <a href="https://pinpoint.world/wordpress-booking/features?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Learn more</a>
-    </p>
-</blockquote>
 
 <h3>Responsive Booking Calendar</h3>
 With this WordPress booking calendar plugin, your clients will be able to book your services and check for their availability directly from your WordPress website. This AJAX simple calendar makes it easier for your clients to make appointments because there is no need to refresh the page to make any updates.
@@ -49,47 +43,17 @@ The Pinpoint booking calendar can be customized to a great extent: the client ca
 
 Your client is able to see a summary of their reservation and, if necessary, you can add a custom form that they can fill in - directly in the booking calendar.
 
-<blockquote>
-    <p>
-        <a href="https://pinpoint.world/demos/wordpress-booking/calendar/?back=https%3A%2F%2Fwordpress.org%2Fplugins%2Fbooking-system&utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">View demo</a> | <a href="https://pinpoint.world/wordpress-booking/calendar?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Learn more</a>
-    </p>
-</blockquote>
-
 <h4>Book Days</h4>
 In your booking calendar, days are displayed with one out of 5 types of availability: none, available, booked, special or unavailable. You can set a special price for groups of days, or select the minimum or the maximum number of days that can be booked.
-
-<blockquote>
-    <p>
-        <a href="https://pinpoint.world/demos/wordpress-booking/days-en/?back=https%3A%2F%2Fwordpress.org%2Fplugins%2Fbooking-system&utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">View demo</a>
-    </p>
-</blockquote>
 
 <h4>Book Nights</h4>
 This feature is perfect for you if you're in the accommodation business. The booking calendar offers support for morning check-outs. Your clients will have the option of checking-in in the afternoons and checking-out in the mornings - and the prices and availability will be displayed accordingly.
 
-<blockquote>
-    <p>
-        <a href="https://pinpoint.world/demos/wordpress-booking/nights-en/?back=https%3A%2F%2Fwordpress.org%2Fplugins%2Fbooking-system&utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">View demo</a>
-    </p>
-</blockquote>
-
 <h4>Book Hours</h4>
 With Pinpoint, you can control your reservations by hours. Hours are treated exactly the same as days, with 5 types of availability, special prices for groups of hours or a minimum or a maximum number of bookable hours.
 
-<blockquote>
-    <p>
-        <a href="https://pinpoint.world/demos/wordpress-booking/hours-en/?back=https%3A%2F%2Fwordpress.org%2Fplugins%2Fbooking-system&utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">View demo</a>
-    </p>
-</blockquote>
-
 <h4>Book Hours Intervals</h4>
 Pinpoint booking calendar lets you adjust the reservation time interval even more - with the help of the time slot. You can set hour intervals for your bookings, down to the minute. This gives you increased precision and control over your client's reservations.
-
-<blockquote>
-    <p>
-        <a href="https://pinpoint.world/demos/wordpress-booking/hours-intervals-en/?back=https%3A%2F%2Fwordpress.org%2Fplugins%2Fbooking-system&utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">View demo</a>
-    </p>
-</blockquote>
 
 <h3>Reservations management</h3>
 
@@ -138,31 +102,18 @@ You can use any currency with our Pinpoint booking system. However, if you need 
 <h4>Online Payment Getaways</h4>
 Even though payment cannot be mandatory when a client makes a reservation, it can be an option. With this booking calendar, PayPal is the default payment method, but if you have another preference, you can change that with add-ons. There are 6 payment gateways to choose from  - Stripe, WePay, 2Checkout, Authorize.Net, Braintree, ICEPAY and Mollie.
 
-<blockquote>
-    <p>
-        <a href="https://pinpoint.world/wordpress-booking/features?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository"><strong>FULL LIST OF FEATURES</strong></a>
-    </p>
-</blockquote>
-
-<blockquote>
-    <p>
-        <a href="https://pinpoint.world/blog/pinpoints-2019-roadmap-1?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">Learn more</a>
-    </p>
-</blockquote>
-
 == Installation ==
 
 Upload the folder **booking-system** from the zip file to "wp-content/plugins" and activate the plugin in your admin panel or upload **booking-system.zip** in the "Add new" section.
 
 == Frequently Asked Questions ==
 
-Click <a href="https://pinpoint.world/documentation-booking/wordpress-changelog#free?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a> to view Pinpoint Booking System WordPress Plugin Documentation.
-
-== Screenshots ==
-
-View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a>.
+Click <a href="https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a> to view Pinpoint Booking System WordPress Plugin Documentation.
 
 == Changelog ==
+= 2.9.9.6.8 =
+* The day generation logic used for availability verification has been updated to work correctly on newer PHP versions.
+
 = 2.9.9.6.7 =
 * Reservations can be canceled or refunded after the check-in date has passed.
 
@@ -199,6 +150,9 @@ View live examples <a href="https://pinpoint.world/wordpress-booking?utm_source=
 * IMPORTANT! PHP 8 is required.
 
 == Upgrade Notice ==
+= 2.9.9.6.8 =
+* The day generation logic used for availability verification has been updated to work correctly on newer PHP versions.
+
 = 2.9.9.6.7 =
 * Reservations can be canceled or refunded after the check-in date has passed.
 

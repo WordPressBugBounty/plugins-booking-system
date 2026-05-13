@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Pinpoint Booking System - Version 2
-Version: 2.9.9.6.7
+Version: 2.9.9.6.8
 Plugin URI: https://wordpress.org/plugins/booking-system/
-Description: Transform your WordPress website into a booking/reservation system. If you like this plugin, feel free to rate it five stars at <a href="https://wordpress.org/support/view/plugin-reviews/booking-system" target="_blank">Wordpress</a> in Reviews section. If you encounter any problems please contact us at <a href="mailto:support@pinpoint.world">support@pinpoint.world</a> so we can help you.
+Description: Transform your WordPress website into a booking/reservation system. If you like this plugin, feel free to rate it five stars at <a href="https://wordpress.org/support/plugin/booking-system/reviews" target="_blank">Wordpress</a> in Reviews section. If you encounter any problems please contact us at <a href="https://pinpoint.world/contact">https://pinpoint.world/contact</a> so we can help you.
 Author: PINPOINT.WORLD
 Author URI: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository
 License: GPL v2 or later
@@ -12,6 +12,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 /*
 Change log:
+
+        2.9.9.6.8 (2026-05-08)
+
+                * The day generation logic used for availability verification has been updated to work correctly on newer PHP versions.
 
         2.9.9.6.7 (2026-05-08)
 
@@ -2973,7 +2977,7 @@ function dopbspMissingFiles(){
     $error = array();
 
     $error[] = '<div class="update-nag">';
-    $error[] = '  <p>WARNING for Pinpoint Booking System! Not all PHP files needed to run the plugin are on the server, in folder <strong>wp-content/plugins/dopbsp/</strong>. If you are installing or updating the plugin using FTP, please allow all files to upload, or try to upload them again. If you think all files are on the server and this message still exist, please contact us at <a href="mailto:support@pinpoint.world" target="_blank">support@pinpoint.world</a>.</p>';
+    $error[] = '  <p>WARNING for Pinpoint Booking System! Not all PHP files needed to run the plugin are on the server, in folder <strong>wp-content/plugins/dopbsp/</strong>. If you are installing or updating the plugin using FTP, please allow all files to upload, or try to upload them again. If you think all files are on the server and this message still exist, please contact us at <a href="https://pinpoint.world/contact" target="_blank">https://pinpoint.world/contact</a>.</p>';
     $error[] = '</div>';
 
     $DOT->echo(implode('',

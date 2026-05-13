@@ -1126,7 +1126,7 @@ if (!class_exists('DOPBSPBackEnd')){
                     $error[] = '<div id="DOPBSP-rating-remove" class="updated notice dopbsp-notice">';
                     $error[] = '  <p>';
                     $error[] = '    Thank you for using Pinpoint Booking System. If you enjoy our plugin, please give us a 5 star rating';
-                    $error[] = '    <a href="https://pinpoint.world/shop/reviews/pinpoint-booking-system-wordpress-plugin-pro-version-1?utm_source=WordPress&utm_medium=Plugin%20PRO" target="_blank"> here</a>. ';
+                    $error[] = '    <a href="https://wordpress.org/support/plugin/booking-system/reviews?utm_source=WordPress&utm_medium=Plugin%20PRO" target="_blank"> here</a>. ';
                     $error[] = '  </p>';
                     $error[] = '  <a href="'.$url.'&dopbsp_request_rating_close=true" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></a>';
                     $error[] = '</div>';

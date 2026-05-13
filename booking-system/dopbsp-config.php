@@ -104,7 +104,7 @@ define('DOPBSP_CONFIG_SERVER_CURL_VERSION',
 // ***************************************************************************** Begin help defaults.
 
 define('DOPBSP_CONFIG_HELP_DOCUMENTATION_URL',
-       'https://pinpoint.world/documentation-booking?utm_source=WordPress&utm_medium=Plugin%20PRO'); // Link to plugin documentation.
+       'https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=WordPress&utm_medium=Plugin%20PRO'); // Link to plugin documentation.
 define('DOPBSP_CONFIG_SHOP_URL',
         (isset($_SERVER['SERVER_NAME'])
                 ? ($_SERVER['SERVER_NAME'] == 'dopstudios.net'

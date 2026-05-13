@@ -919,7 +919,7 @@ if (!class_exists('DOTModelAvailabilityDays')){
                                      0,
                                      date('n'),
                                      date('j'),
-                                     date('Y'))+$this->settings->booking_stop*60);
+                                     date('Y'))+(int)$this->settings->booking_stop*60);
 
             /*
              * Get last day.
