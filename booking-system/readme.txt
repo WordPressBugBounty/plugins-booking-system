@@ -3,8 +3,8 @@ Contributors: DOTonPAPER, PINPOINT.WORLD
 Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
 Requires at least: 6.3
-Tested up to: 6.9
-Stable tag: 2.9.9.6.8
+Tested up to: 7.0
+Stable tag: 2.9.9.6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -111,6 +111,13 @@ Upload the folder **booking-system** from the zip file to "wp-content/plugins" a
 Click <a href="https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a> to view Pinpoint Booking System WordPress Plugin Documentation.
 
 == Changelog ==
+= 2.9.9.6.9 =
+* Reservations are now canceled correctly when the related WooCommerce order is canceled, bug fixed.
+* Reservation export to XLS format has been improved.
+* The bug affecting reservation export in CSV format has been fixed.
+* The bug related to the initial Google Calendar synchronization authorization request has been fixed.
+* Updated the usage of the woocommerce_checkout_create_order and woocommerce_store_api_checkout_update_order_meta hooks to ensure compatibility with WooCommerce version 10.8.1.
+
 = 2.9.9.6.8 =
 * The day generation logic used for availability verification has been updated to work correctly on newer PHP versions.
 
@@ -150,6 +157,13 @@ Click <a href="https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=W
 * IMPORTANT! PHP 8 is required.
 
 == Upgrade Notice ==
+= 2.9.9.6.9 =
+* Reservations are now canceled correctly when the related WooCommerce order is canceled, bug fixed.
+* Reservation export to XLS format has been improved.
+* The bug affecting reservation export in CSV format has been fixed.
+* The bug related to the initial Google Calendar synchronization authorization request has been fixed.
+* Updated the usage of the woocommerce_checkout_create_order and woocommerce_store_api_checkout_update_order_meta hooks to ensure compatibility with WooCommerce version 10.8.1.
+
 = 2.9.9.6.8 =
 * The day generation logic used for availability verification has been updated to work correctly on newer PHP versions.
 

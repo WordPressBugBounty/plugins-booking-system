@@ -196,7 +196,7 @@ var DOPBSPBackEndReservations = new function(){
         var element      = document.createElement('a'),
             dataSaveType = 'data:text/plain;charset=utf-8,';
 
-        if (type === 'CSV'){
+        if (type === 'csv'){
             dataSaveType = 'data:Application/octet-stream,';
         }
         else if (type === 'xls'){

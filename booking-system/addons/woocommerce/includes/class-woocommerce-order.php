@@ -92,7 +92,7 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
         }
 
         function add($order,
-                     $data){
+                     $data = null){
             global $wpdb;
             global $DOPBSP;
             global $DOPBSPWooCommerce;
@@ -295,6 +295,13 @@ if (!class_exists('DOPBSPWooCommerceOrder')){
                     $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE order_item_id=%d',
                                                                            $DOPBSPWooCommerce->tables->woocommerce,
                                                                            $order_item_id));
+
+                    if (count($reservations_data) == 0){
+                        //phpcs:ignore WordPress.DB.DirectDatabaseQuery
+                        $reservations_data = $wpdb->get_results($wpdb->prepare('SELECT * FROM %i WHERE order_item_id=%d',
+                                                                               $DOPBSPWooCommerce->tables->woocommerce,
+                                                                               $order_item->get_product_id()));
+                    }
 
                     foreach ($reservations_data as $reservation_data){
                         $DOPBSP->classes->backend_reservation->add($reservation_data->calendar_id,

@@ -397,14 +397,6 @@ if (!class_exists('DOPBSPBackEndReservations')){
             $reservations = $wpdb->get_results($wpdb->prepare(implode('',
                                                                       $query),
                                                               $values));
-
-            $csvReservations = array();
-            $csvReservationHeader = array('ID',
-                                          'Calendar ID',
-                                          'Calendar Name',
-                                          'Check In',
-                                          'Check Out',
-                                          'Start Hour');
             $jsonReservationsData = array();
 
             // ICS
@@ -413,12 +405,11 @@ if (!class_exists('DOPBSPBackEndReservations')){
                     : null;
 
             // XLS
-            strtolower($type) == 'xls'
+            strtolower($type) == 'xls' || strtolower($type) == 'csv'
                     ? $DOT->models->reservations_xls->get($reservations)
                     : null;
 
             foreach ($reservations as $reservation){
-                $csvReservation = array();
                 $reservations_form = json_decode($reservation->form);
                 $reservation_extras = json_decode($reservation->extras);
                 $reservation = (array)$reservation;
@@ -428,25 +419,17 @@ if (!class_exists('DOPBSPBackEndReservations')){
                                                           $DOPBSP->tables->calendars,
                                                           $reservation['calendar_id']));
 
-                $csvReservation[] = $reservation['id'];
-
                 if (!array_key_exists('id',
                                       $jsonReservationsData)){
                     $jsonReservationsData['id'] = array();
                 }
                 $jsonReservationsData['id'][] = $reservation['id'];
 
-                $csvReservation[] = $reservation['calendar_id'];
-
-                $csvReservation[] = $calendar->name;
-
                 if (!array_key_exists('calendar_id',
                                       $jsonReservationsData)){
                     $jsonReservationsData['calendar_id'] = array();
                 }
                 $jsonReservationsData['calendar_id'][] = $reservation['calendar_id'];
-
-                $csvReservation[] = $reservation['check_in'];
 
                 if (!array_key_exists('check_in',
                                       $jsonReservationsData)){
@@ -459,11 +442,8 @@ if (!class_exists('DOPBSPBackEndReservations')){
                 }
 
                 if ($reservation['check_out'] == ''){
-                    unset($csvReservationHeader[3]);
                 }
                 else{
-                    $csvReservation[] = $reservation['check_out'];
-
                     if (!array_key_exists('check_out',
                                           $jsonReservationsData)){
                         $jsonReservationsData['check_out'] = array();
@@ -476,16 +456,8 @@ if (!class_exists('DOPBSPBackEndReservations')){
                 }
 
                 if ($reservation['start_hour'] == ''){
-                    if ($reservation['check_out'] == ''){
-                        unset($csvReservationHeader[3]);
-                    }
-                    else{
-                        unset($csvReservationHeader[4]);
-                    }
                 }
                 else{
-                    $csvReservation[] = $reservation['start_hour'];
-
                     if (!array_key_exists('start_hour',
                                           $jsonReservationsData)){
                         $jsonReservationsData['start_hour'] = array();
@@ -498,169 +470,117 @@ if (!class_exists('DOPBSPBackEndReservations')){
                 }
 
                 //                    if($reservation['end_hour'] != '') {
-                $csvReservation[] = $reservation['end_hour'];
 
                 if (!array_key_exists('end_hour',
                                       $jsonReservationsData)){
                     $jsonReservationsData['end_hour'] = array();
-                    $csvReservationHeader[] = 'End hour';
                 }
                 $jsonReservationsData['end_hour'][] = $reservation['end_hour'];
                 //                    }
 
-                $csvReservation[] = $reservation['status'];
-
                 if (!array_key_exists('status',
                                       $jsonReservationsData)){
                     $jsonReservationsData['status'] = array();
-                    $csvReservationHeader[] = 'Status';
                 }
                 $jsonReservationsData['status'][] = $reservation['status'];
 
                 if ($reservation['price'] != 0){
-                    $csvReservation[] = $reservation['price'];
-
                     if (!array_key_exists('price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['price'] = array();
-                        $csvReservationHeader[] = 'Price';
                     }
                     $jsonReservationsData['price'][] = $reservation['price'];
                 }
                 else{
-                    $csvReservation[] = '0';
-
                     if (!array_key_exists('price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['price'] = array();
-                        $csvReservationHeader[] = 'Price';
                     }
                 }
 
                 if ($reservation['extras_price'] != 0){
-                    $csvReservation[] = $reservation['extras_price'];
-
                     if (!array_key_exists('extras_price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['extras_price'] = array();
-                        $csvReservationHeader[] = 'Extras price';
                     }
                     $jsonReservationsData['extras_price'][] = $reservation['extras_price'];
                 }
                 else{
-                    $csvReservation[] = '0';
-
                     if (!array_key_exists('extras_price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['extras_price'] = array();
-                        $csvReservationHeader[] = 'Extras price';
                     }
                 }
 
                 if ($reservation['fees_price'] != 0){
-                    $csvReservation[] = $reservation['fees_price'];
-
                     if (!array_key_exists('fees_price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['fees_price'] = array();
-                        $csvReservationHeader[] = 'Fees price';
                     }
                     $jsonReservationsData['fees_price'][] = $reservation['fees_price'];
                 }
                 else{
-                    $csvReservation[] = '0';
-
                     if (!array_key_exists('fees_price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['fees_price'] = array();
-                        $csvReservationHeader[] = 'Fees price';
                     }
                 }
 
                 if ($reservation['coupon_price'] != 0){
-                    $csvReservation[] = $reservation['coupon_price'];
-
                     if (!array_key_exists('coupon_price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['coupon_price'] = array();
-                        $csvReservationHeader[] = 'Coupon price';
                     }
                     $jsonReservationsData['coupon_price'][] = $reservation['coupon_price'];
                 }
                 else{
-                    $csvReservation[] = '0';
-
                     if (!array_key_exists('coupon_price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['coupon_price'] = array();
-                        $csvReservationHeader[] = 'Coupon price';
                     }
                 }
 
                 if ($reservation['deposit_price'] != 0){
-                    $csvReservation[] = $reservation['deposit_price'];
-
                     if (!array_key_exists('deposit_price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['deposit_price'] = array();
-                        $csvReservationHeader[] = 'Deposit price';
                     }
                     $jsonReservationsData['deposit_price'][] = $reservation['deposit_price'];
                 }
                 else{
-                    $csvReservation[] = '0';
-
                     if (!array_key_exists('deposit_price',
                                           $jsonReservationsData)){
                         $jsonReservationsData['deposit_price'] = array();
-                        $csvReservationHeader[] = 'Deposit price';
                     }
                 }
-
-                $csvReservation[] = $reservation['price_total'];
 
                 if (!array_key_exists('price_total',
                                       $jsonReservationsData)){
                     $jsonReservationsData['price_total'] = array();
-                    $csvReservationHeader[] = 'Total price';
                 }
                 $jsonReservationsData['price_total'][] = $reservation['price_total'];
-                $csvReservation[] = $reservation['currency_code'];
 
                 if (!array_key_exists('currency_code',
                                       $jsonReservationsData)){
                     $jsonReservationsData['currency_code'] = array();
-                    $csvReservationHeader[] = 'Currency';
                 }
                 $jsonReservationsData['currency_code'][] = $reservation['currency_code'];
 
                 if ($reservation['no_items'] != 0){
-                    $csvReservation[] = $reservation['no_items'];
-
                     if (!array_key_exists('no_items',
                                           $jsonReservationsData)){
                         $jsonReservationsData['no_items'] = array();
-                        $csvReservationHeader[] = 'No. Items';
                     }
                     $jsonReservationsData['no_items'][] = $reservation['no_items'];
                 }
                 else{
-                    $csvReservation[] = '0';
-
                     if (!array_key_exists('no_items',
                                           $jsonReservationsData)){
                         $jsonReservationsData['no_items'] = array();
-                        $csvReservationHeader[] = 'No. Items';
                     }
                 }
 
                 foreach ($reservations_form as $data){
-                    if (!in_array($data->translation,
-                                  $csvReservationHeader)){
-                        $csvReservationHeader[] = $data->translation;
-                    }
-                    $csvReservation[] = $data->value;
-
                     if (!array_key_exists(str_replace(" ",
                                                       "",
                                                       strtolower($data->translation)),
@@ -675,12 +595,6 @@ if (!class_exists('DOPBSPBackEndReservations')){
                 }
 
                 foreach ($reservation_extras as $data){
-                    if (!in_array($data->group_translation,
-                                  $csvReservationHeader)){
-                        $csvReservationHeader[] = $data->group_translation;
-                    }
-                    $csvReservation[] = $data->translation;
-
                     if (!array_key_exists(str_replace(" ",
                                                       "",
                                                       strtolower($data->group_translation)),
@@ -694,35 +608,14 @@ if (!class_exists('DOPBSPBackEndReservations')){
                                                       strtolower($data->group_translation))][] = $data->translation;
                 }
 
-                $csvReservation[] = $reservation['date_created'];
-
                 if (!array_key_exists('date_created',
                                       $jsonReservationsData)){
                     $jsonReservationsData['date_created'] = array();
-                    $csvReservationHeader[] = 'Date created';
                 }
                 $jsonReservationsData['date_created'][] = $reservation['date_created'];
-
-                $csvReservations[] = implode(',',
-                                             $csvReservation);
             }
 
-            if (!array_key_exists('Export date:',
-                                  $jsonReservationsData)){
-                $csvReservationHeader[] = 'Export date:';
-            }
-            $csvReservationHeader[] = $export_date;
-
-            array_unshift($csvReservations,
-                          implode(',',
-                                  $csvReservationHeader));
-
-            if (strtolower($type) == 'csv'){
-                $DOT->echo(implode('\r\n',
-                                   $csvReservations),
-                           'textarea');
-            }
-            elseif (strtolower($type) == 'json'){
+            if (strtolower($type) == 'json'){
                 $DOT->echo($jsonReservationsData,
                            'json');
             }

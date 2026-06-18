@@ -619,8 +619,9 @@ if (!class_exists('DOPBSPBackEndReservation')){
              */
             $nonce = $DOT->post('nonce');
 
-            if (!wp_verify_nonce($nonce,
-                                 'dopbsp_user_nonce')){
+            if ($nonce !== false
+                    && !wp_verify_nonce($nonce,
+                                        'dopbsp_user_nonce')){
                 return false;
             }
             /*

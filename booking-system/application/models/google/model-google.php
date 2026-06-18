@@ -133,12 +133,14 @@ if (!class_exists('DOTModelGoogle')){
                 }
                 else{
                     $authUrl = $client->createAuthUrl();
-                    $link = sprintf(wp_kses('<a href="%s" style="background-color: #dbdfea; border-radius: 2px; color: #3e3f40; display: block; font-size: 16px; line-height: 24px; margin: auto; max-width: 200px; min-width: 200px; padding: 12px 0; text-align: center; text-decoration: none; width: 200px;">Google Sync</a>',
-                                            array('a' => array('href'  => array(),
-                                                               'style' => array()))),
+                    $link = sprintf('<a href="%s" style="background-color: #dbdfea; border-radius: 2px; color: #3e3f40; display: block; font-size: 16px; line-height: 24px; margin: auto; max-width: 200px; min-width: 200px; padding: 12px 0; text-align: center; text-decoration: none; width: 200px;">Google Sync</a>',
                                     esc_url($authUrl));
                     $DOT->echo($link,
-                               'none');
+                               'content',
+                               [
+                                       'a' => ['href'  => [],
+                                               'style' => []]
+                               ]);
                     // exit;
                 }
                 // If there is no previous token or it's expired.

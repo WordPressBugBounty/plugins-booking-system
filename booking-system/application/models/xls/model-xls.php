@@ -2,7 +2,7 @@
 
 /*
  * Title                   : Pinpoint Booking System
- * File                    : application/models/model-xls.php
+ * File                    : application/models/xls/model-xls.php
  * Author                  : Pinpoint World
  * Copyright               : © 2021 Pinpoint World
  * Website                 : https://pinpoint.world
@@ -63,12 +63,12 @@ if (!class_exists('DOTModelXls')){
         }
 
         /*
-         * Get iCal.
+         * Get XLS file.
          *
          * @usage
          *      In FILE search for function call: $this->get
          *      In FILE search for function call in hooks: array(&$this, 'get')
-         *      In PROJECT search for function call: $DOT->models->ical->get
+         *      In PROJECT search for function call: $DOT->models->xls->get
          *
          * @params
          *      labels (array): labels list
@@ -93,10 +93,7 @@ if (!class_exists('DOTModelXls')){
          *      -
          *
          * @functions
-         *      application/models/model-ical-timezones.php : get() // Get iCal timezones.
-         *
-         *      this : events() // Set iCal events.
-         *      this : timezones() // Set iCal timezones.
+         *      -
          *
          * @hooks
          *      -
@@ -130,18 +127,14 @@ if (!class_exists('DOTModelXls')){
              * Set labels.
              */
             $row = array();
-            $row_empty = array();
 
             foreach ($labels as $label){
                 if ($label->usage != 0){
                     $row[] = $label->label;
-                    $row_empty[] = ' ';
                 }
             }
             $content[] = implode("\t",
                                  $row);
-            $content[] = implode("\t",
-                                 $row_empty);
 
             /*
              * Set data.
