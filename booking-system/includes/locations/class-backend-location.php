@@ -118,6 +118,11 @@ if (!class_exists('DOPBSPBackEndLocation')){
             $value = $DOT->post('value');
             $coordinates = $DOT->post('coordinates');
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->locations,
                           array($field => $value),

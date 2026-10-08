@@ -4,7 +4,7 @@ Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_m
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
 Requires at least: 6.3
 Tested up to: 7.0
-Stable tag: 2.9.9.6.9
+Stable tag: 2.9.9.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -111,6 +111,19 @@ Upload the folder **booking-system** from the zip file to "wp-content/plugins" a
 Click <a href="https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a> to view Pinpoint Booking System WordPress Plugin Documentation.
 
 == Changelog ==
+= 2.9.9.7.2 =
+* Security bugs repaired.
+
+= 2.9.9.7.1 =
+* Calendars are displayed correctly in the Mobile Safari browser.
+* Reservation edits are saved correctly, bug fixed.
+
+= 2.9.9.7.0 =
+* Reservation edits are saved correctly, bug fixed.
+* Reservation status is changed correctly when the related WooCommerce order status is changed, bug fixed.
+* Security bug repaired.
+* WooCommerce cart prices are calculated correctly when reservations are removed from the calendar, bug fixed.
+
 = 2.9.9.6.9 =
 * Reservations are now canceled correctly when the related WooCommerce order is canceled, bug fixed.
 * Reservation export to XLS format has been improved.
@@ -157,6 +170,19 @@ Click <a href="https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=W
 * IMPORTANT! PHP 8 is required.
 
 == Upgrade Notice ==
+= 2.9.9.7.2 =
+* Security bugs repaired.
+
+= 2.9.9.7.1 =
+* Calendars are displayed correctly in the Mobile Safari browser.
+* Reservation edits are saved correctly, bug fixed.
+
+= 2.9.9.7.0 =
+* Reservation edits are saved correctly, bug fixed.
+* Reservation status is changed correctly when the related WooCommerce order status is changed, bug fixed.
+* Security bug repaired.
+* WooCommerce cart prices are calculated correctly when reservations are removed from the calendar, bug fixed.
+
 = 2.9.9.6.9 =
 * Reservations are now canceled correctly when the related WooCommerce order is canceled, bug fixed.
 * Reservation export to XLS format has been improved.

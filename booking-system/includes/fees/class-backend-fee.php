@@ -133,6 +133,11 @@ if (!class_exists('DOPBSPBackEndFee')){
                 $field = 'translation';
             }
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->fees,
                           array($field => $value),

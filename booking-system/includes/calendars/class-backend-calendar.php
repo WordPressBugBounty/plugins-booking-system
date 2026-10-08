@@ -157,6 +157,11 @@ if (!class_exists('DOPBSPBackEndCalendar')){
                              'int');
             $value = $DOT->post('value');
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             /*
              * Update calendar field.
              */

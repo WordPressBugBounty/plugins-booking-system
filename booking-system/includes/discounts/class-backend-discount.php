@@ -113,9 +113,16 @@ if (!class_exists('DOPBSPBackEndDiscount')){
              * End verify nonce.
              */
 
+            $field = $DOT->post('field');
+
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->discounts,
-                          array($DOT->post('field') => $DOT->post('value')),
+                          array($field => $DOT->post('value')),
                           array('id' => $DOT->post('id',
                                                    'int')));
 

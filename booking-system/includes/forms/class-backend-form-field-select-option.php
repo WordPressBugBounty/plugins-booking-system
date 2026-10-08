@@ -127,6 +127,11 @@ if (!class_exists('DOPBSPBackEndFormFieldSelectOption')){
                 $field = 'translation';
             }
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $select_option = $wpdb->get_row($wpdb->prepare('SELECT * FROM %i WHERE id=%d',
                                                            $DOPBSP->tables->forms_fields_options,

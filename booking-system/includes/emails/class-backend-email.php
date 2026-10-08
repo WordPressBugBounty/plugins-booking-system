@@ -241,6 +241,11 @@ if (!class_exists('DOPBSPBackEndEmail')){
                                 'html');
             $language = $DOT->post('language');
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             if ($field != 'name'){
                 $value = str_replace("\n",
                                      '<<new-line>>',

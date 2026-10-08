@@ -226,6 +226,11 @@ if (!class_exists('DOPBSPBackEndSms')){
             $value = $DOT->post('value');
             $language = $DOT->post('language');
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             if ($field != 'name'){
                 $value = str_replace("\n",
                                      '<<new-line>>',

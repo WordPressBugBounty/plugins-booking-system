@@ -124,6 +124,11 @@ if (!class_exists('DOPBSPBackEndDiscountItemRule')){
                 $field = 'translation';
             }
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->discounts_items_rules,
                           array($field => $value),

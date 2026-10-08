@@ -117,6 +117,11 @@ if (!class_exists('DOPBSPBackEndRule')){
             $field = $DOT->post('field');
             $value = $DOT->post('value');
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->rules,
                           array($field => $value),

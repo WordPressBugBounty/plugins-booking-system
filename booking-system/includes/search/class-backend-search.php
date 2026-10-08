@@ -116,6 +116,11 @@ if (!class_exists('DOPBSPBackEndSearch')){
             $field = $DOT->post('field');
             $value = $DOT->post('value');
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->searches,
                           array($field => $value),

@@ -96,7 +96,7 @@ var DOPBSPBackEndReservationForm = new function(){
 
         for (var i = 0; i<reservation_json.length; i++){
 
-            if (reservation_json[i]['id'] === id){
+            if (reservation_json[i]['id'].toString() === id.toString()){
                 var value_json = value.replace(/'/g,
                                                "&#39;");
                 value_json = value_json.replace(/"/g,

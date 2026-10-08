@@ -104,6 +104,15 @@ if (!class_exists('DOPBSPWooCommerceCart')){
              */
             $reservation = $cart_data[0];
 
+            /*
+             * Validate reservation.
+             */
+            if (!$DOPBSP->classes->frontend_reservations->validate($calendar_id,
+                                                                   $reservation)){
+                $DOT->echo('unavailable;;;;;Error 120!');
+                die();
+            }
+
             if (!$this->validateAvailability($calendar_id,
                                              $reservation)){
                 $DOT->echo('unavailable;;;;;'.$DOPBSP->text('WOOCOMMERCE_UNAVAILABLE').' <a href="'.wc_get_cart_url().'">'.$DOPBSP->text('WOOCOMMERCE_VIEW_CART').'</a>',
@@ -350,6 +359,7 @@ if (!class_exists('DOPBSPWooCommerceCart')){
                                                        array('frontend',
                                                              'woocommerce_frontend'));
                     wc_add_notice($DOPBSP->text('WOOCOMMERCE_DELETED'));
+                    header('Refresh:0');
                 }
             }
         }

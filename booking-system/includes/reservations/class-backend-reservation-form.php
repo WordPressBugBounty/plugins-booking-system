@@ -26,7 +26,7 @@ if (!class_exists('DOPBSPBackEndReservationForm')){
          * @param reservation_id (integer): reservation ID
          * @post reservation_id (integer): reservation ID
          */
-        function edit($reservation_id = 0){
+        function edit($reservation_id = ''){
             global $wpdb;
             global $DOPBSP;
             global $DOT;
@@ -44,10 +44,10 @@ if (!class_exists('DOPBSPBackEndReservationForm')){
              * End verify nonce.
              */
 
-            $reservation_id = $reservation_id != 0
+            $reservation_id = $reservation_id != ''
                     ? $reservation_id
-                    : $DOT->post('id',
-                                 'int');
+                    : $DOT->post('id');
+
             $form = $DOT->post('value',
                                false);
             $form = mb_convert_encoding($form,

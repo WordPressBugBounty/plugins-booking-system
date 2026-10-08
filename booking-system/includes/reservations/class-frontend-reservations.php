@@ -320,12 +320,11 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                   $reservation)
                             : $this->getPriceHours($calendar_id,
                                                    $reservation));
-            return true;
 
-            if (floor(floatval($reservation['price'])) !== floor($price) && floor($price) != 0){
+            if (floatval($reservation['price']) !== floatval($price)){
                 return false;
             }
-            return true;
+
             /*
              * Validate extras.
              */
@@ -333,7 +332,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                   $reservation);
 
             if ($price_extras === false
-                    || floor(floatval($reservation['extras_price'])) !== floor($price_extras)){
+                    || floatval($reservation['extras_price']) !== floatval($price_extras)){
                 return false;
             }
 
@@ -344,7 +343,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                       $reservation);
 
             if ($price_discount === false
-                    || floor(floatval($reservation['discount_price'])) !== floor($price_discount)){
+                    || floatval($reservation['discount_price']) !== floatval($price_discount)){
                 return false;
             }
 
@@ -355,7 +354,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                               $reservation);
 
             if ($price_fees === false
-                    || floor(floatval($reservation['fees_price'])) !== floor($price_fees)){
+                    || floatval($reservation['fees_price']) !== floatval($price_fees)){
                 return false;
             }
 
@@ -366,7 +365,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                   $reservation);
 
             if ($price_coupon === false
-                    || floor(floatval($reservation['coupon_price'])) !== floor($price_coupon)){
+                    || floatval($reservation['coupon_price']) !== floatval($price_coupon)){
                 return false;
             }
 
@@ -379,7 +378,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                         $decimals);
             $price_total = intval($price_total*$expo)/$expo;
 
-            if (floor(floatval($reservation['price_total'])) !== floor($price_total) && floor($price_total) != 0){
+            if (floatval($reservation['price_total']) !== floatval($price_total)){
                 return false;
             }
 
@@ -389,8 +388,8 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             $price_deposit = $this->validateDeposit($calendar_id,
                                                     $reservation);
 
-            if (($price_deposit === false
-                            || floor(floatval($reservation['deposit_price'])) !== floor($price_deposit))
+            if ($price_deposit === false
+                            || floatval($reservation['deposit_price']) !== floatval($price_deposit)
                     && (float)$reservation['deposit_price']>0){
                 return false;
             }
@@ -587,6 +586,10 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             foreach ($extras as $extra){
                 $extras_ids[] = $extra['id'];
                 $extras_ids_type[] = '%d';
+            }
+
+            if (count($extras_ids_type) == 0){
+                return 0;
             }
 
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery

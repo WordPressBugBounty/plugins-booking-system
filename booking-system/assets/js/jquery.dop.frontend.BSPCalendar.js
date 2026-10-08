@@ -2076,10 +2076,10 @@
                  * If day width smaller than 70px available, booked, unavailable text is hidden.
                  */
                 if (dayWidth <= 70){
-                    $day.find($('.dopbsp-no-available-text')).css('display', 'none');
+                    $day.find($('.dopbsp-no-available-text')).css('opacity', '0');
                 }
                 else{
-                    $day.find($('.dopbsp-no-available-text')).css('display', 'inline');
+                    $day.find($('.dopbsp-no-available-text')).css('opacity', '1');
                 }
 
                 /*
@@ -2095,6 +2095,7 @@
                      * Set days height to the biggest height found.
                      */
                     $('.DOPBSPCalendar-day .dopbsp-bind-middle .dopbsp-body', Container).each(function(){
+                        console.log(maxHeight, $(this).height());
                         if (maxHeight < $(this).height()){
                             maxHeight = $(this).height();
                         }

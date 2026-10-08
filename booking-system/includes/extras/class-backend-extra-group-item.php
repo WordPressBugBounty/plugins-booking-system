@@ -125,6 +125,11 @@ if (!class_exists('DOPBSPBackEndExtraGroupItem')){
                 $field = 'translation';
             }
 
+            if (!preg_match('/^[a-zA-Z0-9_]+$/',
+                            $field)){
+                return false;
+            }
+
             //phpcs:ignore WordPress.DB.DirectDatabaseQuery
             $wpdb->update($DOPBSP->tables->extras_groups_items,
                           array($field => $value),
