@@ -389,7 +389,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                                     $reservation);
 
             if ($price_deposit === false
-                            || floatval($reservation['deposit_price']) !== floatval($price_deposit)
+                    || floatval($reservation['deposit_price']) !== floatval($price_deposit)
                     && (float)$reservation['deposit_price']>0){
                 return false;
             }
@@ -550,6 +550,13 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             global $wpdb;
 
             /*
+             * Verify extras.
+             */
+            if (!isset($reservation['extras'])){
+                return 0;
+            }
+
+            /*
              * Get data.
              */
             $extras = $reservation['extras'];
@@ -608,8 +615,12 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                 : 0);
             }
             else{
-                $time_lapse = $DOT->prototypes->hours($start_hour,
-                                                      $end_hour);
+                $time_lapse = $this->hours($start_hour,
+                                           $end_hour,
+                                           'hours')
+                        +($settings_calendar->hours_add_last_hour_to_total_price == 'true'
+                                ? 1
+                                : 0);
             }
 
             foreach ($extras as $extra){
@@ -662,6 +673,13 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             global $DOT;
 
             /*
+             * Verify discount.
+             */
+            if (!isset($reservation['discount'])){
+                return 0;
+            }
+
+            /*
              * Get data.
              */
             $discount = $reservation['discount'];
@@ -706,8 +724,12 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                 : 0);
             }
             else{
-                $time_lapse = $DOT->prototypes->hours($start_hour,
-                                                      $end_hour);
+                $time_lapse = $this->hours($start_hour,
+                                           $end_hour,
+                                           'hours')
+                        +($settings_calendar->hours_add_last_hour_to_total_price == 'true'
+                                ? 1
+                                : 0);
             }
 
             /*
@@ -813,17 +835,24 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                 : 0);
             }
             else{
-                $time_lapse = $DOT->prototypes->hours($start_hour,
-                                                      $end_hour);
+                $time_lapse = $this->hours($start_hour,
+                                           $end_hour,
+                                           'hours');
+
+                if ($settings_calendar->hours_interval_autobreak_enabled == 'true'){
+                    $time_lapse = $time_lapse%2 === 0
+                            ? int($time_lapse/2)
+                            : int($time_lapse/2)+1;
+                }
             }
 
             for ($i = 0; $i<count($discounts); $i++){
                 if (($discounts[$i]->start_time_lapse == ''
-                                || $discounts[$i]->start_time_lapse == 0
-                                || floatval($discounts[$i]->start_time_lapse)<=$time_lapse)
+                                || (int)$discounts[$i]->start_time_lapse == 0
+                                || (int)$discounts[$i]->start_time_lapse<=(int)$time_lapse)
                         && ($discounts[$i]->end_time_lapse == ''
-                                || $discounts[$i]->end_time_lapse == 0
-                                || floatval($discounts[$i]->end_time_lapse)>=$time_lapse)){
+                                || (int)$discounts[$i]->end_time_lapse == 0
+                                || (int)$discounts[$i]->end_time_lapse>=(int)$time_lapse)){
                     $discount_data->id = $discounts[$i]->id;
                     $discount_data->operation = $discounts[$i]->operation;
                     $discount_data->price = $discounts[$i]->price;
@@ -880,6 +909,13 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             global $DOT;
 
             /*
+             * Verify fees.
+             */
+            if (!isset($reservation['fees'])){
+                return 0;
+            }
+
+            /*
              * Get data.
              */
             $fees = $reservation['fees'];
@@ -925,8 +961,10 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                 : 0);
             }
             else{
-                $time_lapse = $DOT->prototypes->hours($start_hour,
-                                                      $end_hour)+($settings_calendar->hours_add_last_hour_to_total_price
+                $time_lapse = $this->hours($start_hour,
+                                           $end_hour,
+                                           'hours')
+                        +($settings_calendar->hours_add_last_hour_to_total_price == 'true'
                                 ? 1
                                 : 0);
             }
@@ -956,8 +994,7 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                         /*
                          * Verify data.
                          */
-                        if ($fee['group_id'] != $fee_data->group_id
-                                || $fee['operation'] != $fee_data->operation
+                        if ($fee['operation'] != $fee_data->operation
                                 || $fee['price'] != $fee_data->price
                                 || $fee['price_by'] != $fee_data->price_by
                                 || $fee['price_type'] != $fee_data->price_type
@@ -983,12 +1020,19 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             global $DOT;
 
             /*
+             * Verify coupon.
+             */
+            if (!isset($reservation['coupon'])){
+                return 0;
+            }
+
+            /*
              * Get data.
              */
             $coupon = $reservation['coupon'];
             $price_extras = $reservation['extras_price'];
             $price_discount = $reservation['discount_price'];
-            $price_fees = $reservation['discount_fees'];
+            $price_fees = $reservation['fees_price'];
             $price_reservation = $reservation['price'];
             $check_in = $reservation['check_in'];
             $check_out = $reservation['check_out'];
@@ -1020,6 +1064,13 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             $coupon_data = $coupon_data['data']['coupon'];
 
             /*
+             * Verify coupon data.
+             */
+            if ($coupon_data === null){
+                return 0;
+            }
+
+            /*
              * Verify data.
              */
             if ($start_hour == ''){
@@ -1030,8 +1081,12 @@ if (!class_exists('DOPBSPFrontEndReservations')){
                                 : 0);
             }
             else{
-                $time_lapse = $DOT->prototypes->hours($start_hour,
-                                                      $end_hour);
+                $time_lapse = $this->hours($start_hour,
+                                           $end_hour,
+                                           'hours')
+                        +($settings_calendar->hours_add_last_hour_to_total_price == 'true'
+                                ? 1
+                                : 0);
             }
 
             if ($coupon['id'] == $coupon_data->id){
@@ -1078,7 +1133,6 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             /*
              * Get data.
              */
-            $deposit = $reservation['deposit'];
             $price_total = $reservation['price_total'];
 
             /*
@@ -1098,6 +1152,56 @@ if (!class_exists('DOPBSPFrontEndReservations')){
             return strval($price) == '-0'
                     ? 0
                     : $price;
+        }
+
+        function hours($hour1,
+                       $hour2,
+                       $type = 'seconds',
+                       $valueType = 'float',
+                       $noDecimals = -1){
+            $parts1 = explode(':',
+                              $hour1);
+            $parts2 = explode(':',
+                              $hour2);
+
+            $hours1 = (int)$parts1[0];
+            $minutes1 = (int)$parts1[1];
+            $seconds1 = isset($parts1[2])
+                    ? (int)$parts1[2]
+                    : 0;
+
+            $hours2 = (int)$parts2[0];
+            $minutes2 = (int)$parts2[1];
+            $seconds2 = isset($parts2[2])
+                    ? (int)$parts2[2]
+                    : 0;
+
+            switch ($type){
+                case 'hours':
+                    $time1 = $hours1+$minutes1/60+$seconds1/3600;
+                    $time2 = $hours2+$minutes2/60+$seconds2/3600;
+                    break;
+
+                case 'minutes':
+                    $time1 = $hours1*60+$minutes1+$seconds1/60;
+                    $time2 = $hours2*60+$minutes2+$seconds2/60;
+                    break;
+
+                default:
+                    $time1 = $hours1*3600+$minutes1*60+$seconds1;
+                    $time2 = $hours2*3600+$minutes2*60+$seconds2;
+            }
+
+            $diff = abs($time1-$time2);
+
+            if ($valueType === 'float'){
+                return $noDecimals === -1
+                        ? $diff
+                        : round($diff,
+                                $noDecimals);
+            }
+
+            return (int)ceil($diff);
         }
     }
 }
