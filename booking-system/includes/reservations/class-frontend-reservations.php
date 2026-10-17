@@ -841,8 +841,8 @@ if (!class_exists('DOPBSPFrontEndReservations')){
 
                 if ($settings_calendar->hours_interval_autobreak_enabled == 'true'){
                     $time_lapse = $time_lapse%2 === 0
-                            ? int($time_lapse/2)
-                            : int($time_lapse/2)+1;
+                            ? intval($time_lapse/2)
+                            : intval($time_lapse/2)+1;
                 }
             }
 

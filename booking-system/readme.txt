@@ -4,7 +4,7 @@ Donate link: https://pinpoint.world/wordpress-booking?utm_source=WordPress&utm_m
 Tags: appointments, availability calendar, booking calendar, booking system, reservations
 Requires at least: 6.3
 Tested up to: 7.1
-Stable tag: 2.9.9.7.3
+Stable tag: 2.9.9.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -111,6 +111,10 @@ Upload the folder **booking-system** from the zip file to "wp-content/plugins" a
 Click <a href="https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=WordPress&utm_medium=Plugin%20FREE%20repository">here</a> to view Pinpoint Booking System WordPress Plugin Documentation.
 
 == Changelog ==
+= 2.9.9.7.4 =
+* An issue where availability data used for validation was not saved correctly due to improper sanitization has been fixed.
+* An issue with server-side validation of discount prices has been fixed.
+
 = 2.9.9.7.3 =
 * Server-side reservation validation bug fixed.
 
@@ -173,6 +177,10 @@ Click <a href="https://pinpoint.world/docs/legacy-booking/wordpress?utm_source=W
 * IMPORTANT! PHP 8 is required.
 
 == Upgrade Notice ==
+= 2.9.9.7.4 =
+* An issue where availability data used for validation was not saved correctly due to improper sanitization has been fixed.
+* An issue with server-side validation of discount prices has been fixed.
+
 = 2.9.9.7.3 =
 * Server-side reservation validation bug fixed.
 

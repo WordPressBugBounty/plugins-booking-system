@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Pinpoint Booking System - Version 2
-Version: 2.9.9.7.3
+Version: 2.9.9.7.4
 Plugin URI: https://wordpress.org/plugins/booking-system/
 Description: Transform your WordPress website into a booking/reservation system. If you like this plugin, feel free to rate it five stars at <a href="https://wordpress.org/support/plugin/booking-system/reviews" target="_blank">Wordpress</a> in Reviews section. If you encounter any problems please contact us at <a href="https://pinpoint.world/contact">https://pinpoint.world/contact</a> so we can help you.
 Author: PINPOINT.WORLD
@@ -12,6 +12,11 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 /*
 Change log:
+
+        2.9.9.7.4 (2026-10-17)
+
+                * An issue where availability data used for validation was not saved correctly due to improper sanitization has been fixed.
+                * An issue with server-side validation of discount prices has been fixed.
 
         2.9.9.7.3 (2026-10-12)
 

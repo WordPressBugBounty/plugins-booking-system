@@ -2095,7 +2095,6 @@
                      * Set days height to the biggest height found.
                      */
                     $('.DOPBSPCalendar-day .dopbsp-bind-middle .dopbsp-body', Container).each(function(){
-                        console.log(maxHeight, $(this).height());
                         if (maxHeight < $(this).height()){
                             maxHeight = $(this).height();
                         }
